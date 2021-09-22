@@ -1,9 +1,12 @@
 # Default ignored files
 /shelf/
-/.idea/workspace.xml
 .DS_Store
 lib/
+
+# supplied files
 misc/
+
+# db cred
 src/helper/*
 
 # Compiled class file
@@ -25,7 +28,6 @@ out/
 *.ear
 *.nar
 hs_err_pid*
-
 
 # Maven
 target/
