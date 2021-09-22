@@ -1,4 +1,4 @@
-package sample;
+package wgu_full;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
