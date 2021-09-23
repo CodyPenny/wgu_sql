@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgu_full.controller.MainController">
+   <children>
+      <Line endX="56.83826446533203" endY="176.0" layoutX="8.0" layoutY="-32.0" startX="789.1715698242188" startY="176.0" stroke="#c4c4c4" AnchorPane.leftAnchor="30.16666603088379" AnchorPane.rightAnchor="211.50002098083496" />
+      <Line endX="22.66666603088379" endY="167.9595489501953" layoutX="8.0" layoutY="116.0" startX="754.0" startY="167.95953369140625" stroke="#c4c4c4" />
+      <TabPane layoutX="29.0" layoutY="310.0" prefHeight="379.0" prefWidth="736.0" style="-fx-border-color: #c4c4c4;" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="apptTab" text="Appointments">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+          <Tab fx:id="custTab" text="Customers">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+            <Tab fx:id="reportTab" text="Reports">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <ImageView fx:id="avatar" fitHeight="60.0" fitWidth="67.0" layoutX="363.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="username" alignment="CENTER" layoutX="29.0" layoutY="104.0" prefHeight="17.0" prefWidth="733.0" text="User name" />
+      <Label fx:id="upcomingLabel" alignment="CENTER" layoutX="30.0" layoutY="156.0" prefHeight="26.0" prefWidth="736.0" text="No Upcoming Appointments" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="logout" layoutX="700.0" layoutY="725.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="Log Out" />
+      <TableView fx:id="upcomingTable" layoutX="96.0" layoutY="195.0" prefHeight="74.0" prefWidth="605.0">
+        <columns>
+          <TableColumn prefWidth="112.0" text="ID" />
+          <TableColumn minWidth="0.0" prefWidth="307.0" text="DATE" />
+            <TableColumn minWidth="0.0" prefWidth="185.0" text="TIME" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
