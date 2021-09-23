@@ -1,4 +1,4 @@
-package wgu_full;
+package wgu_full.controller;
 
 public class Controller {
 }

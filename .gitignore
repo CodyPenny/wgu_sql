@@ -7,7 +7,7 @@ lib/
 misc/
 
 # db cred
-src/helper/*
+src/wgu_full/DAO/JDBC.java
 
 # Compiled class file
 *.class
