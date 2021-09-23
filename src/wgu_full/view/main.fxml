@@ -41,7 +41,7 @@
                               <TableColumn fx:id="typeCol" prefWidth="53.0" text="TYPE" />
                               <TableColumn fx:id="startCol" prefWidth="61.0" text="START" />
                               <TableColumn fx:id="endCol" prefWidth="57.0" text="END" />
-                              <TableColumn fx:id="custIdCol" prefWidth="81.0" text="CUST_ID" />
+                              <TableColumn fx:id="apptCustIdCol" prefWidth="81.0" text="CUST_ID" />
                               <TableColumn fx:id="userIdCol" prefWidth="73.0" text="USER_ID" />
                           </columns>
                         </TableView>
