@@ -2,10 +2,12 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
@@ -18,7 +20,33 @@
         <tabs>
           <Tab fx:id="apptTab" text="Appointments">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <RadioButton fx:id="allRadio" layoutX="527.0" layoutY="30.0" mnemonicParsing="false" selected="true" text="All">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="view" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="monthRadio" layoutX="582.0" layoutY="30.0" mnemonicParsing="false" text="Month" toggleGroup="$view" />
+                        <RadioButton fx:id="weekRadio" layoutX="652.0" layoutY="30.0" mnemonicParsing="false" text="Week" toggleGroup="$view" />
+                        <TableView layoutX="17.0" layoutY="66.0" prefHeight="200.0" prefWidth="701.0">
+                          <columns>
+                            <TableColumn fx:id="apptIdCol" prefWidth="43.0" text="ID" />
+                            <TableColumn fx:id="titleCol" prefWidth="62.0" text="TITLE" />
+                              <TableColumn fx:id="descriptionCol" prefWidth="120.0" text="DESCRIPTION" />
+                              <TableColumn fx:id="locationCol" prefWidth="75.0" text="LOCATION" />
+                              <TableColumn fx:id="contactCol" prefWidth="75.0" text="CONTACT" />
+                              <TableColumn fx:id="typeCol" prefWidth="53.0" text="TYPE" />
+                              <TableColumn fx:id="startCol" prefWidth="61.0" text="START" />
+                              <TableColumn fx:id="endCol" prefWidth="57.0" text="END" />
+                              <TableColumn fx:id="custIdCol" prefWidth="81.0" text="CUST_ID" />
+                              <TableColumn fx:id="userIdCol" prefWidth="73.0" text="USER_ID" />
+                          </columns>
+                        </TableView>
+                        <Button fx:id="addApptBtn" layoutX="444.0" layoutY="294.0" mnemonicParsing="false" prefWidth="100.0" text="CREATE NEW" />
+                        <Button fx:id="editApptBtn" layoutX="555.0" layoutY="294.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="EDIT" />
+                        <Button fx:id="deleteApptBtn" layoutX="632.0" layoutY="294.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="DELETE" />
+                     </children></AnchorPane>
             </content>
           </Tab>
           <Tab fx:id="custTab" text="Customers">
