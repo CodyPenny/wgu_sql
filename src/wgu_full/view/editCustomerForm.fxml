@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgu_full.controller.AddCustomerController">
+    <children>
+        <Label alignment="CENTER" layoutX="2.0" layoutY="29.0" prefHeight="40.0" prefWidth="594.0" text="CREATE CUSTOMER FORM">
+            <font>
+                <Font name="Arial" size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="40.0" layoutY="109.0" prefHeight="17.0" prefWidth="92.0" text="Customer ID:">
+            <font>
+                <Font name="Arial" size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="40.0" layoutY="149.0" prefHeight="17.0" prefWidth="52.0" text="Name:">
+            <font>
+                <Font name="Arial" size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="40.0" layoutY="189.0" prefHeight="17.0" prefWidth="92.0" text="Address:">
+            <font>
+                <Font name="Arial" size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="40.0" layoutY="229.0" prefHeight="17.0" prefWidth="92.0" text="Country:">
+            <font>
+                <Font name="Arial" size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="40.0" layoutY="269.0" prefHeight="17.0" prefWidth="92.0" text="State:">
+            <font>
+                <Font name="Arial" size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="40.0" layoutY="309.0" prefHeight="17.0" prefWidth="92.0" text="Postal Code:">
+            <font>
+                <Font name="Arial" size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="40.0" layoutY="349.0" prefHeight="17.0" prefWidth="59.0" text="Phone:">
+            <font>
+                <Font name="Arial" size="14.0" />
+            </font>
+        </Label>
+        <Label alignment="CENTER" layoutX="35.0" layoutY="395.0" prefHeight="40.0" prefWidth="531.0" text="ERROR" textFill="#ff6262">
+            <font>
+                <Font name="Arial" size="14.0" />
+            </font>
+        </Label>
+        <Button layoutX="496.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Save" />
+        <Button layoutX="408.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Cancel" />
+        <TextField layoutX="132.0" layoutY="105.0" />
+        <TextField layoutX="132.0" layoutY="145.0" prefHeight="26.0" prefWidth="292.0" />
+        <TextField layoutX="132.0" layoutY="185.0" prefHeight="26.0" prefWidth="292.0" />
+        <ComboBox layoutX="132.0" layoutY="225.0" prefHeight="26.0" prefWidth="129.0" />
+        <ComboBox layoutX="132.0" layoutY="265.0" prefHeight="26.0" prefWidth="129.0" />
+        <TextField layoutX="132.0" layoutY="305.0" prefHeight="26.0" prefWidth="129.0" />
+        <TextField layoutX="132.0" layoutY="345.0" prefHeight="26.0" prefWidth="129.0" />
+    </children>
+</AnchorPane>
