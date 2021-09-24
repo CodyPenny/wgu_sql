@@ -23,6 +23,14 @@ public class Query {
         }
     }
 
+    /**
+     * Uses the PreparedStatement interface to validate the input username and password
+     *
+     * @param username the username string
+     * @param pw the password string
+     * @throws SQLException JDBC encountered an error with the data source
+     */
+
     public static void makeLoginQuery(String username, String pw) throws SQLException {
         query = "Select * from users where user_name = ? and password = ?";
         try {
@@ -35,6 +43,11 @@ public class Query {
         }
     }
 
+    /**
+     * Fetches the result referencing the ResultSet object
+     *
+     * @return the target data
+     */
     public static ResultSet getResult(){
         return result;
     }
