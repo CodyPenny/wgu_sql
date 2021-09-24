@@ -90,6 +90,26 @@ public class MainController implements Initializable {
     }
 
     /**
+     * Opens add new appointment form
+     *
+     * @param event when the create new button is fired
+     * @throws IOException if I/O operation fails
+     */
+    public void openAddAppointmentForm(ActionEvent event) throws IOException {
+        try {
+            root = FXMLLoader.load(getClass().getResource("../view/addApptForm.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showError(true, "Error opening add form.");
+        } catch (Exception e){
+            showError(true, "Error opening add form.");
+        }
+    }
+
+    /**
      * Shows or the hides the custom error
      *
      * @param showOrHide sets the error to be visible or invisible
