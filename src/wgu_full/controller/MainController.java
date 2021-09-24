@@ -1,13 +1,21 @@
 package wgu_full.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import wgu_full.model.Appointment;
 import wgu_full.model.Customer;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -19,6 +27,10 @@ import static wgu_full.DAO.CustomerDao.getAllCustomers;
  */
 
 public class MainController implements Initializable {
+
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
 
     /**
      * The tables
@@ -51,6 +63,42 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Customer, String> custProvinceCol;
     @FXML private TableColumn<Customer, String> custPostalCol;
     @FXML private TableColumn<Customer, String> custPhoneCol;
+
+    /**
+     * Label
+     */
+    @FXML private Label errorLabel;
+
+    /**
+     * Opens add new customer form
+     *
+     * @param event when the create new button is fired
+     * @throws IOException if I/O operation fails
+     */
+    public void openAddCustomerForm(ActionEvent event) throws IOException {
+        try {
+            root = FXMLLoader.load(getClass().getResource("../view/addCustomerForm.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showError(true, "Error opening add form.");
+        } catch (Exception e){
+            showError(true, "Error opening add form.");
+        }
+    }
+
+    /**
+     * Shows or the hides the custom error
+     *
+     * @param showOrHide sets the error to be visible or invisible
+     * @param errorText the custom error message to show
+     */
+    public void showError(boolean showOrHide, String errorText){
+        errorLabel.setText(errorText);
+        errorLabel.setVisible(showOrHide);
+    }
 
 
     /**
