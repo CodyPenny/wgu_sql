@@ -1,21 +1,21 @@
 package wgu_full.model;
 
 public class Appointment {
-    private int appt_id;
+    private int id;
     private String title;
     private String description;
     private String location;
     private String type;
     private String start;
     private String end;
-    private String customer;
-    private String user;
+    private int customer;
+    private int user;
     private String contact;
 
     /**
      * Constructor
      *
-     * @param appt_id
+     * @param id
      * @param title
      * @param description
      * @param location
@@ -26,8 +26,8 @@ public class Appointment {
      * @param user
      * @param contact
      */
-    public Appointment(int appt_id, String title, String description, String location, String type, String start, String end, String customer, String user, String contact){
-        this.appt_id = appt_id;
+    public Appointment(int id, String title, String description, String location, String type, String start, String end, int customer, int user, String contact){
+        this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
@@ -42,14 +42,14 @@ public class Appointment {
     /**
      * @return the appointment id
      */
-    public int getApptId(){
-        return this.appt_id;
+    public int getId(){
+        return this.id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setAppt_id(int id){ this.appt_id = id;}
+    public void setId(int id){ this.id = id;}
 
     /**
      * @return the title
@@ -114,22 +114,22 @@ public class Appointment {
     /**
      * @return the customer id
      */
-    public String getCustomer(){ return this.customer; }
+    public int getCustomer(){ return this.customer; }
 
     /**
      * @param customer the customer id to set
      */
-    public void setCustomer(String customer){ this.customer = customer; }
+    public void setCustomer(int customer){ this.customer = customer; }
 
     /**
      * @return the user id
      */
-    public String getUser(){ return this.user; }
+    public int getUser(){ return this.user; }
 
     /**
      * @param user the user id to set
      */
-    public void setUser(String user){ this.user = user; }
+    public void setUser(int user){ this.user = user; }
 
     /**
      * @return the contact id

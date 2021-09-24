@@ -11,6 +11,7 @@ import wgu_full.model.Customer;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static wgu_full.DAO.AppointmentDao.getAllAppointments;
 import static wgu_full.DAO.CustomerDao.getAllCustomers;
 
 /**
@@ -38,8 +39,8 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Appointment, String> typeCol;
     @FXML private TableColumn<Appointment, String> startCol;
     @FXML private TableColumn<Appointment, String> endCol;
-    @FXML private TableColumn<Appointment, String> apptCustIdCol;
-    @FXML private TableColumn<Appointment, String> userIdCol;
+    @FXML private TableColumn<Appointment, Integer> apptCustIdCol;
+    @FXML private TableColumn<Appointment, Integer> userIdCol;
 
     /**
      * The columns of the customer table
@@ -73,8 +74,8 @@ public class MainController implements Initializable {
         typeCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("type"));
         startCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("start"));
         endCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("end"));
-        apptCustIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("customer"));
-        userIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("user"));
+        apptCustIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("customer"));
+        userIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("user"));
     }
 
     /**
@@ -87,5 +88,6 @@ public class MainController implements Initializable {
         setupCustomerColumns();
         setupAppointmentColumns();
         customerTable.setItems(getAllCustomers());
+        appointmentTable.setItems(getAllAppointments());
     }
 }
