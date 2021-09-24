@@ -65,6 +65,9 @@ public class MainController implements Initializable {
         custPhoneCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("phone"));
     }
 
+    /**
+     * Populates the columns of the appointments table
+     */
     public void setupAppointmentColumns(){
         apptIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("id"));
         titleCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("title"));

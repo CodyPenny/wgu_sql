@@ -12,6 +12,11 @@ import static wgu_full.DAO.JDBC.openConnection;
 
 public class AppointmentDao {
 
+    /**
+     * Allows the Appointments, Users, Customers, and Contact table
+     *
+     * @return the ObservableList containing all appointments
+     */
     public static ObservableList<Appointment> getAllAppointments(){
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
         try {
