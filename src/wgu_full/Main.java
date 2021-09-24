@@ -6,13 +6,24 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
+/*
+    Javadoc files are in the doc folder
+ */
+
 public class Main extends Application {
 
+    /**
+     *
+     * @param primaryStage the top level JavaFX container
+     * @throws IOException if start operation fails
+     */
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("view/sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+    public void start(Stage primaryStage) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("view/login.fxml"));
+        primaryStage.setTitle("Global Consulting Scheduling");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
