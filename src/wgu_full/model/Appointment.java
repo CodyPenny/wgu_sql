@@ -1,7 +1,7 @@
 package wgu_full.model;
 
 public class Appointment {
-    private String appt_id;
+    private int appt_id;
     private String title;
     private String description;
     private String location;
@@ -26,7 +26,7 @@ public class Appointment {
      * @param user_id
      * @param contact_id
      */
-    public Appointment(String appt_id, String title, String description, String location, String type, String start, String end, int customer_id, int user_id, int contact_id){
+    public Appointment(int appt_id, String title, String description, String location, String type, String start, String end, int customer_id, int user_id, int contact_id){
         this.appt_id = appt_id;
         this.title = title;
         this.description = description;
@@ -42,9 +42,14 @@ public class Appointment {
     /**
      * @return the appointment id
      */
-    public String getApptId(){
+    public int getApptId(){
         return this.appt_id;
     }
+
+    /**
+     * @param id the id to set
+     */
+    public void setAppt_id(int id){ this.appt_id = id;}
 
     /**
      * @return the title

@@ -1,7 +1,7 @@
 package wgu_full.model;
 
 public class Contact {
-    private String contact_id;
+    private int contact_id;
     private String contact_name;
     private String contact_email;
 
@@ -13,7 +13,7 @@ public class Contact {
      * @param email the contact email
      */
 
-    public Contact(String id, String name, String email){
+    public Contact(int id, String name, String email){
         this.contact_id = id;
         this.contact_name =  name;
         this.contact_email = email;
@@ -22,12 +22,12 @@ public class Contact {
     /**
      * @return the id
      */
-    public String getId() { return this.contact_id;}
+    public int getId() { return this.contact_id;}
 
     /**
      * @param id the id to set
      */
-    public void setId(String id) { this.contact_id = id;}
+    public void setId(int id) { this.contact_id = id;}
 
     /**
      * @return the name
