@@ -130,7 +130,11 @@ public class LoginController implements Initializable {
             usernameField = userNameInput.getText();
             passwordField = passwordInput.getText();
             if(!validateInput()){
-                showError(true, "Invalid user or unauthorized.");
+                if(showFrench){
+                    showError(true, "Utilisateur invalide ou non autorisé.");
+                } else {
+                    showError(true, "Invalid user or unauthorized.");
+                }
                 return;
             }
             goToMain(event);
