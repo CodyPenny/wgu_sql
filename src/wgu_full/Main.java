@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import wgu_full.DAO.JDBC;
 
 import java.io.IOException;
 import java.time.ZoneId;
@@ -31,7 +32,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
-//        JDBC.openConnection();
-//        JDBC.closeConnection();
+       //JDBC.openConnection();
+       //JDBC.closeConnection();
     }
 }

@@ -16,9 +16,12 @@ import javafx.stage.Stage;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static wgu_full.DAO.UserDao.validateUser;
 
 /**
  * The interface for the login form
@@ -75,27 +78,34 @@ public class LoginController implements Initializable {
      *
      * @return false if invalid
      */
-    public boolean validateInput(){
-        if(usernameField == null || usernameField.isEmpty()){
-            if(!showFrench){
-                showError(true, "Please enter a username");
-            } else {
-                showError(true, "Merci d'entrer un nom d'utilisateur.");
+    public boolean validateInput() throws SQLException {
+        try {
+            if(usernameField == null || usernameField.isEmpty()){
+                if(!showFrench){
+                    showError(true, "Please enter a username");
+                } else {
+                    showError(true, "Merci d'entrer un nom d'utilisateur.");
+                }
+                return false;
             }
-            return false;
-        }
-        if(passwordField == null || passwordField.isEmpty()){
-            if(!showFrench){
-                showError(true, "Please enter a password");
-            } else {
-                showError(true, "Veuillez entrer un mot de passe.");
+            if(passwordField == null || passwordField.isEmpty()){
+                if(!showFrench){
+                    showError(true, "Please enter a password");
+                } else {
+                    showError(true, "Veuillez entrer un mot de passe.");
+                }
+                return false;
             }
-            return false;
+
+            // check with db
+            if (validateUser(usernameField, passwordField)) {
+                return true;
+            }
+
+        } catch (Exception e){
+            System.out.println("Error -" + e.getMessage());
         }
-
-        // check with db
-
-        return true;
+        return false;
     }
 
     /**
@@ -120,6 +130,7 @@ public class LoginController implements Initializable {
             usernameField = userNameInput.getText();
             passwordField = passwordInput.getText();
             if(!validateInput()){
+                showError(true, "Invalid user or unauthorized.");
                 return;
             }
             goToMain(event);
@@ -160,7 +171,7 @@ public class LoginController implements Initializable {
         ZoneId zone = ZoneId.systemDefault();
         setZoneLabel(zone.toString());
         //test French
-        Locale.setDefault(new Locale("fr"));
+        //Locale.setDefault(new Locale("fr"));
         translate();
     }
 
