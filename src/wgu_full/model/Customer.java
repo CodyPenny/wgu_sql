@@ -10,7 +10,7 @@ public class Customer {
     private String address;
     private String postal_code;
     private String phone;
-    private int division;
+    private String division;
     private String country;
 
     /**
@@ -24,7 +24,7 @@ public class Customer {
      * @param division
      * @param country
      */
-    public Customer(int id, String name, String address, String postal_code, String phone, int division, String country){
+    public Customer(int id, String name, String address, String postal_code, String phone, String division, String country){
         this.id = id;
         this.name = name;
         this.address = address;
@@ -58,6 +58,11 @@ public class Customer {
      * @return the phone number
      */
     public String getPhone(){ return this.phone; }
+
+    /**
+     * @return the division
+     */
+    public String getDivision(){ return this.division; }
 
     /**
      * @param id the id to set

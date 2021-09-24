@@ -59,10 +59,10 @@
                           <columns>
                             <TableColumn fx:id="custIdCol" prefWidth="62.0" text="ID" />
                             <TableColumn fx:id="custNameCol" prefWidth="99.0" text="Name" />
-                              <TableColumn fx:id="custAddressCol" prefWidth="253.0" text="Address" />
-                              <TableColumn fx:id="custProvinceCol" prefWidth="118.0" text="Province/St" />
-                              <TableColumn fx:id="custPostalCol" prefWidth="83.0" text="Postal Code" />
-                              <TableColumn fx:id="custPhoneCol" prefWidth="85.0" text="Phone" />
+                              <TableColumn fx:id="custAddressCol" prefWidth="206.33334350585938" text="Address" />
+                              <TableColumn fx:id="custProvinceCol" prefWidth="106.33331298828125" text="Province/St" />
+                              <TableColumn fx:id="custPostalCol" prefWidth="99.33331298828125" text="Postal Code" />
+                              <TableColumn fx:id="custPhoneCol" prefWidth="127.66668701171875" text="Phone" />
                           </columns>
                         </TableView>
                         <Button fx:id="addCustBtn" layoutX="444.0" layoutY="294.0" mnemonicParsing="false" prefWidth="100.0" text="CREATE NEW" />

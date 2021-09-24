@@ -17,6 +17,10 @@ public class Query {
         query = q;
         try {
             stat = connection.createStatement();
+            if(query.toLowerCase().startsWith("select"))
+                result=stat.executeQuery(q);
+            if(query.toLowerCase().startsWith("delete")||query.toLowerCase().startsWith("insert")||query.toLowerCase().startsWith("update"))
+                stat.executeUpdate(q);
 
         } catch(Exception e){
             System.out.println(e.getMessage());
