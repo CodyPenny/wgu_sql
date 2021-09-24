@@ -38,8 +38,8 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Appointment, String> typeCol;
     @FXML private TableColumn<Appointment, String> startCol;
     @FXML private TableColumn<Appointment, String> endCol;
-    @FXML private TableColumn<Appointment, Integer> apptCustIdCol;
-    @FXML private TableColumn<Appointment, Integer> userIdCol;
+    @FXML private TableColumn<Appointment, String> apptCustIdCol;
+    @FXML private TableColumn<Appointment, String> userIdCol;
 
     /**
      * The columns of the customer table
@@ -64,6 +64,19 @@ public class MainController implements Initializable {
         custPhoneCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("phone"));
     }
 
+    public void setupAppointmentColumns(){
+        apptIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("id"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("title"));
+        descriptionCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("description"));
+        locationCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("location"));
+        contactCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("contact"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("type"));
+        startCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("start"));
+        endCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("end"));
+        apptCustIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("customer"));
+        userIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("user"));
+    }
+
     /**
      *
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
@@ -72,6 +85,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupCustomerColumns();
+        setupAppointmentColumns();
         customerTable.setItems(getAllCustomers());
     }
 }

@@ -8,9 +8,9 @@ public class Appointment {
     private String type;
     private String start;
     private String end;
-    private int customer_id;
-    private int user_id;
-    private int contact_id;
+    private String customer;
+    private String user;
+    private String contact;
 
     /**
      * Constructor
@@ -22,11 +22,11 @@ public class Appointment {
      * @param type
      * @param start
      * @param end
-     * @param customer_id
-     * @param user_id
-     * @param contact_id
+     * @param customer
+     * @param user
+     * @param contact
      */
-    public Appointment(int appt_id, String title, String description, String location, String type, String start, String end, int customer_id, int user_id, int contact_id){
+    public Appointment(int appt_id, String title, String description, String location, String type, String start, String end, String customer, String user, String contact){
         this.appt_id = appt_id;
         this.title = title;
         this.description = description;
@@ -34,9 +34,9 @@ public class Appointment {
         this.type = type;
         this.start = start;
         this.end = end;
-        this.customer_id = customer_id;
-        this.user_id = user_id;
-        this.contact_id = contact_id;
+        this.customer = customer;
+        this.user = user;
+        this.contact = contact;
     }
 
     /**
@@ -114,32 +114,32 @@ public class Appointment {
     /**
      * @return the customer id
      */
-    public int getCustomerId(){ return this.customer_id; }
+    public String getCustomer(){ return this.customer; }
 
     /**
-     * @param customer_id the customer id to set
+     * @param customer the customer id to set
      */
-    public void setCustomerId(int customer_id){ this.customer_id = customer_id; }
+    public void setCustomer(String customer){ this.customer = customer; }
 
     /**
      * @return the user id
      */
-    public int getUserId(){ return this.user_id; }
+    public String getUser(){ return this.user; }
 
     /**
-     * @param user_id the user id to set
+     * @param user the user id to set
      */
-    public void setUserId(int user_id){ this.user_id = user_id; }
+    public void setUser(String user){ this.user = user; }
 
     /**
      * @return the contact id
      */
-    public int getContactId(){ return this.contact_id; }
+    public String getContact(){ return this.contact; }
 
     /**
-     * @param contact_id the contact id to set
+     * @param contact the contact id to set
      */
-    public void setContactId(int contact_id){ this.contact_id = contact_id; }
+    public void setContact(String contact){ this.contact = contact; }
 
 
 
