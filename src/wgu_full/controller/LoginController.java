@@ -1,13 +1,20 @@
 package wgu_full.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import javax.swing.*;
+import java.io.IOException;
 import java.net.URL;
 import java.time.ZoneId;
 import java.util.Locale;
@@ -18,6 +25,9 @@ import java.util.ResourceBundle;
  */
 public class LoginController implements Initializable {
 
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
     private String system_language = "";
     private String usernameField, passwordField;
     private boolean showFrench = false;
@@ -82,6 +92,9 @@ public class LoginController implements Initializable {
             }
             return false;
         }
+
+        // check with db
+
         return true;
     }
 
@@ -102,16 +115,35 @@ public class LoginController implements Initializable {
      *
      * @param event
      */
-    public void login(ActionEvent event) {
+    public void login(ActionEvent event) throws Exception {
         try {
             usernameField = userNameInput.getText();
             passwordField = passwordInput.getText();
             if(!validateInput()){
                 return;
             }
+            goToMain(event);
 
         } catch(Exception e){
-            System.out.println("Error");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Opens the main page
+     *
+     * @param event login button has been fired
+     * @throws IOException if I/O operation fails
+     */
+    public void goToMain(ActionEvent event) throws IOException{
+        try {
+            root = FXMLLoader.load(getClass().getResource("../view/main.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showError(true, "Can not load the protected page.");
         }
     }
 
