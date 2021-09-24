@@ -35,7 +35,7 @@
       </Pane>
       <TextField fx:id="userNameInput" layoutX="175.0" layoutY="155.0" prefHeight="26.0" prefWidth="189.0" />
       <TextField fx:id="passwordInput" layoutX="175.0" layoutY="213.0" prefHeight="26.0" prefWidth="189.0" />
-      <Button fx:id="loginBtn" layoutX="175.0" layoutY="271.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="95.0" text="Log In" />
+      <Button fx:id="loginBtn" layoutX="175.0" layoutY="271.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="95.0" text="Log In" onAction="#login" />
       <Label fx:id="errorLabel" alignment="CENTER" layoutX="4.0" layoutY="337.0" prefHeight="26.0" prefWidth="431.0" text="ERROR" textFill="#ff5e5e" visible="false" />
    </children>
 </AnchorPane>
