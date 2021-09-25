@@ -59,8 +59,8 @@
                           <columns>
                             <TableColumn fx:id="custIdCol" prefWidth="40.66667175292969" text="ID" />
                             <TableColumn fx:id="custNameCol" prefWidth="135.3333282470703" text="Name" />
-                              <TableColumn fx:id="custAddressCol" prefWidth="191.83334350585938" text="Address" />
-                              <TableColumn fx:id="custProvinceCol" prefWidth="106.33331298828125" text="Province/St" />
+                              <TableColumn fx:id="custAddressCol" prefWidth="155.0" text="Address" />
+                              <TableColumn fx:id="custProvinceCol" prefWidth="143.5" text="Province/St" />
                               <TableColumn fx:id="custPostalCol" prefWidth="99.33331298828125" text="Postal Code" />
                               <TableColumn fx:id="custPhoneCol" prefWidth="127.66668701171875" text="Phone" />
                           </columns>

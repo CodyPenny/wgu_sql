@@ -93,6 +93,11 @@ public class AddCustomerController implements Initializable {
 
     }
 
+    /**
+     * Validates the textfields are not empty
+     *
+     * @return false if a textfield is empty prompting an error to show
+     */
     public boolean validateInput(){
         if(nameField.isEmpty() || addressField.isEmpty() || postalField.isEmpty() || phoneField.isEmpty() ) {
             showError(true, "All fields must be complete.");
@@ -130,14 +135,19 @@ public class AddCustomerController implements Initializable {
         }
     }
 
-
+    /**
+     * Populates the country and state/province comboBoxes
+     * Based on the region, the label changes to state or province
+     *
+     * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         countryCombo.setItems(Country.getAllCountry());
         countryCombo.setVisibleRowCount(5);
         countryCombo.getSelectionModel().selectFirst();
         stateOrProvince();
-
         stateOrProvinceCombo.setItems(Division.getAllDivisionByCountry(1));
         stateOrProvinceCombo.setVisibleRowCount(5);
 
