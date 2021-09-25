@@ -4,12 +4,32 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import wgu_full.model.Customer;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
+import static wgu_full.DAO.Query.createCustomer;
 
 public class CustomerDao {
+
+    /**
+     * Creates a new customer by accessing the customers table
+     *
+     * @param name the name of the customer
+     * @param address the address of the customer
+     * @param postal the postal code of the customer
+     * @param phone the phone number
+     * @param division the state or province id
+     * @throws SQLException JDBC encountered an error with the data source
+     */
+    public static void addCustomer(String name, String address, String postal, String phone, int division) throws SQLException {
+        openConnection();
+        createCustomer(name, address, postal, phone, division);
+        closeConnection();
+        return;
+    }
 
     /**
      * Accesses the customers and divisions table

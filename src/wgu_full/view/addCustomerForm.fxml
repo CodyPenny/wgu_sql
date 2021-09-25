@@ -55,7 +55,7 @@
          </font>
       </Label>
       <Button fx:id="saveBtn" layoutX="448.0" layoutY="460.0" mnemonicParsing="false" onAction="#createCustomer" prefHeight="26.0" prefWidth="52.0" text="Save" />
-      <Button fx:id="cancelBtn" layoutX="372.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Cancel" />
+      <Button fx:id="cancelBtn" layoutX="372.0" layoutY="460.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="26.0" prefWidth="59.0" text="Cancel" />
       <TextField fx:id="custIdText" editable="false" layoutX="132.0" layoutY="105.0" opacity="0.5" text="auto-generated">
          <font>
             <Font name="Arial" size="12.0" />

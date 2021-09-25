@@ -47,12 +47,43 @@ public class Query {
         }
     }
 
+    /**
+     * Uses the PreparedStatement interface to retrieve divisions by country
+     *
+     * @param countryId the country id
+     * @throws SQLException JDBC encountered an error with the data source
+     */
     public static void makeDivisionByCountryQuery(int countryId) throws SQLException {
         query = "SELECT * FROM first_level_divisions WHERE Country_ID = ?";
         try {
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, countryId);
             result = stmt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("SQL error -" + e.getMessage());
+        }
+    }
+
+    /**
+     * Uses the PreparedStatement interface to create a new customer
+     * @param name the name of the customer
+     * @param address the address of the customer
+     * @param postal the postal code of the customer
+     * @param phone the phone number
+     * @param division the state or province id
+     * @throws SQLException JDBC encountered an error with the data source
+     */
+    public static void createCustomer(String name, String address, String postal, String phone, int division) throws SQLException{
+        query = "INSERT INTO customers " + "(Customer_Name, Address, Postal_Code, Phone, Division_ID)" + "values (?,?,?,?,?)";
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, name);
+            stmt.setString(2, address);
+            stmt.setString(3, postal);
+            stmt.setString(4, phone);
+            stmt.setInt(5, division);
+            stmt.executeUpdate();
+            stmt.close();
         } catch (SQLException e) {
             System.out.println("SQL error -" + e.getMessage());
         }
