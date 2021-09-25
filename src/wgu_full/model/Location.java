@@ -39,6 +39,4 @@ public class Location {
      */
     public static void addLocation(Location newLocation){ allLocations.add(newLocation); }
 
-
-
 }

@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgu_full.controller.AddApptController">
    <children>
       <Label alignment="CENTER" layoutY="20.0" prefHeight="50.0" prefWidth="600.0" text="ADD APPOINTMENT FORM">
@@ -66,21 +65,21 @@
             <Font name="Arial" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="errorLabel" alignment="CENTER" layoutX="3.0" layoutY="508.0" prefHeight="37.0" prefWidth="594.0" text="ERROR" textFill="#ff5b5b">
+      <Label fx:id="errorLabel" alignment="CENTER" layoutX="3.0" layoutY="508.0" prefHeight="37.0" prefWidth="594.0" text="ERROR" textFill="#ff5b5b" visible="false">
          <font>
             <Font name="Arial" size="14.0" />
          </font>
       </Label>
       <Button fx:id="saveBtn" layoutX="520.0" layoutY="565.0" mnemonicParsing="false" text="Save" />
       <Button fx:id="cancelBtn" layoutX="446.0" layoutY="565.0" mnemonicParsing="false" text="Cancel" />
-      <TextField editable="false" layoutX="155.0" layoutY="96.0" text="disabled" />
+      <TextField disable="true" editable="false" layoutX="155.0" layoutY="96.0" opacity="0.5" text="auto-generated" />
       <TextField fx:id="titleText" layoutX="155.0" layoutY="136.0" />
       <TextField fx:id="descriptionText" layoutX="155.0" layoutY="176.0" prefHeight="26.0" prefWidth="399.0" />
       <ComboBox fx:id="locationCombo" layoutX="155.0" layoutY="216.0" prefHeight="26.0" prefWidth="130.0" />
       <ComboBox fx:id="contactCombo" layoutX="155.0" layoutY="256.0" prefHeight="26.0" prefWidth="130.0" />
       <ComboBox fx:id="typeCombo" layoutX="155.0" layoutY="296.0" prefHeight="26.0" prefWidth="130.0" />
-      <DatePicker fx:id="startText" layoutX="181.0" layoutY="335.0" prefHeight="26.0" prefWidth="150.0" />
-      <DatePicker fx:id="endText" layoutX="181.0" layoutY="375.0" prefHeight="26.0" prefWidth="150.0" />
+      <DatePicker fx:id="startTime" layoutX="181.0" layoutY="335.0" prefHeight="26.0" prefWidth="150.0" />
+      <DatePicker fx:id="endTime" layoutX="181.0" layoutY="375.0" prefHeight="26.0" prefWidth="150.0" />
       <ComboBox fx:id="customerCombo" layoutX="155.0" layoutY="416.0" prefHeight="26.0" prefWidth="130.0" />
       <ComboBox fx:id="userCombo" layoutX="155.0" layoutY="456.0" prefHeight="26.0" prefWidth="130.0" />
    </children>

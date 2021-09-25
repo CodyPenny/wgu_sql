@@ -1,5 +1,10 @@
 package wgu_full.model;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import static wgu_full.DAO.ContactDao.getContacts;
+
 public class Contact {
     private int contact_id;
     private String contact_name;
@@ -48,5 +53,7 @@ public class Contact {
      * @param email the email to set
      */
     public void setEmail(String email) { this.contact_email = email; }
+
+    public static ObservableList<Contact> getAllContacts(){ return getContacts();}
 
 }

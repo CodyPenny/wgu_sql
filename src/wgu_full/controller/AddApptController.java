@@ -1,6 +1,7 @@
 package wgu_full.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
@@ -8,8 +9,14 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import wgu_full.model.*;
 
-public class AddApptController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static wgu_full.model.Contact.getAllContacts;
+
+public class AddApptController implements Initializable {
 
     private Stage stage;
     private Scene scene;
@@ -29,12 +36,16 @@ public class AddApptController {
     /**
      * ComboBoxes
      */
-    //@FXML
-//    private ComboBox<> locationCombo;
-//    private ComboBox<> contactCombo;
-//    private ComboBox<> typeCombo;
-//    private ComboBox<> customerCombo;
-//    private ComboBox<> userCombo;
+    @FXML
+    private ComboBox<Location> locationCombo;
+    @FXML
+    private ComboBox<Contact> contactCombo;
+    @FXML
+    private ComboBox<Type> typeCombo;
+    @FXML
+    private ComboBox<Customer> customerCombo;
+    @FXML
+    private ComboBox<User> userCombo;
 
     /**
      * DatePicker
@@ -44,4 +55,17 @@ public class AddApptController {
 
     @FXML Label errorLabel;
 
+
+    /**
+     *
+     * @param url
+     * @param resourceBundle
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // fill in the combo boxes
+        // populate type and location instances
+        contactCombo.setItems(getAllContacts());
+
+    }
 }

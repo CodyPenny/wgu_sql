@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -46,7 +47,10 @@
                           </columns>
                         </TableView>
                         <Button fx:id="addApptBtn" layoutX="345.0" layoutY="294.0" mnemonicParsing="false" onAction="#openAddAppointmentForm" prefHeight="26.0" prefWidth="199.0" text="CREATE NEW APPOINTMENT" />
-                        <Button fx:id="editApptBtn" layoutX="555.0" layoutY="294.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="EDIT" />
+                        <Button fx:id="editApptBtn" layoutX="555.0" layoutY="294.0" mnemonicParsing="false" onAction="#openEditAppointmentForm" prefHeight="26.0" prefWidth="65.0" text="EDIT">
+                           <effect>
+                              <Blend />
+                           </effect></Button>
                         <Button fx:id="deleteApptBtn" layoutX="632.0" layoutY="294.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="DELETE" />
                      </children></AnchorPane>
             </content>

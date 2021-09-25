@@ -90,6 +90,7 @@ public class MainController implements Initializable {
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+
         } catch (IOException e) {
             showError(true, "Error opening add form.");
         } catch (Exception e){
@@ -122,7 +123,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Opens add new appointment form
+     * Opens the add new appointment form
      *
      * @param event when the create new button is fired
      * @throws IOException if I/O operation fails
@@ -130,7 +131,7 @@ public class MainController implements Initializable {
     public void openAddAppointmentForm(ActionEvent event) throws IOException {
         try {
             root = FXMLLoader.load(getClass().getResource("../view/addApptForm.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -138,6 +139,26 @@ public class MainController implements Initializable {
             showError(true, "Error opening add form.");
         } catch (Exception e){
             showError(true, "Error opening add form.");
+        }
+    }
+
+    /**
+     * Opens the edit appointment form
+     *
+     * @param event when the edit button is fired
+     * @throws IOException if I/O operation fails
+     */
+    public void openEditAppointmentForm(ActionEvent event) throws IOException {
+        try {
+            root = FXMLLoader.load(getClass().getResource("../view/editApptForm.fxml"));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showError(true, "Error opening edit form.");
+        } catch (Exception e){
+            showError(true, "Error opening edit form.");
         }
     }
 
@@ -178,7 +199,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Selects the tab of the Tabpane object
+     * Selects the tab of the TabPane object
      *
      * @param i the index of the Tab starting from 1
      */
