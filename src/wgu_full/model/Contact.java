@@ -56,4 +56,11 @@ public class Contact {
 
     public static ObservableList<Contact> getAllContacts(){ return getContacts();}
 
+    /**
+     * Overrides the toString method to customize display in comboBox
+     * @return
+     */
+    @Override
+    public String toString(){ return this.contact_name; }
+
 }
