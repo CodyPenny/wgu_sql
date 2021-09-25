@@ -18,7 +18,7 @@
    <children>
       <Line endX="56.83826446533203" endY="176.0" layoutX="8.0" layoutY="-32.0" startX="789.1715698242188" startY="176.0" stroke="#c4c4c4" AnchorPane.leftAnchor="30.16666603088379" AnchorPane.rightAnchor="211.50002098083496" />
       <Line endX="22.66666603088379" endY="167.9595489501953" layoutX="8.0" layoutY="116.0" startX="754.0" startY="167.95953369140625" stroke="#c4c4c4" />
-      <TabPane layoutX="29.0" layoutY="310.0" prefHeight="379.0" prefWidth="736.0" style="-fx-border-color: #c4c4c4;" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="mainTabPane" layoutX="29.0" layoutY="310.0" prefHeight="379.0" prefWidth="736.0" style="-fx-border-color: #c4c4c4;" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="apptTab" text="Appointments">
             <content>

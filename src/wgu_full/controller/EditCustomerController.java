@@ -24,6 +24,10 @@ import static wgu_full.DAO.CustomerDao.updateCustomer;
 
 public class EditCustomerController implements Initializable {
 
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+
     /**
      * Variables that will hold the text entered in the textfields
      */
@@ -132,9 +136,12 @@ public class EditCustomerController implements Initializable {
      */
     public void backToMain(ActionEvent event) throws IOException{
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("../view/main.fxml"));
-            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/main.fxml"));
+            root = loader.load();
+            MainController controller = loader.getController();
+            controller.selectTab(2);
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {

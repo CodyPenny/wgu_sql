@@ -7,10 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import wgu_full.model.Appointment;
@@ -73,6 +70,7 @@ public class MainController implements Initializable {
     /**
      * Tabs
      */
+    @FXML private TabPane mainTabPane;
     @FXML private Tab apptTab, custTab, reportTab;
 
     /**
@@ -95,6 +93,12 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Opens the edit/update customer form
+     *
+     * @param event when the edit button is fired
+     * @throws Exception if I/O operation fails
+     */
     public void openEditCustomerForm(ActionEvent event) throws Exception{
         try{
             Customer row = customerTable.getFocusModel().getFocusedItem();
@@ -144,6 +148,20 @@ public class MainController implements Initializable {
         errorLabel.setVisible(showOrHide);
     }
 
+    /**
+     * Selects the tab of the Tabpane object
+     *
+     * @param i the index of the Tab starting from 1
+     */
+    public void selectTab( int i){
+        if(i == 1){
+            mainTabPane.getSelectionModel().select(apptTab);
+        } else if (i == 2){
+            mainTabPane.getSelectionModel().select(custTab);
+        } else {
+            mainTabPane.getSelectionModel().select(reportTab);
+        }
+    }
 
     /**
      * Populates the columns of the customers table
