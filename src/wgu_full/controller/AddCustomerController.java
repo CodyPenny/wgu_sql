@@ -61,6 +61,11 @@ public class AddCustomerController implements Initializable {
         });
     }
 
+    /**
+     * Takes the entered text in the textfields, validates the entry, then creates a new customer
+     *
+     * @param event the save button has been fired
+     */
     public void createCustomer(ActionEvent event) {
         try {
             nameField = custNameText.getText();

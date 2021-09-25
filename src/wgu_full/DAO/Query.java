@@ -89,6 +89,24 @@ public class Query {
         }
     }
 
+    public static void changeCustomer(int id ,String name, String address, String postal, String phone, int division) throws SQLException {
+        query = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? where Customer_ID = ?";
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, name);
+            stmt.setString(2, address);
+            stmt.setString(3, postal);
+            stmt.setString(4, phone);
+            stmt.setInt(5, division);
+            stmt.setInt(6, id);
+            stmt.executeUpdate();
+            connection.commit();
+
+        } catch (SQLException e) {
+            System.out.println("SQL error -" + e.getMessage());
+        }
+    }
+
     /**
      * Fetches the result referencing the ResultSet object
      *

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
+import static wgu_full.DAO.Query.changeCustomer;
 import static wgu_full.DAO.Query.createCustomer;
 
 public class CustomerDao {
@@ -27,6 +28,13 @@ public class CustomerDao {
     public static void addCustomer(String name, String address, String postal, String phone, int division) throws SQLException {
         openConnection();
         createCustomer(name, address, postal, phone, division);
+        closeConnection();
+        return;
+    }
+
+    public static void updateCustomer(int id ,String name, String address, String postal, String phone, int division) throws SQLException {
+        openConnection();
+        changeCustomer(id, name, address, postal, phone, division);
         closeConnection();
         return;
     }
