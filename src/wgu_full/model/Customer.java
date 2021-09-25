@@ -112,14 +112,14 @@ public class Customer {
     }
 
     /**
-     * @return the ObservableList for associated appointments
+     * @return The ObservableList for associated appointments
      */
     public ObservableList<Appointment> getAllAssociatedAppointments(){
         return this.associatedAppts;
     }
 
     /**
-     * @return the ObservableList for all customers
+     * @return The ObservableList for all customers from the data store
      */
     public static ObservableList<Customer> getAllCusts(){return getAllCustomers();}
 
@@ -132,6 +132,13 @@ public class Customer {
         //delete from database too
         return true;
     }
+
+    /**
+     * Overrides the toString method to customize display in comboBox
+     * @return
+     */
+    @Override
+    public String toString(){ return (Integer.toString(this.id) + " - " + this.name); }
 
 
 }

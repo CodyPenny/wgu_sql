@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static wgu_full.model.Contact.getAllContacts;
+import static wgu_full.model.Customer.getAllCusts;
 
 public class AddApptController implements Initializable {
 
@@ -66,6 +67,6 @@ public class AddApptController implements Initializable {
         // fill in the combo boxes
         // populate type and location instances
         contactCombo.setItems(getAllContacts());
-
+        customerCombo.setItems(getAllCusts());
     }
 }
