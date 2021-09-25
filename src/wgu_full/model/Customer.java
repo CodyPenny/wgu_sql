@@ -3,6 +3,8 @@ package wgu_full.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import static wgu_full.DAO.CustomerDao.getAllCustomers;
+
 public class Customer {
     private ObservableList<Appointment> associatedAppts = FXCollections.observableArrayList();
     private int id;
@@ -11,7 +13,7 @@ public class Customer {
     private String postal_code;
     private String phone;
     private String division;
-    private String country;
+    private int country;
 
     /**
      * Constructor
@@ -24,7 +26,7 @@ public class Customer {
      * @param division
      * @param country
      */
-    public Customer(int id, String name, String address, String postal_code, String phone, String division, String country){
+    public Customer(int id, String name, String address, String postal_code, String phone, String division, int country){
         this.id = id;
         this.name = name;
         this.address = address;
@@ -65,6 +67,11 @@ public class Customer {
     public String getDivision(){ return this.division; }
 
     /**
+     * @return the country id
+     */
+    public int getCountry(){ return this.country;}
+
+    /**
      * @param id the id to set
      */
     public void setId(int id){ this.id = id; }
@@ -77,7 +84,6 @@ public class Customer {
     /**
      * @param address the address to set
      */
-
     public void setAddress(String address){ this.address= address; }
 
     /**
@@ -89,6 +95,11 @@ public class Customer {
      * @param phone the phone number to set
      */
     public void setPhone(String phone){ this.phone = phone; }
+
+    /**
+     * @param country the country id to set
+     */
+    public void setCountry(int country){ this.country = country;}
 
     /**
      * Adds an appointment to the associated Appointment list
@@ -106,6 +117,11 @@ public class Customer {
     public ObservableList<Appointment> getAllAssociatedAppointments(){
         return this.associatedAppts;
     }
+
+    /**
+     * @return the ObservableList for all customers
+     */
+    public static ObservableList<Customer> getAllCusts(){return getAllCustomers();}
 
     /**
      *

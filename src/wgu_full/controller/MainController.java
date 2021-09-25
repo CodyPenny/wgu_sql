@@ -91,11 +91,11 @@ public class MainController implements Initializable {
 
     public void openEditCustomerForm(ActionEvent event) throws Exception{
         try{
-//            Part obj = partTableView.getFocusModel().getFocusedItem();
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("modifyPart.fxml"));
-//            root = loader.load();
-//            ModifyPartController modifyPartController = loader.getController();
-//            modifyPartController.populateForm(obj);
+            Customer row = customerTable.getFocusModel().getFocusedItem();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/editCustomerForm.fxml"));
+            root = loader.load();
+            EditCustomerController controller = loader.getController();
+            controller.populateForm(row);
 
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
@@ -176,7 +176,7 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupCustomerColumns();
         setupAppointmentColumns();
-        customerTable.setItems(getAllCustomers());
+        customerTable.setItems(Customer.getAllCusts());
         appointmentTable.setItems(getAllAppointments());
     }
 }

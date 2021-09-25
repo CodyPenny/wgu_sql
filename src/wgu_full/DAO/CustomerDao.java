@@ -48,7 +48,7 @@ public class CustomerDao {
         ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
         try {
             openConnection();
-            String query = "SELECT c.*, d.Division FROM customers AS c LEFT JOIN first_level_divisions as d on (c.Division_ID = d.Division_ID)";
+            String query = "SELECT c.*, d.Division, d.Country_ID FROM customers AS c LEFT JOIN first_level_divisions as d on (c.Division_ID = d.Division_ID)";
             Query.makeQuery(query);
             ResultSet result = Query.getResult();
 
@@ -59,7 +59,8 @@ public class CustomerDao {
                 String postal = result.getString("Postal_Code");
                 String phone = result.getString("Phone");
                 String division = result.getString("Division");
-                Customer customerResult = new Customer(id, name, address, postal, phone, division, "");
+                int country = result.getInt("Country_ID");
+                Customer customerResult = new Customer(id, name, address, postal, phone, division, country);
                 allCustomers.add(customerResult);
             }
             closeConnection();
