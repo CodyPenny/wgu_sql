@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import wgu_full.DAO.JDBC;
 import wgu_full.model.Location;
+import wgu_full.model.Type;
 
 import java.io.IOException;
 import java.time.ZoneId;
@@ -24,16 +25,25 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException{
-        try {
-            Location loc1 = new Location("White Plains, NY");
-            Location loc2 = new Location("Phoenix, AZ");
-            Location loc3 = new Location("Montreal, Canada");
-            Location loc4 = new Location("London, England");
-            Location.addLocation(loc1);
-            Location.addLocation(loc2);
-            Location.addLocation(loc3);
-            Location.addLocation(loc4);
+        Location loc1 = new Location("White Plains, NY");
+        Location loc2 = new Location("Phoenix, AZ");
+        Location loc3 = new Location("Montreal, Canada");
+        Location loc4 = new Location("London, England");
+        Location.addLocation(loc1);
+        Location.addLocation(loc2);
+        Location.addLocation(loc3);
+        Location.addLocation(loc4);
 
+        Type type1 = new Type("Planning session");
+        Type type2 = new Type("De-briefing");
+        Type type3 = new Type("Consultation");
+        Type type4 = new Type("Happy Hour");
+        Type.addType(type1);
+        Type.addType(type2);
+        Type.addType(type3);
+        Type.addType(type4);
+
+        try {
             Parent root = FXMLLoader.load(getClass().getResource("view/login.fxml"));
             primaryStage.setTitle("Global Consulting Scheduling");
             primaryStage.setScene(new Scene(root));
