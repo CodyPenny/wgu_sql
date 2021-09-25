@@ -1,32 +1,35 @@
 package wgu_full.model;
 
+import javafx.collections.ObservableList;
+
+import static wgu_full.DAO.CountryDao.getAllCountries;
+import static wgu_full.DAO.DivisionDao.getAllDivisions;
+import static wgu_full.DAO.DivisionDao.getAllDivisionsByCountry;
+
 public class Division {
-    private int division_id;
+    private int id;
     private String division;
-    private int country_id;
 
     /**
      * Constructor
      *
-     * @param division_id
+     * @param id
      * @param division
-     * @param country_id
      */
-    public Division(int division_id, String division, int country_id){
-        this.division_id = division_id;
+    public Division(int id, String division){
+        this.id = id;
         this.division = division;
-        this.country_id = country_id;
     }
 
     /**
      * @return the division id
      */
-    public int getDivisionId(){ return this.division_id; }
+    public int getId(){ return this.id; }
 
     /**
      * @param id the division id to set
      */
-    public void setDivisionId(int id){ this.division_id = id; }
+    public void setId(int id){ this.id = id; }
 
     /**
      * @return the division
@@ -39,12 +42,25 @@ public class Division {
     public void setDivision(String division){ this.division = division; }
 
     /**
-     * @return the country id
+     * @return all divisions from the data store
      */
-    public int getCountryId(){ return this.country_id; }
+    public static ObservableList<Division> getAllDivision(){
+        return getAllDivisions();
+    }
 
     /**
-     * @param id the country id to set
+     * @return all divisions by country from the data store
      */
-    public void setCountryId(int id){ this.country_id = id; }
+    public static ObservableList<Division> getAllDivisionByCountry(int countryId){
+        return getAllDivisionsByCountry(countryId);
+    }
+
+    /**
+     * Overrides the toString method to customize display in comboBox
+     *
+     * @return
+     */
+    @Override
+    public String toString(){ return this.division; }
+
 }

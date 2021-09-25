@@ -40,19 +40,16 @@ public class Country {
     public void setCountry(String country){ this.country = country; }
 
     /**
-     * Fetches all countries from the data store
-     * @return all countries
+     * @return all countries from the data store
      */
     public static ObservableList<Country> getAllCountry(){
         return getAllCountries();
     }
 
     /**
-     * Override the toString method to customize display in comboBox
+     * Overrides the toString method to customize display in comboBox
      * @return
      */
     @Override
-    public String toString(){
-        return ("#" + Integer.toString(this.id) + ' ' +this.country);
-    }
+    public String toString(){ return this.country; }
 }

@@ -47,6 +47,17 @@ public class Query {
         }
     }
 
+    public static void makeDivisionByCountryQuery(int countryId) throws SQLException {
+        query = "SELECT * FROM first_level_divisions WHERE Country_ID = ?";
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, countryId);
+            result = stmt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("SQL error -" + e.getMessage());
+        }
+    }
+
     /**
      * Fetches the result referencing the ResultSet object
      *

@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgu_full.controller.AddCustomerController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgu_full.controller.AddCustomerController">
    <children>
-      <Label alignment="CENTER" layoutX="2.0" layoutY="29.0" prefHeight="40.0" prefWidth="594.0" text="CREATE CUSTOMER FORM">
+      <Label alignment="CENTER" layoutX="2.0" layoutY="29.0" prefHeight="40.0" prefWidth="542.0" text="CREATE CUSTOMER FORM">
          <font>
             <Font name="Arial" size="18.0" />
          </font>
@@ -54,17 +54,17 @@
             <Font name="Arial" size="14.0" />
          </font>
       </Label>
-      <Button fx:id="saveBtn" layoutX="503.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Save" />
-      <Button fx:id="cancelBtn" layoutX="430.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Cancel" />
+      <Button fx:id="saveBtn" layoutX="448.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Save" />
+      <Button fx:id="cancelBtn" layoutX="372.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Cancel" />
       <TextField fx:id="custIdText" editable="false" layoutX="132.0" layoutY="105.0" opacity="0.5" text="auto-generated">
          <font>
             <Font name="Arial" size="12.0" />
          </font></TextField>
-      <TextField fx:id="custNameText" layoutX="132.0" layoutY="145.0" prefHeight="26.0" prefWidth="292.0" />
-      <TextField fx:id="custAddressText" layoutX="132.0" layoutY="185.0" prefHeight="26.0" prefWidth="292.0" />
-      <ComboBox fx:id="countryCombo" layoutX="132.0" layoutY="225.0" prefHeight="26.0" prefWidth="129.0" />
-      <ComboBox fx:id="stateOrProvinceCombo" layoutX="132.0" layoutY="265.0" prefHeight="26.0" prefWidth="129.0" />
-      <TextField fx:id="postalText" layoutX="132.0" layoutY="305.0" prefHeight="26.0" prefWidth="129.0" />
-      <TextField fx:id="phoneText" layoutX="132.0" layoutY="345.0" prefHeight="26.0" prefWidth="129.0" />
+      <TextField fx:id="custNameText" layoutX="132.0" layoutY="145.0" prefHeight="26.0" prefWidth="206.0" />
+      <TextField fx:id="custAddressText" layoutX="132.0" layoutY="185.0" prefHeight="26.0" prefWidth="206.0" />
+      <ComboBox fx:id="countryCombo" layoutX="132.0" layoutY="225.0" prefHeight="26.0" prefWidth="115.0" />
+      <ComboBox fx:id="stateOrProvinceCombo" layoutX="132.0" layoutY="265.0" prefHeight="26.0" prefWidth="115.0" promptText="Select one ..." />
+      <TextField fx:id="postalText" layoutX="132.0" layoutY="305.0" prefHeight="26.0" prefWidth="115.0" />
+      <TextField fx:id="phoneText" layoutX="132.0" layoutY="345.0" prefHeight="26.0" prefWidth="115.0" />
    </children>
 </AnchorPane>

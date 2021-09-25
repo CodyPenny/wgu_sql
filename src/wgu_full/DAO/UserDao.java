@@ -21,7 +21,6 @@ public class UserDao {
     public static boolean validateUser(String username, String pw) throws SQLException {
         openConnection();
         Query.makeLoginQuery(username, pw);
-        User userResult;
         ResultSet result = Query.getResult();
         if (!result.isBeforeFirst()) {
             return false;

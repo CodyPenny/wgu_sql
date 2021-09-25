@@ -28,10 +28,25 @@ public class AddCustomerController implements Initializable {
     @FXML private ComboBox<Country> countryCombo;
     @FXML private ComboBox<Division> stateOrProvinceCombo;
 
+    /**
+     * The country comboxBox listens for any changes in the selection and displays the province or states associated with the selected country
+     */
+    public void stateOrProvince(){
+        countryCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            stateOrProvinceCombo.setItems(Division.getAllDivisionByCountry(newValue.getId()));
+        });
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         countryCombo.setItems(Country.getAllCountry());
         countryCombo.setVisibleRowCount(5);
+        countryCombo.getSelectionModel().selectFirst();
+        stateOrProvince();
+
+        stateOrProvinceCombo.setItems(Division.getAllDivisionByCountry(1));
+        stateOrProvinceCombo.setVisibleRowCount(5);
+
     }
 }

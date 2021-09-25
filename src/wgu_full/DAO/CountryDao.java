@@ -11,6 +11,10 @@ import static wgu_full.DAO.JDBC.openConnection;
 
 public class CountryDao {
 
+    /**
+     * Accesses the country table
+     * @return the ObservableList containing all countries
+     */
     public static ObservableList<Country> getAllCountries(){
         ObservableList<Country> allCountries = FXCollections.observableArrayList();
         try {
