@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 
 import static wgu_full.model.Contact.getAllContacts;
 import static wgu_full.model.Customer.getAllCusts;
+import static wgu_full.model.Location.getAllLocations;
 import static wgu_full.model.User.getUsers;
 
 public class AddApptController implements Initializable {
@@ -70,5 +71,6 @@ public class AddApptController implements Initializable {
         contactCombo.setItems(getAllContacts());
         customerCombo.setItems(getAllCusts());
         userCombo.setItems(getUsers());
+        locationCombo.setItems(getAllLocations());
     }
 }

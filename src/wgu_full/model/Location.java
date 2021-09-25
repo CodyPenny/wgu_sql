@@ -15,7 +15,7 @@ public class Location {
      *
      * @param city_state the city and state/province
      */
-    Location(String city_state){
+    public Location(String city_state){
         this.city_state = city_state;
     }
 
@@ -39,4 +39,10 @@ public class Location {
      */
     public static void addLocation(Location newLocation){ allLocations.add(newLocation); }
 
+    /**
+     * Overrides the toString method to customize display in comboBox
+     * @return
+     */
+    @Override
+    public String toString(){ return this.city_state; }
 }

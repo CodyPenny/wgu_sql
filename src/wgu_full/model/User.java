@@ -52,6 +52,9 @@ public class User {
      */
     public void setPassword(String password){ this.password = password; }
 
+    /**
+     * @return ObservableList of all users from the data store
+     */
     public static ObservableList<User> getUsers(){
         return getAllUsers();
     }

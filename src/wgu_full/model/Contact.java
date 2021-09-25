@@ -54,6 +54,9 @@ public class Contact {
      */
     public void setEmail(String email) { this.contact_email = email; }
 
+    /**
+     * @return ObservableList of all contacts from the data store
+     */
     public static ObservableList<Contact> getAllContacts(){ return getContacts();}
 
     /**

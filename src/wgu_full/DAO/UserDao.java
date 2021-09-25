@@ -31,6 +31,11 @@ public class UserDao {
         return true;
     }
 
+    /**
+     * Allows access to the users table
+     *
+     * @return ObservableList of all users
+     */
     public static ObservableList<User> getAllUsers(){
         ObservableList<User> allUsers = FXCollections.observableArrayList();
         try {

@@ -13,6 +13,10 @@ public class Query {
     private static PreparedStatement stmt;
     private static ResultSet result;
 
+    /**
+     * Queries the database per sql keyword
+     * @param q the query string
+     */
     public static void makeQuery(String q) {
         query = q;
         try {
@@ -120,7 +124,7 @@ public class Query {
     }
 
     /**
-     * Remove or delete a customer
+     * Remove or deletes a customer
      *
      * @param id the customer id
      * @return true if customer is deleted without any errors
