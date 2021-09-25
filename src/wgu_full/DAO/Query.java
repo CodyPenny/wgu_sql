@@ -66,6 +66,7 @@ public class Query {
 
     /**
      * Uses the PreparedStatement interface to create a new customer
+     *
      * @param name the name of the customer
      * @param address the address of the customer
      * @param postal the postal code of the customer
@@ -89,6 +90,18 @@ public class Query {
         }
     }
 
+    /**
+     * Update a customer
+     *
+     * @param id the customer id
+     * @param name the name of the customer
+     * @param address the address of the customer
+     * @param postal the postal code of the customer
+     * @param phone the phone number
+     * @param division the state or province id
+     * @throws SQLException JDBC encountered an error with the data source
+
+     */
     public static void changeCustomer(int id ,String name, String address, String postal, String phone, int division) throws SQLException {
         query = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? where Customer_ID = ?";
         try {
@@ -101,9 +114,28 @@ public class Query {
             stmt.setInt(6, id);
             stmt.executeUpdate();
             connection.commit();
-
         } catch (SQLException e) {
             System.out.println("SQL error -" + e.getMessage());
+        }
+    }
+
+    /**
+     * Remove or delete a customer
+     *
+     * @param id the customer id
+     * @return true if customer is deleted without any errors
+     * @throws SQLException JDBC encountered an error with the data source
+     */
+    public static boolean removeCustomer(int id) throws SQLException {
+        query = "DELETE FROM customers WHERE Customer_ID = ?";
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("SQL error -" + e.getMessage());
+            return false;
         }
     }
 

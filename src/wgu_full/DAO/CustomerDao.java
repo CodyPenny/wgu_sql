@@ -10,8 +10,7 @@ import java.sql.SQLException;
 
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
-import static wgu_full.DAO.Query.changeCustomer;
-import static wgu_full.DAO.Query.createCustomer;
+import static wgu_full.DAO.Query.*;
 
 public class CustomerDao {
 
@@ -32,11 +31,38 @@ public class CustomerDao {
         return;
     }
 
+    /**
+     * Updates the customer attributes
+     *
+     * @param id the customer id
+     * @param name the name of the customer
+     * @param address the address of the customer
+     * @param postal the postal code of the customer
+     * @param phone the phone number
+     * @param division the state or province id
+     * @throws SQLException JDBC encountered an error with the data source
+     */
     public static void updateCustomer(int id ,String name, String address, String postal, String phone, int division) throws SQLException {
         openConnection();
         changeCustomer(id, name, address, postal, phone, division);
         closeConnection();
         return;
+    }
+
+    /**
+     * Deletes a customer
+     *
+     * @param id the customer id
+     * @return true if the customer is deleted without any errors
+     * @throws SQLException JDBC encountered an error with the data source
+     */
+    public static boolean deleteCustomer(int id) throws SQLException {
+        openConnection();
+        if(!removeCustomer(id)){
+            return false;
+        }
+        closeConnection();
+        return true;
     }
 
     /**

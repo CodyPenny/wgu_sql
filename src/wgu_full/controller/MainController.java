@@ -10,13 +10,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import wgu_full.DAO.CustomerDao;
 import wgu_full.model.Appointment;
 import wgu_full.model.Customer;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
+import static javafx.scene.control.Alert.AlertType.INFORMATION;
 import static wgu_full.DAO.AppointmentDao.getAllAppointments;
 import static wgu_full.DAO.CustomerDao.getAllCustomers;
 
@@ -134,6 +138,31 @@ public class MainController implements Initializable {
             showError(true, "Error opening add form.");
         } catch (Exception e){
             showError(true, "Error opening add form.");
+        }
+    }
+
+    /**
+     * Deletes a customer from the customer table
+     *
+     * @param event when the delete button is fired
+     */
+    public void deleteCustomer(ActionEvent event) {
+        try {
+            Customer selectedCustomer = customerTable.getFocusModel().getFocusedItem();
+            Alert alert = new Alert(CONFIRMATION, "Are you sure?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                if(!CustomerDao.deleteCustomer(selectedCustomer.getId())){
+                    showError(true, "Error with deletion");
+                    return;
+                } else {
+                    Alert okAlert = new Alert(INFORMATION, "Row removed");
+                    okAlert.show();
+                    customerTable.setItems(Customer.getAllCusts());
+                }
+            }
+        } catch (Exception e){
+            showError(true, "Error with deletion");
         }
     }
 

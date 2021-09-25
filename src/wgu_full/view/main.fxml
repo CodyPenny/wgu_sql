@@ -67,7 +67,7 @@
                         </TableView>
                         <Button fx:id="addCustBtn" layoutX="365.0" layoutY="294.0" mnemonicParsing="false" onAction="#openAddCustomerForm" prefHeight="26.0" prefWidth="179.0" text="CREATE NEW CUSTOMER" />
                         <Button fx:id="editCustBtn" layoutX="555.0" layoutY="294.0" mnemonicParsing="false" onAction="#openEditCustomerForm" prefHeight="26.0" prefWidth="65.0" text="EDIT" />
-                        <Button fx:id="deleteCustBtn" layoutX="632.0" layoutY="294.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="DELETE" />
+                        <Button fx:id="deleteCustBtn" layoutX="632.0" layoutY="294.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="26.0" prefWidth="75.0" text="DELETE" />
                      </children></AnchorPane>
             </content>
           </Tab>
