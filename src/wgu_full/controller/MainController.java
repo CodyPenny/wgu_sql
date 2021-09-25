@@ -156,7 +156,7 @@ public class MainController implements Initializable {
                     showError(true, "Error with deletion");
                     return;
                 } else {
-                    Alert okAlert = new Alert(INFORMATION, "Row removed");
+                    Alert okAlert = new Alert(INFORMATION, "Customer removed");
                     okAlert.show();
                     customerTable.setItems(Customer.getAllCusts());
                 }
