@@ -64,7 +64,7 @@
       <TextField fx:id="custAddressText" layoutX="132.0" layoutY="185.0" prefHeight="26.0" prefWidth="292.0" />
       <ComboBox fx:id="countryCombo" layoutX="132.0" layoutY="225.0" prefHeight="26.0" prefWidth="129.0" />
       <ComboBox fx:id="stateOrProvinceCombo" layoutX="132.0" layoutY="265.0" prefHeight="26.0" prefWidth="129.0" />
-      <TextField fx:id="postalCombo" layoutX="132.0" layoutY="305.0" prefHeight="26.0" prefWidth="129.0" />
-      <TextField fx:id="phoneCombo" layoutX="132.0" layoutY="345.0" prefHeight="26.0" prefWidth="129.0" />
+      <TextField fx:id="postalText" layoutX="132.0" layoutY="305.0" prefHeight="26.0" prefWidth="129.0" />
+      <TextField fx:id="phoneText" layoutX="132.0" layoutY="345.0" prefHeight="26.0" prefWidth="129.0" />
    </children>
 </AnchorPane>
