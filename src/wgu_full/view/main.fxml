@@ -45,7 +45,7 @@
                               <TableColumn fx:id="userIdCol" prefWidth="63.0" text="USER_ID" />
                           </columns>
                         </TableView>
-                        <Button fx:id="addApptBtn" layoutX="444.0" layoutY="294.0" mnemonicParsing="false" onAction="#openAddAppointmentForm" prefWidth="100.0" text="CREATE NEW" />
+                        <Button fx:id="addApptBtn" layoutX="345.0" layoutY="294.0" mnemonicParsing="false" onAction="#openAddAppointmentForm" prefHeight="26.0" prefWidth="199.0" text="CREATE NEW APPOINTMENT" />
                         <Button fx:id="editApptBtn" layoutX="555.0" layoutY="294.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="EDIT" />
                         <Button fx:id="deleteApptBtn" layoutX="632.0" layoutY="294.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="DELETE" />
                      </children></AnchorPane>
@@ -65,7 +65,7 @@
                               <TableColumn fx:id="custPhoneCol" prefWidth="127.66668701171875" text="Phone" />
                           </columns>
                         </TableView>
-                        <Button fx:id="addCustBtn" layoutX="444.0" layoutY="294.0" mnemonicParsing="false" onAction="#openAddCustomerForm" prefWidth="100.0" text="CREATE NEW" />
+                        <Button fx:id="addCustBtn" layoutX="365.0" layoutY="294.0" mnemonicParsing="false" onAction="#openAddCustomerForm" prefHeight="26.0" prefWidth="179.0" text="CREATE NEW CUSTOMER" />
                         <Button fx:id="editCustBtn" layoutX="555.0" layoutY="294.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="EDIT" />
                         <Button fx:id="deleteCustBtn" layoutX="632.0" layoutY="294.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="DELETE" />
                      </children></AnchorPane>

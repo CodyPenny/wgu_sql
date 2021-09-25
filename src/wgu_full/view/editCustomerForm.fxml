@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgu_full.controller.EditCustomerController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgu_full.controller.EditCustomerController">
     <children>
-        <Label alignment="CENTER" layoutX="2.0" layoutY="29.0" prefHeight="40.0" prefWidth="594.0" text="EDIT CUSTOMER FORM">
+        <Label alignment="CENTER" layoutX="2.0" layoutY="29.0" prefHeight="40.0" prefWidth="544.0" text="EDIT CUSTOMER FORM">
             <font>
                 <Font name="Arial" size="18.0" />
             </font>
@@ -49,16 +49,16 @@
                 <Font name="Arial" size="14.0" />
             </font>
         </Label>
-        <Label fx:id="errorLabel" alignment="CENTER" layoutX="35.0" layoutY="395.0" prefHeight="40.0" prefWidth="531.0" text="ERROR" textFill="#ff6262">
+        <Label fx:id="errorLabel" alignment="CENTER" layoutX="35.0" layoutY="395.0" prefHeight="40.0" prefWidth="531.0" text="ERROR" textFill="#ff6262" visible="false">
             <font>
                 <Font name="Arial" size="14.0" />
             </font>
         </Label>
-        <Button fx:id="saveBtn" layoutX="503.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Save" />
-        <Button fx:id="cancelBtn" layoutX="430.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Cancel" />
-        <TextField fx:id="idLabel" editable="false" layoutX="132.0" layoutY="105.0" />
-        <TextField fx:id="nameLabel" layoutX="132.0" layoutY="145.0" prefHeight="26.0" prefWidth="292.0" />
-        <TextField fx:id="addressLabel" layoutX="132.0" layoutY="185.0" prefHeight="26.0" prefWidth="292.0" />
+        <Button fx:id="saveBtn" layoutX="470.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Save" />
+        <Button fx:id="cancelBtn" layoutX="400.0" layoutY="460.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Cancel" />
+        <TextField fx:id="idLabel" disable="true" editable="false" layoutX="132.0" layoutY="105.0" prefHeight="26.0" prefWidth="129.0" />
+        <TextField fx:id="nameLabel" layoutX="132.0" layoutY="145.0" prefHeight="26.0" prefWidth="246.0" />
+        <TextField fx:id="addressLabel" layoutX="132.0" layoutY="185.0" prefHeight="26.0" prefWidth="246.0" />
         <ComboBox fx:id="countryCombo" layoutX="132.0" layoutY="225.0" prefHeight="26.0" prefWidth="129.0" />
         <ComboBox fx:id="stateOrProvinceCombo" layoutX="132.0" layoutY="265.0" prefHeight="26.0" prefWidth="129.0" />
         <TextField fx:id="postalLabel" layoutX="132.0" layoutY="305.0" prefHeight="26.0" prefWidth="129.0" />
