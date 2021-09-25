@@ -1,5 +1,9 @@
 package wgu_full.model;
 
+import javafx.collections.ObservableList;
+
+import static wgu_full.DAO.UserDao.getAllUsers;
+
 public class User {
     private int user_id;
     private String user_name;
@@ -47,4 +51,15 @@ public class User {
      * @param password the password to set
      */
     public void setPassword(String password){ this.password = password; }
+
+    public static ObservableList<User> getUsers(){
+        return getAllUsers();
+    }
+
+    /**
+     * Overrides the toString method to customize display in comboBox
+     * @return
+     */
+    @Override
+    public String toString(){ return (Integer.toString(this.user_id) + " - " + this.user_name); }
 }

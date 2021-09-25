@@ -1,5 +1,7 @@
 package wgu_full.DAO;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import wgu_full.model.User;
 
 import java.sql.ResultSet;
@@ -27,6 +29,27 @@ public class UserDao {
         }
         closeConnection();
         return true;
+    }
+
+    public static ObservableList<User> getAllUsers(){
+        ObservableList<User> allUsers = FXCollections.observableArrayList();
+        try {
+            openConnection();
+            String query = "SELECT User_ID, User_Name FROM users";
+            Query.makeQuery(query);
+            ResultSet result = Query.getResult();
+
+            while(result.next()){
+                int id = result.getInt("User_ID");
+                String name = result.getString("User_Name");
+                User newUser = new User(id, name, "");
+                allUsers.add(newUser);
+            }
+
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return allUsers;
     }
 
 
