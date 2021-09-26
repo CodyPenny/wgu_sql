@@ -18,9 +18,11 @@ import wgu_full.DAO.AppointmentDao;
 import wgu_full.DAO.CustomerDao;
 import wgu_full.model.Appointment;
 import wgu_full.model.Customer;
+import wgu_full.model.Type;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -30,8 +32,8 @@ import java.util.ResourceBundle;
 
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static javafx.scene.control.Alert.AlertType.INFORMATION;
-import static wgu_full.DAO.AppointmentDao.getAllAppointments;
-import static wgu_full.DAO.AppointmentDao.getSameDateAppointmentsByUser;
+import static wgu_full.DAO.AppointmentDao.*;
+import static wgu_full.model.Type.getAllTypes;
 
 
 /**
@@ -87,7 +89,7 @@ public class MainController implements Initializable {
     /**
      * Label
      */
-    @FXML private Label errorLabel, upcomingLabel, usernameLabel ;
+    @FXML private Label errorLabel, upcomingLabel, typeErrorLabel, reportQtyLabel ;
 
     /**
      * Tabs and the TabPane
@@ -101,7 +103,41 @@ public class MainController implements Initializable {
     @FXML private RadioButton allRadio, monthRadio, weekRadio;
     @FXML private ToggleGroup view;
 
+    /**
+     * ComboBoxes
+     */
+    @FXML private ComboBox<Integer> reportMthCombo;
+    @FXML private ComboBox<Type> reportTypeCombo;
 
+
+
+    public void generateMonthTypeReport(){
+        if (!validateMonthTypeComboBox()){
+            return;
+        }
+        int count = getTypeByMonth(reportMthCombo.getValue(), reportTypeCombo.getValue().toString());
+        reportQtyLabel.setText(Integer.toString(count));
+
+
+    }
+
+
+    /**
+     * Validates a selection has been made on the comboBoxes
+     */
+    public boolean validateMonthTypeComboBox(){
+        if(reportMthCombo.getSelectionModel().isEmpty() || reportTypeCombo.getSelectionModel().isEmpty()){
+            typeErrorLabel.setText("Please make a selection on both comboBoxes");
+            typeErrorLabel.setVisible(true);
+            return false;
+        }
+        return true;
+    }
+    /**
+     * Searches the data store for upcoming appointments for the user that is scheduled in the next 15 minutes
+     *
+     * @param user_id the user id of the user
+     */
     public void searchUpcomingAppointments(int user_id){
         ObservableList<Appointment> inFifteen = FXCollections.observableArrayList();
         LocalTime current = LocalTime.now();
@@ -118,11 +154,15 @@ public class MainController implements Initializable {
                 inFifteen.add(meet);
             }
         }
-
         displayUpcomingApptLabel(inFifteen.size());
         upcomingTable.setItems(inFifteen);
     }
 
+    /**
+     * Displays the count
+     *
+     * @param count the number of appointments in the next 15 minutes since login
+     */
     public void displayUpcomingApptLabel(int count){
         if(count > 0){
             upcomingLabel.setText("You have " + count + " upcoming appointment(s).");
@@ -445,11 +485,23 @@ public class MainController implements Initializable {
         upTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("time"));
     }
 
+    /**
+     * Populates the comboBox with an integer representation of each month
+     */
+    public void initiateMonthComboBox(){
+        ObservableList<Integer> months = FXCollections.observableArrayList();
+        for ( int i = 1; i < 13; i++){
+            months.add(i);
+        }
+        reportMthCombo.setItems(months);
+    }
+
 
     /**
      * Populates the tables with its corresponding columns and data from the data store.
      * The radioButton from the appointments table listens for any selection changes.
      * Searches for any upcoming appointments the user has within 15 minutes of logging in.
+     * Populates the month and type comboBox in Reports
      *
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
      * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
@@ -458,10 +510,10 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupCustomerColumns();
         setupAppointmentColumns();
-//        setupUpcomingColumns();
         customerTable.setItems(Customer.getAllCusts());
         appointmentTable.setItems(getAllAppointments());
         filterPerSelection();
-
+        reportTypeCombo.setItems(getAllTypes());
+        initiateMonthComboBox();
     }
 }

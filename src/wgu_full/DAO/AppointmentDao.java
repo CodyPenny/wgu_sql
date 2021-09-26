@@ -173,4 +173,25 @@ public class AppointmentDao {
         return true;
     }
 
+    public static int getTypeByMonth(int mth, String type){
+        int count = 0;
+        try{
+            openConnection();
+            String query = "SELECT * FROM appointments WHERE MONTH(START) = " + mth + " AND Type = '" + type +"'";
+            System.out.println(query);
+            Query.makeQuery(query);
+            ResultSet result = Query.getResult();
+            while(result.next()){
+                int id = result.getInt("Appointment_ID");
+                Timestamp start = result.getTimestamp("Start");
+                System.out.println("start "+ start);
+                count++;
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        closeConnection();
+        return count;
+    }
+
 }
