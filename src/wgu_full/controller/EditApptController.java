@@ -1,5 +1,6 @@
 package wgu_full.controller;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,8 +17,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
+import static wgu_full.DAO.AppointmentDao.getSameDateAppointments;
+import static wgu_full.DAO.AppointmentDao.updateAppointment;
 import static wgu_full.model.Contact.getAllContacts;
 import static wgu_full.model.Customer.getAllCusts;
 import static wgu_full.model.Location.getAllLocations;
@@ -31,6 +36,22 @@ public class EditApptController implements Initializable {
     private Parent root;
 
     Appointment selectedRow;
+
+    /**
+     * Start and end local date time
+     */
+    LocalDateTime startLDT;
+    LocalDateTime endLDT;
+    /**
+     * Start and end zoned date time
+     */
+    ZonedDateTime startZDT;
+    ZonedDateTime endZDT;
+
+    /**
+     * Observable list of possible overlapping appointments
+     */
+    private static ObservableList<Appointment> overlaps;
 
     /**
      * The textfields in the add appointment form
@@ -66,57 +87,245 @@ public class EditApptController implements Initializable {
 
     @FXML private Label errorLabel;
 
+    public void saveAppointment(ActionEvent event) throws IOException {
+        if(!validateInputFields()){
+            return;
+        }
+        if(!validateTime()){
+            return;
+        }
+        startZDT = convertToSystemZonedDateTime(startLDT);
+        endZDT = convertToSystemZonedDateTime(endLDT);
+        // check for overlap with selected customer
+        LocalDate date = startLDT.toLocalDate();
+        int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
+        overlaps = getSameDateAppointments(customer, date);
+        if(overlaps.size() > 0){
+            System.out.println("conflicting");
+            //check for conflict
+            boolean noOverlap = validateOverlap(overlaps);
+            if (!noOverlap){
+                showError(true, "Selected time for customer overlaps with another appointment. Please select another time.");
+                return;
+            }
+        }
+        // update db
+        String titleField = titleText.getText();
+        String descriptionField = descriptionText.getText();
+        String loc = locationCombo.getSelectionModel().getSelectedItem().toString();
+        int contact = contactCombo.getSelectionModel().getSelectedItem().getId();
+        String t = typeCombo.getSelectionModel().getSelectedItem().toString();
+        int user = userCombo.getSelectionModel().getSelectedItem().getId();
+        LocalDateTime start = convertToUTC(startZDT).toLocalDateTime();
+        LocalDateTime end = convertToUTC(endZDT).toLocalDateTime();
+        updateAppointment(selectedRow.getId(), titleField, descriptionField, loc, start, end, t, user, contact, customer);
+        backToMain(event);
+    }
+
+    /**
+     * Validates the logic of the selected start and end times
+     */
+    public boolean validateTime(){
+        if(startHour.getValue() == 24 && startMin.getValue() > 0){
+            showError(true, "Time can not exceed 24 hours.");
+            return false;
+        }
+        if(endHour.getValue() == 24 && endMin.getValue() > 0){
+            showError(true, "Time can not exceed 24 hours.");
+            return false;
+        }
+        if(startHour.getValue() > endHour.getValue()){
+            showError(true, "Start time can not be greater than the end time.");
+            return false;
+        }
+        if(startHour.getValue() == endHour.getValue()){
+            if(startMin.getValue() >= endMin.getValue()){
+                showError(true, "Start time can not be greater or the same as the end time.");
+                return false;
+            }
+        }
+
+        startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
+        endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
+
+        if(startLDT.isAfter(endLDT) || startLDT.isEqual(endLDT)){
+            showError(true, "Start time can not be greater or the same as the end time.");
+            return false;
+        }
+
+        if (!validateZonedDateTimeBusiness(startLDT) || !validateZonedDateTimeBusiness(endLDT)){
+            return false;
+        };
+        return true;
+    }
+
+    /**
+     * Takes the selected date, hour, and minute and creates a LocalDateTime object
+     * @param hr the hour
+     * @param min the min
+     * @return LocalDateTime object of the input time
+     */
+    public LocalDateTime convertToTimeObject(int hr, int min) {
+        LocalDate date = dateBox.getValue();
+        return LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), hr, min);
+    }
+
+    /**
+     * Validates the selected time against the business hours
+     *
+     * @param ldt an instance of the LocalDateTime object
+     * @return true if the selected time is within business hours
+     */
+    public boolean validateZonedDateTimeBusiness(LocalDateTime ldt){
+        ZonedDateTime zdt = convertToSystemZonedDateTime(ldt);
+        ZonedDateTime est = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
+        //System.out.println("est " + est);
+        ZonedDateTime open = est.withHour(8);
+        ZonedDateTime close = est.withHour(22);
+        //System.out.println("open " + open);
+        //System.out.println("close " + close);
+        if(est.isAfter(close)){
+            //System.out.println("after close");
+            showError(true, "Selected time is after business hours. Please select a time within 8am-10pm est.");
+            return false;
+        }
+        if(est.isBefore(open)) {
+            //System.out.println("before open");
+            showError(true, "Selected time is before business hours. Please select a time within 8am-10pm est.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Looks for any overlaps between the input list of appointments and selected appointment times
+     *
+     * @param test the list of appointments with possible conflicts
+     * @return false if there is an overlap
+     */
+    public boolean validateOverlap(ObservableList<Appointment> test){
+        LocalDateTime A = convertToUTC(startZDT).toLocalDateTime();
+        LocalDateTime Z = convertToUTC(endZDT).toLocalDateTime();
+        for(Appointment appt : test){
+            LocalDateTime S = appt.getStart().toLocalDateTime();
+            LocalDateTime E = appt.getEnd().toLocalDateTime();
+            //case 1 - when the start is in the window
+            if((A.isAfter(S) || A.isEqual(S)) && Z.isBefore(S)){
+                return false;
+            }
+            //case 2 - when the end is in the window
+            if(A.isAfter(E) && (Z.isBefore(E) || Z.isEqual(E))){
+                return false;
+            }
+            //case 3 - when the start and end are outside of the window
+            if(((A.isBefore(S) || A.isEqual(S)) && (Z.isAfter(E) || Z.isEqual(E)))){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Takes a date-time object and returns a copy with the UTC time zone
+     *
+     * @param zdt an instance of the ZonedDateTime object
+     * @return a UTC date-time object
+     */
+    public ZonedDateTime convertToUTC(ZonedDateTime zdt){
+        return zdt.withZoneSameInstant(ZoneId.of("UTC"));
+    }
 
 
+    /**
+     * Validates the textfields are complete and a selection has been made on the comboBoxes
+     *
+     * @return false if incomplete
+     */
+    public boolean validateInputFields(){
+        if(titleText.getText().isEmpty() || descriptionText.getText().isEmpty()){
+            System.out.println("empty");
+            showError(true, "All fields are required. Please complete.");
+            return false;
+        }
+        if(locationCombo.getSelectionModel().isEmpty()){
+            showError(true, "Please select a location.");
+            return false;
+        }
+        if(contactCombo.getSelectionModel().isEmpty()){
+            showError(true, "Please select a contact.");
+            return false;
+        }
+        if(typeCombo.getSelectionModel().isEmpty()){
+            showError(true, "Please select the type.");
+            return false;
+        }
+        if(customerCombo.getSelectionModel().isEmpty()){
+            showError(true, "Please select a customer.");
+            return false;
+        }
+        if(userCombo.getSelectionModel().isEmpty()){
+            showError(true, "Please select a user.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Converts a LocalDateTime object to a ZonedDateTime object
+     *
+     * @param ldt an instance of LocalDateTime
+     * @return ZonedDateTime relative to the user's system time
+     */
+    public ZonedDateTime convertToSystemZonedDateTime(LocalDateTime ldt){
+        return ldt.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+    }
+
+
+    /**
+     * Populates the form with the attributes of the selected appointment
+     *
+     * @param row the appointment
+     */
     public void populateForm(Appointment row){
         selectedRow = row;
         idText.setText(Integer.toString(row.getId()));
         titleText.setText(row.getTitle());
         descriptionText.setText(row.getDescription());
-
         for(Location item : locationCombo.getItems()){
             if(item.getCity_state().equals(row.getLocation())){
                 locationCombo.getSelectionModel().select(item);
                 break;
             }
         }
-
         for(Contact person : contactCombo.getItems()){
             if(person.getName().equals(row.getContact())){
                 contactCombo.getSelectionModel().select(person);
                 break;
             }
         }
-
         for(Type meeting : typeCombo.getItems()){
             if(meeting.getAppointment_type().equals(row.getType())){
                 typeCombo.getSelectionModel().select(meeting);
                 break;
             }
         }
-
         for(Customer cust : customerCombo.getItems()){
             if(cust.getId() == row.getCustomer()){
                 customerCombo.getSelectionModel().select(cust);
                 break;
             }
         }
-
         for(User user : userCombo.getItems()){
             if(user.getId() == row.getUser()){
                 userCombo.getSelectionModel().select(user);
                 break;
             }
         }
-
         LocalDateTime startLDT = row.getStart().toLocalDateTime();
         LocalDateTime endLDT = row.getEnd().toLocalDateTime();
         LocalDate ld = startLDT.toLocalDate();
         dateBox.setValue(ld);
-
-
-
-
+        setSpinners(startLDT.getHour(), endLDT.getHour(), startLDT.getMinute(), endLDT.getMinute());
     }
 
     /**
@@ -152,8 +361,8 @@ public class EditApptController implements Initializable {
     }
 
     /**
-     * Disable past dates on DatePicker
-     * Taken from Oracle documentation
+     * Disable past dates on the DatePicker widget
+     * (Taken from the Oracle documentation)
      */
     private void disablePastDates() {
         dateBox.setValue(LocalDate.now());
@@ -178,6 +387,25 @@ public class EditApptController implements Initializable {
         dateBox.setDayCellFactory(dayCellFactory);
     }
 
+    /**
+     * Initializes the start and end hours/minutes of the spinners
+     *
+     * @param initStartHr the start hour
+     * @param initEndHr the end hour
+     * @param initStartMin the start minute
+     * @param initEndMin the end minute
+     */
+    public void setSpinners(int initStartHr, int initEndHr, int initStartMin, int initEndMin){
+        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, initStartHr);
+        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, initEndHr);
+        SpinnerValueFactory<Integer> startMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, initStartMin, 10);
+        SpinnerValueFactory<Integer> endMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, initEndMin, 10);
+        startHour.setValueFactory(startHourFactory);
+        startMin.setValueFactory(startMinFactory);
+        endHour.setValueFactory(endHourFactory);
+        endMin.setValueFactory(endMinFactory);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         contactCombo.setItems(getAllContacts());
@@ -187,15 +415,7 @@ public class EditApptController implements Initializable {
         typeCombo.setItems(getAllTypes());
 
         // limit hour to EST after retrieving local time
-        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 8, 1);
-        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 8);
-        SpinnerValueFactory<Integer> startMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 0, 10);
-        SpinnerValueFactory<Integer> endMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 0, 10);
-        startHour.setValueFactory(startHourFactory);
-        startMin.setValueFactory(startMinFactory);
-        endHour.setValueFactory(endHourFactory);
-        endMin.setValueFactory(endMinFactory);
-
+        setSpinners(8,8,0,0);
         disablePastDates();
     }
 

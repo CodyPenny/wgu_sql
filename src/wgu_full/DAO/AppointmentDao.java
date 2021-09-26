@@ -6,6 +6,7 @@ import wgu_full.model.Appointment;
 import wgu_full.model.Customer;
 
 import java.sql.ResultSet;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -99,6 +100,18 @@ public class AppointmentDao {
             closeConnection();
         } catch (Exception e) {
         System.out.println(e.getMessage());
+        }
+    }
+
+    public static void updateAppointment(int id, String title, String description, String location, LocalDateTime start, LocalDateTime end,String type, int user, int contact, int customer ){
+        try {
+            openConnection();
+            String query = "UPDATE appointments SET Title = '" + title + "', Description = '" + description + "', Location = '" + location + "', Type = '" + type + "', Start = '" + start + "', End = '" + end + "', Customer_ID = " + customer + ", User_ID = " + user + ", Contact_ID = " + contact + " WHERE Appointment_ID = " + id;
+            System.out.println("query"+query);
+            Query.makeQuery(query);
+            closeConnection();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 

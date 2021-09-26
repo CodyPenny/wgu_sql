@@ -125,6 +125,11 @@ public class AddApptController implements Initializable {
         return true;
     }
 
+    /**
+     * Validates the textfields are complete and a selection has been made on the comboBoxes
+     *
+     * @return false if incomplete
+     */
     public boolean validateInputFields(){
         if(titleText.getText().isEmpty() || descriptionText.getText().isEmpty()){
             System.out.println("empty");
