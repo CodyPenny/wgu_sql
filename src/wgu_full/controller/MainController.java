@@ -453,6 +453,17 @@ public class MainController implements Initializable {
     }
 
     /**
+     * Prompts confirmation from the user on exit. Closes the program on Ok.
+     */
+    public void exitProgram(){
+        Alert alert = new Alert(CONFIRMATION, "Are you sure?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            System.exit(0);
+        }
+    }
+
+    /**
      * Shows or the hides the custom error
      *
      * @param showOrHide sets the error to be visible or invisible

@@ -120,7 +120,7 @@
          <font>
             <Font name="Arial" size="18.0" />
          </font></Label>
-      <Button fx:id="logout" layoutX="908.0" layoutY="729.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="Log Out" />
+      <Button fx:id="logout" layoutX="908.0" layoutY="729.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="26.0" prefWidth="65.0" text="Log Out" />
       <TableView fx:id="upcomingTable" layoutX="185.0" layoutY="162.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="84.0" prefWidth="638.0" style="-fx-border-color: #394F8A; -fx-border-radius: 5px; -fx-border-width: 2px;">
         <columns>
           <TableColumn fx:id="upApptIdCol" prefWidth="135.0" style="-fx-alignment: CENTER;" text="ID" />
