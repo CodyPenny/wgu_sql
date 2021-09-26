@@ -29,11 +29,13 @@ public class EditApptController implements Initializable {
     private Scene scene;
     private Parent root;
 
+    Appointment selectedRow;
+
     /**
      * The textfields in the add appointment form
      */
     @FXML
-    private TextField titleText, descriptionText;
+    private TextField titleText, descriptionText, idText;
 
     /**
      * ComboBoxes
@@ -64,6 +66,30 @@ public class EditApptController implements Initializable {
     @FXML private Label errorLabel;
 
 
+
+    public void populateForm(Appointment row){
+        selectedRow = row;
+        idText.setText(Integer.toString(row.getId()));
+        titleText.setText(row.getTitle());
+        descriptionText.setText(row.getDescription());
+
+        for(Location item : locationCombo.getItems()){
+            if(item.getCity_state().equals(row.getLocation())){
+                locationCombo.getSelectionModel().select(item);
+                break;
+            }
+        }
+
+        for(Contact person : contactCombo.getItems()){
+            if(person.getName().equals(row.getContact())){
+                contactCombo.getSelectionModel().select(person);
+                break;
+            }
+        }
+
+
+
+    }
 
     /**
      * Shows or the hides the custom error

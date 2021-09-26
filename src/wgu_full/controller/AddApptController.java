@@ -122,7 +122,6 @@ public class AddApptController implements Initializable {
         if (!validateZonedDateTimeBusiness(startLDT) || !validateZonedDateTimeBusiness(endLDT)){
             return false;
         };
-
         return true;
     }
 
@@ -174,7 +173,6 @@ public class AddApptController implements Initializable {
         }
         startZDT = convertToSystemZonedDateTime(startLDT);
         endZDT = convertToSystemZonedDateTime(endLDT);
-
         // check for overlap with selected customer
         LocalDate date = startLDT.toLocalDate();
         System.out.println("local date " + date);
@@ -189,7 +187,6 @@ public class AddApptController implements Initializable {
                 return;
             }
         }
-
         // save to db
         String titleField = titleText.getText();
         String descriptionField = descriptionText.getText();
@@ -200,7 +197,6 @@ public class AddApptController implements Initializable {
         LocalDateTime start = convertToUTC(startZDT).toLocalDateTime();
         LocalDateTime end = convertToUTC(endZDT).toLocalDateTime();
         createAppointment(titleField, descriptionField, loc, t, start, end, customer, user, contact);
-
         backToMain(event);
     }
 

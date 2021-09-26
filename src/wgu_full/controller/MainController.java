@@ -150,8 +150,13 @@ public class MainController implements Initializable {
      */
     public void openEditAppointmentForm(ActionEvent event) throws IOException {
         try {
-            root = FXMLLoader.load(getClass().getResource("../view/editApptForm.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Appointment row = appointmentTable.getFocusModel().getFocusedItem();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/editApptForm.fxml"));
+            root = loader.load();
+            EditApptController controller = loader.getController();
+            controller.populateForm(row);
+
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
