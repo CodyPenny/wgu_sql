@@ -143,6 +143,13 @@ public class Query {
         }
     }
 
+    /**
+     * Remove or deletes an appointment
+     *
+     * @param id the appointment id
+     * @return false if deletion fails
+     * @throws SQLException JDBC encountered an error with the data source
+     */
     public static boolean removeAppt(int id) throws SQLException {
         query = "DELETE FROM appointments WHERE Appointment_ID = ?";
         try {

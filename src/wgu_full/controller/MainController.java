@@ -176,23 +176,34 @@ public class MainController implements Initializable {
     public void deleteCustomer(ActionEvent event) {
         try {
             Customer selectedCustomer = customerTable.getFocusModel().getFocusedItem();
-            Alert alert = new Alert(CONFIRMATION, "Are you sure?");
+            int customerId = selectedCustomer.getId();
+            Alert alert = new Alert(CONFIRMATION, "Are you sure? All of the customer's appointments will also be deleted.");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                if(!CustomerDao.deleteCustomer(selectedCustomer.getId())){
+                if(!CustomerDao.deleteCustomer(customerId)){
                     showError(true, "Error with deletion");
                     return;
-                } else {
-                    Alert okAlert = new Alert(INFORMATION, "Customer removed");
-                    okAlert.show();
-                    customerTable.setItems(Customer.getAllCusts());
                 }
+                if(!deleteAssociatedAppointments(customerId)){
+                    showError(true, "Error with deletion");
+                    return;
+                }
+                Alert okAlert = new Alert(INFORMATION, "The customer and all associated appointments have been deleted.");
+                okAlert.show();
+                customerTable.setItems(Customer.getAllCusts());
+                appointmentTable.setItems(getAllAppointments());
             }
         } catch (Exception e){
             showError(true, "Error with deletion");
         }
     }
 
+
+    /**
+     * Deletes the selected appointment
+     *
+     * @param event when the delete button is fired
+     */
     public void deleteAppointment(ActionEvent event){
         try {
             Appointment selectedAppt = appointmentTable.getFocusModel().getFocusedItem();
@@ -211,6 +222,22 @@ public class MainController implements Initializable {
         } catch (Exception e){
             showError(true, "Error with deletion");
         }
+    }
+
+    public boolean deleteAssociatedAppointments(int customer_id){
+        try {
+            for(Appointment meet : getAllAppointments()){
+                if(meet.getCustomer() == customer_id){
+                    if(!AppointmentDao.deleteAppointment(meet.getId())){
+                        return false;
+                    }
+                }
+            }
+        }catch (Exception e){
+            showError(true, "Error with deletion");
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
 import static wgu_full.DAO.Query.removeAppt;
-import static wgu_full.DAO.Query.removeCustomer;
 
 public class AppointmentDao {
 
@@ -82,7 +81,7 @@ public class AppointmentDao {
     /**
      * Creates an appointment
      *
-     *  @param title the title
+     * @param title the title
      * @param desc the description
      * @param loc the location
      * @param type the type of appointment
@@ -128,6 +127,13 @@ public class AppointmentDao {
         }
     }
 
+    /**
+     * Deletes the selected appointment
+     *
+     * @param id the appointment id
+     * @return false if deletion fails
+     * @throws SQLException JDBC encountered an error with the data source
+     */
     public static boolean deleteAppointment(int id) throws SQLException {
         openConnection();
         if(!removeAppt(id)){
