@@ -38,10 +38,13 @@ public class AddApptController implements Initializable {
     private Parent root;
 
     /**
-     * DateTime object
+     * Start and end local date time
      */
     LocalDateTime startLDT;
     LocalDateTime endLDT;
+    /**
+     * Start and end zoned date time
+     */
     ZonedDateTime startZDT;
     ZonedDateTime endZDT;
 
@@ -180,6 +183,8 @@ public class AddApptController implements Initializable {
         if(overlaps.size() > 0){
             System.out.println("conflicting");
             //check for conflict
+            validateOverlap(overlaps);
+            return;
         }
 
         // save to db
@@ -228,6 +233,10 @@ public class AddApptController implements Initializable {
        return zdt.withZoneSameInstant(ZoneId.of("UTC"));
     }
 
+    public LocalDateTime convertFromString(String time){
+        return LocalDateTime.parse(time);
+    }
+
     /**
      * Validates the selected time against the business hours
      *
@@ -251,6 +260,19 @@ public class AddApptController implements Initializable {
             //System.out.println("before open");
             showError(true, "Selected time is before business hours. Please select a time within 8am-10pm est.");
             return false;
+        }
+        return true;
+    }
+
+    public boolean validateOverlap(ObservableList<Appointment> test){
+        LocalDateTime A = startZDT.toLocalDateTime();
+        LocalDateTime Z = endZDT.toLocalDateTime();
+
+        for(Appointment appt : test){
+            LocalDateTime S = appt.getStart().toLocalDateTime();
+            LocalDateTime E = appt.getEnd().toLocalDateTime();
+
+
         }
         return true;
     }

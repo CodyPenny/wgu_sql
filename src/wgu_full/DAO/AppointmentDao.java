@@ -6,6 +6,7 @@ import wgu_full.model.Appointment;
 import wgu_full.model.Customer;
 
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -33,8 +34,8 @@ public class AppointmentDao {
                 String description = result.getString("description");
                 String location = result.getString("location");
                 String type = result.getString("type");
-                String start = result.getString("start");
-                String end = result.getString("end");
+                Timestamp start = result.getTimestamp("start");
+                Timestamp end = result.getTimestamp("end");
                 int customer = result.getInt("Customer_ID");
                 int user = result.getInt("User_ID");
                 String contact = result.getString("Contact_Name");
@@ -49,23 +50,23 @@ public class AppointmentDao {
     }
 
     /**
+     * Accesses the appointments table and retrieves appointments from the same customer with same dates
      *
-     * @param customerId
-     * @param date
-     * @return
+     * @param customerId the customer id
+     * @param date the date
+     * @return ObservableList of appointments
      */
     public static ObservableList<Appointment> getSameDateAppointments(int customerId, LocalDate date){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         try {
             openConnection();
-//            String query = "SELECT Appointment_ID FROM appointments WHERE Start = '" + date + "' AND Customer_ID = " + customerId;
-            String query = "SELECT Appointment_ID FROM appointments WHERE Start >= '" + date + "' AND Start < '" + date + "' + INTERVAL 1 DAY AND Customer_ID = " + customerId;
+            String query = "SELECT * FROM appointments WHERE Start >= '" + date + "' AND Start < '" + date + "' + INTERVAL 1 DAY AND Customer_ID = " + customerId;
             Query.makeQuery(query);
             ResultSet result = Query.getResult();
             while(result.next()){
                 int id = result.getInt("Appointment_ID");
-                String start = result.getString("Start");
-                String end = result.getString("End");
+                Timestamp start = result.getTimestamp("Start");
+                Timestamp end = result.getTimestamp("End");
                 int customer = result.getInt("Customer_ID");
                 Appointment same = new Appointment(id, "","","","",start, end, customer, 0,"");
                 appointments.add(same);
