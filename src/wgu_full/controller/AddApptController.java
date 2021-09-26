@@ -179,12 +179,15 @@ public class AddApptController implements Initializable {
         LocalDate date = startLDT.toLocalDate();
         System.out.println("local date " + date);
         int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
-        overlaps = getSameDateAppointments( customer, date);
+        overlaps = getSameDateAppointments(customer, date);
         if(overlaps.size() > 0){
             System.out.println("conflicting");
             //check for conflict
-            validateOverlap(overlaps);
-            return;
+            boolean noOverlap = validateOverlap(overlaps);
+            if (!noOverlap){
+                showError(true, "Selected time for customer overlaps with another appointment. Please select another time.");
+                return;
+            }
         }
 
         // save to db
@@ -233,10 +236,6 @@ public class AddApptController implements Initializable {
        return zdt.withZoneSameInstant(ZoneId.of("UTC"));
     }
 
-    public LocalDateTime convertFromString(String time){
-        return LocalDateTime.parse(time);
-    }
-
     /**
      * Validates the selected time against the business hours
      *
@@ -264,15 +263,30 @@ public class AddApptController implements Initializable {
         return true;
     }
 
+    /**
+     * Looks for any overlaps between the input list of appointments and selected appointment times
+     *
+     * @param test the list of appointments with possible conflicts
+     * @return false if there is an overlap
+     */
     public boolean validateOverlap(ObservableList<Appointment> test){
-        LocalDateTime A = startZDT.toLocalDateTime();
-        LocalDateTime Z = endZDT.toLocalDateTime();
-
+        LocalDateTime A = convertToUTC(startZDT).toLocalDateTime();
+        LocalDateTime Z = convertToUTC(endZDT).toLocalDateTime();
         for(Appointment appt : test){
             LocalDateTime S = appt.getStart().toLocalDateTime();
             LocalDateTime E = appt.getEnd().toLocalDateTime();
-
-
+            //case 1 - when the start is in the window
+            if((A.isAfter(S) || A.isEqual(S)) && Z.isBefore(S)){
+                return false;
+            }
+            //case 2 - when the end is in the window
+            if(A.isAfter(E) && (Z.isBefore(E) || Z.isEqual(E))){
+                return false;
+            }
+            //case 3 - when the start and end are outside of the window
+            if(((A.isBefore(S) || A.isEqual(S)) && (Z.isAfter(E) || Z.isEqual(E)))){
+                return false;
+            }
         }
         return true;
     }
