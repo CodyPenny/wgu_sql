@@ -16,13 +16,13 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgu_full.controller.MainController">
    <children>
-      <Line endX="56.83826446533203" endY="176.0" layoutX="-24.0" layoutY="-66.0" startX="993.1715698242188" startY="176.0" stroke="#c4c4c4" AnchorPane.leftAnchor="32.33826446533203" AnchorPane.rightAnchor="30.32842254638672" />
-      <Line endX="22.66666603088379" endY="167.9595489501953" layoutX="8.0" layoutY="116.0" startX="960.0" startY="167.95953369140625" stroke="#c4c4c4" />
+      <Line endX="56.83826446533203" endY="176.0" layoutX="-25.0" layoutY="-105.0" startX="993.1715698242188" startY="176.0" stroke="#c4c4c4" AnchorPane.leftAnchor="31.33826446533203" AnchorPane.rightAnchor="31.32842254638672" />
+      <Line endX="22.66666603088379" endY="167.9595489501953" layoutX="9.0" layoutY="109.0" startX="960.0" startY="167.95953369140625" stroke="#c4c4c4" />
       <TabPane fx:id="mainTabPane" layoutX="29.0" layoutY="310.0" prefHeight="379.0" prefWidth="944.0" style="-fx-border-color: #c4c4c4;" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="apptTab" text="Appointments">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #E1FCFD;">
                      <children>
                         <RadioButton fx:id="allRadio" layoutX="725.0" layoutY="30.0" mnemonicParsing="false" selected="true" text="All">
                            <toggleGroup>
@@ -33,7 +33,7 @@
                         <RadioButton fx:id="weekRadio" layoutX="850.0" layoutY="30.0" mnemonicParsing="false" text="Week" toggleGroup="$view" />
                         <TableView fx:id="appointmentTable" layoutX="17.0" layoutY="66.0" prefHeight="200.0" prefWidth="903.0">
                           <columns>
-                            <TableColumn fx:id="apptIdCol" prefWidth="29.0" text="ID" />
+                            <TableColumn fx:id="apptIdCol" prefWidth="29.0" style="-fx-alignment: CENTER;" text="ID" />
                             <TableColumn fx:id="titleCol" prefWidth="58.0" text="TITLE" />
                               <TableColumn fx:id="descriptionCol" prefWidth="107.0" text="DESCRIPTION" />
                               <TableColumn fx:id="locationCol" prefWidth="97.0" text="LOCATION" />
@@ -41,8 +41,8 @@
                               <TableColumn fx:id="typeCol" prefWidth="110.0" text="TYPE" />
                               <TableColumn fx:id="startCol" prefWidth="154.0" text="START" />
                               <TableColumn fx:id="endCol" prefWidth="144.0" text="END" />
-                              <TableColumn fx:id="apptCustIdCol" prefWidth="60.0" text="CUST_ID" />
-                              <TableColumn fx:id="userIdCol" prefWidth="59.0" text="USER_ID" />
+                              <TableColumn fx:id="apptCustIdCol" prefWidth="60.0" style="-fx-alignment: CENTER;" text="CUST_ID" />
+                              <TableColumn fx:id="userIdCol" prefWidth="59.0" style="-fx-alignment: CENTER;" text="USER_ID" />
                           </columns>
                         </TableView>
                         <Button fx:id="addApptBtn" layoutX="540.0" layoutY="294.0" mnemonicParsing="false" onAction="#openAddAppointmentForm" prefHeight="26.0" prefWidth="199.0" text="CREATE NEW APPOINTMENT" />
@@ -56,16 +56,16 @@
           </Tab>
           <Tab fx:id="custTab" text="Customers">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #4A5FC1;">
                      <children>
                         <TableView fx:id="customerTable" layoutX="17.0" layoutY="40.0" prefHeight="220.0" prefWidth="903.0">
                           <columns>
-                            <TableColumn fx:id="custIdCol" prefWidth="40.66667175292969" text="ID" />
+                            <TableColumn fx:id="custIdCol" prefWidth="40.66667175292969" style="-fx-alignment: CENTER;" text="ID" />
                             <TableColumn fx:id="custNameCol" prefWidth="135.3333282470703" text="Name" />
-                              <TableColumn fx:id="custAddressCol" prefWidth="235.0" text="Address" />
-                              <TableColumn fx:id="custProvinceCol" prefWidth="209.5" text="Province/St" />
-                              <TableColumn fx:id="custPostalCol" prefWidth="147.5" text="Postal Code" />
-                              <TableColumn fx:id="custPhoneCol" minWidth="0.0" prefWidth="133.5" text="Phone" />
+                              <TableColumn fx:id="custAddressCol" prefWidth="235.0" style="-fx-alignment: CENTER;" text="Address" />
+                              <TableColumn fx:id="custProvinceCol" prefWidth="209.5" style="-fx-alignment: CENTER;" text="Province/St" />
+                              <TableColumn fx:id="custPostalCol" prefWidth="147.5" style="-fx-alignment: CENTER;" text="Postal Code" />
+                              <TableColumn fx:id="custPhoneCol" minWidth="0.0" prefWidth="133.5" style="-fx-alignment: CENTER;" text="Phone" />
                           </columns>
                         </TableView>
                         <Button fx:id="addCustBtn" layoutX="560.0" layoutY="294.0" mnemonicParsing="false" onAction="#openAddCustomerForm" prefHeight="26.0" prefWidth="179.0" text="CREATE NEW CUSTOMER" />
@@ -76,50 +76,52 @@
           </Tab>
             <Tab fx:id="reportTab" text="Reports">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #394F8A;">
                      <children>
-                        <Pane layoutX="35.0" layoutY="106.0" prefHeight="212.0" prefWidth="442.0" style="-fx-border-color: #c4c4c4;">
+                        <Pane layoutX="35.0" layoutY="106.0" prefHeight="212.0" prefWidth="442.0" style="-fx-border-color: #9CF6FB; -fx-border-width: 2px;">
                            <children>
                               <TableView fx:id="typeCountTable" layoutX="19.0" layoutY="54.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="132.0" prefWidth="398.0">
                                 <columns>
-                                  <TableColumn fx:id="reportTypeCol" prefWidth="174.0" text="TYPE" />
-                                  <TableColumn fx:id="reportCountCol" prefWidth="96.0" text="COUNT" />
+                                  <TableColumn fx:id="reportTypeCol" prefWidth="185.0" style="-fx-alignment: CENTER;" text="TYPE" />
+                                  <TableColumn fx:id="reportCountCol" prefWidth="212.0" style="-fx-alignment: CENTER;" text="COUNT" />
                                 </columns>
                               </TableView>
-                              <Label alignment="CENTER" layoutX="5.0" layoutY="21.0" prefHeight="17.0" prefWidth="424.0" text="TOTAL NUMBER OF APPOINTMENTS BY TYPE" />
+                              <Label alignment="CENTER" layoutX="5.0" layoutY="21.0" prefHeight="17.0" prefWidth="424.0" text="TOTAL NUMBER OF APPOINTMENTS BY TYPE" textFill="#e1fcfd">
+                                 <font>
+                                    <Font name="Arial Bold" size="13.0" />
+                                 </font></Label>
                            </children>
                         </Pane>
-                        <Pane layoutX="35.0" layoutY="27.0" prefHeight="52.0" prefWidth="442.0" style="-fx-border-color: #c4c4c4;">
+                        <Pane layoutX="35.0" layoutY="27.0" prefHeight="52.0" prefWidth="442.0" style="-fx-border-color: #9CF6FB; -fx-border-width: 2px;">
                            <children>
-                              <Label layoutX="43.0" layoutY="18.0" prefHeight="17.0" prefWidth="234.0" text="Total number of appointments this month: " />
-                              <Label fx:id="reportTotalLabel" layoutX="292.0" layoutY="18.0" prefHeight="16.0" prefWidth="114.0" text="number">
+                              <Label layoutX="43.0" layoutY="18.0" prefHeight="17.0" prefWidth="267.0" text="Total number of appointments this month: " textFill="#e1fcfd">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font></Label>
+                              <Label fx:id="reportTotalLabel" layoutX="325.0" layoutY="18.0" prefHeight="16.0" prefWidth="81.0" text="number" textFill="#e1fcfd">
                                  <font>
                                     <Font name="Arial Bold" size="14.0" />
                                  </font>
                               </Label>
                            </children>
                         </Pane>
-                        <Button fx:id="reportViewContactBtn" layoutX="551.0" layoutY="66.0" mnemonicParsing="false" prefHeight="81.0" prefWidth="283.0" text="VIEW SCHEDULE FOR EACH CONTACT" />
-                        <Button fx:id="reportViewRegionBtn" layoutX="551.0" layoutY="202.0" mnemonicParsing="false" prefHeight="81.0" prefWidth="283.0" text="VIEW TOTAL APPOINTMENTS BY REGION" />
+                        <Button fx:id="reportViewContactBtn" layoutX="551.0" layoutY="66.0" mnemonicParsing="false" prefHeight="81.0" prefWidth="283.0" style="-fx-background-color: #9CF6FB;" text="VIEW SCHEDULE FOR EACH CONTACT" />
+                        <Button fx:id="reportViewRegionBtn" layoutX="551.0" layoutY="202.0" mnemonicParsing="false" prefHeight="81.0" prefWidth="283.0" style="-fx-background-color: #E1FCFD;" text="VIEW TOTAL APPOINTMENTS BY REGION" />
                      </children></AnchorPane>
                </content>
             </Tab>
         </tabs>
       </TabPane>
-      <Label fx:id="usernameLabel" alignment="CENTER" layoutX="31.0" layoutY="58.0" prefHeight="17.0" prefWidth="937.0" text="User name" textFill="#525252">
-         <font>
-            <Font name="Avenir Next Bold" size="16.0" />
-         </font></Label>
-      <Label fx:id="upcomingLabel" alignment="CENTER" layoutX="33.0" layoutY="128.0" prefHeight="35.0" prefWidth="937.0" text="No Upcoming Appointments" textAlignment="CENTER" textFill="#313131" wrapText="true">
+      <Label fx:id="upcomingLabel" alignment="CENTER" layoutX="35.0" layoutY="100.0" prefHeight="35.0" prefWidth="937.0" text="No Upcoming Appointments" textAlignment="CENTER" textFill="#313131" wrapText="true">
          <font>
             <Font name="Arial" size="18.0" />
          </font></Label>
       <Button fx:id="logout" layoutX="908.0" layoutY="729.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="Log Out" />
-      <TableView fx:id="upcomingTable" layoutX="137.0" layoutY="185.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="84.0" prefWidth="740.0" style="-fx-border-color: #ffa83f; -fx-border-radius: 5px;">
+      <TableView fx:id="upcomingTable" layoutX="185.0" layoutY="162.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="84.0" prefWidth="637.0" style="-fx-border-color: #394F8A; -fx-border-radius: 5px; -fx-border-width: 2px;">
         <columns>
-          <TableColumn fx:id="upApptIdCol" prefWidth="124.0" text="ID" />
-          <TableColumn fx:id="upDateCol" minWidth="0.0" prefWidth="456.0" text="DATE" />
-            <TableColumn fx:id="upTimeCol" minWidth="0.0" prefWidth="159.0" text="TIME" />
+          <TableColumn fx:id="upApptIdCol" prefWidth="135.0" style="-fx-alignment: CENTER;" text="ID" />
+          <TableColumn fx:id="upDateCol" minWidth="0.0" prefWidth="360.0" style="-fx-alignment: CENTER;" text="DATE" />
+            <TableColumn fx:id="upTimeCol" minWidth="0.0" prefWidth="140.0" style="-fx-alignment: CENTER;" text="TIME" />
         </columns>
       </TableView>
       <Label fx:id="errorLabel" alignment="CENTER" layoutX="29.0" layoutY="725.0" prefHeight="35.0" prefWidth="856.0" text="ERROR" textFill="#ff6262" visible="false">

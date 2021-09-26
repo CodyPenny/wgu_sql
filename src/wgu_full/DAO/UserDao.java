@@ -20,15 +20,20 @@ public class UserDao {
      * @return true if the user exists
      * @throws SQLException JDBC encountered an error with the data source
      */
-    public static boolean validateUser(String username, String pw) throws SQLException {
+    public static int validateUser(String username, String pw) throws SQLException {
         openConnection();
         Query.makeLoginQuery(username, pw);
         ResultSet result = Query.getResult();
         if (!result.isBeforeFirst()) {
-            return false;
+            return 0;
         }
+        int id = 0;
+        while(result.next()) {
+            id = result.getInt("User_ID");
+        }
+        
         closeConnection();
-        return true;
+        return id;
     }
 
     /**

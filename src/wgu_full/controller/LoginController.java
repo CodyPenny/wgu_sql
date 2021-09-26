@@ -78,7 +78,7 @@ public class LoginController implements Initializable {
      *
      * @return false if invalid
      */
-    public boolean validateInput() throws SQLException {
+    public int validateInput() throws SQLException {
         try {
             if(usernameField == null || usernameField.isEmpty()){
                 if(!showFrench){
@@ -86,7 +86,7 @@ public class LoginController implements Initializable {
                 } else {
                     showError(true, "Merci d'entrer un nom d'utilisateur.");
                 }
-                return false;
+                return 0;
             }
             if(passwordField == null || passwordField.isEmpty()){
                 if(!showFrench){
@@ -94,18 +94,13 @@ public class LoginController implements Initializable {
                 } else {
                     showError(true, "Veuillez entrer un mot de passe.");
                 }
-                return false;
-            }
-
-            // check with db
-            if (validateUser(usernameField, passwordField)) {
-                return true;
+                return 0;
             }
 
         } catch (Exception e){
             System.out.println("Error -" + e.getMessage());
         }
-        return false;
+        return validateUser(usernameField, passwordField);
     }
 
     /**
@@ -129,7 +124,8 @@ public class LoginController implements Initializable {
         try {
             usernameField = userNameInput.getText();
             passwordField = passwordInput.getText();
-            if(!validateInput()){
+            int result = validateInput();
+            if( result == 0 ){
                 if(showFrench){
                     showError(true, "Utilisateur invalide ou non autorisé.");
                 } else {
@@ -137,7 +133,7 @@ public class LoginController implements Initializable {
                 }
                 return;
             }
-            goToMain(event);
+            goToMain(event, result);
 
         } catch(Exception e){
             System.out.println(e.getMessage());
@@ -150,13 +146,19 @@ public class LoginController implements Initializable {
      * @param event login button has been fired
      * @throws IOException if I/O operation fails
      */
-    public void goToMain(ActionEvent event) throws IOException{
+    public void goToMain(ActionEvent event, int user_id) throws IOException{
         try {
-            root = FXMLLoader.load(getClass().getResource("../view/main.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/main.fxml"));
+            root = loader.load();
+            MainController controller = loader.getController();
+            controller.setupUpcomingColumns();
+            controller.searchUpcomingAppointments(user_id);
+
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+
         } catch (IOException e) {
             showError(true, "Can not load the protected page.");
         }

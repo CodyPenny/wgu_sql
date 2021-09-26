@@ -79,6 +79,36 @@ public class AppointmentDao {
     }
 
     /**
+     * Accesses the appointments table and retrieves appointments from the same customer with same dates
+     *
+     * @param userId the user id
+     * @param date the date
+     * @return ObservableList of appointments
+     */
+    public static ObservableList<Appointment> getSameDateAppointmentsByUser(int userId, LocalDate date){
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        try {
+            openConnection();
+            String query = "SELECT * FROM appointments WHERE Start >= '" + date + "' AND Start < '" + date + "' + INTERVAL 1 DAY AND User_ID = " + userId;
+            Query.makeQuery(query);
+            ResultSet result = Query.getResult();
+            while(result.next()){
+                int id = result.getInt("Appointment_ID");
+                Timestamp start = result.getTimestamp("Start");
+                Timestamp end = result.getTimestamp("End");
+                int user = result.getInt("User_ID");
+                Appointment same = new Appointment(id, "","","","",start, end, 0, user,"");
+                appointments.add(same);
+            }
+            closeConnection();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return appointments;
+    }
+
+
+    /**
      * Creates an appointment
      *
      * @param title the title

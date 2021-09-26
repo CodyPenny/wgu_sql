@@ -23,12 +23,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static javafx.scene.control.Alert.AlertType.INFORMATION;
 import static wgu_full.DAO.AppointmentDao.getAllAppointments;
+import static wgu_full.DAO.AppointmentDao.getSameDateAppointmentsByUser;
 
 
 /**
@@ -40,6 +43,7 @@ public class MainController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+
 
     /**
      * The tables
@@ -97,6 +101,34 @@ public class MainController implements Initializable {
     @FXML private RadioButton allRadio, monthRadio, weekRadio;
     @FXML private ToggleGroup view;
 
+
+    public void searchUpcomingAppointments(int user_id){
+        ObservableList<Appointment> inFifteen = FXCollections.observableArrayList();
+        LocalTime current = LocalTime.now();
+        System.out.println("current "+ current);
+        for(Appointment meet : getSameDateAppointmentsByUser(user_id, LocalDate.now())){
+            LocalTime otherTime = meet.getStart().toLocalDateTime().toLocalTime();
+            System.out.println("other time "+ otherTime);
+            long timeDiff = ChronoUnit.MINUTES.between(current, otherTime);
+            System.out.println("timeDiff"+timeDiff);
+            if(timeDiff < 0) {
+                timeDiff *= -1;
+            }
+            if(timeDiff > 0 && timeDiff <= 15){
+                inFifteen.add(meet);
+            }
+        }
+
+        displayUpcomingApptLabel(inFifteen.size());
+        upcomingTable.setItems(inFifteen);
+    }
+
+    public void displayUpcomingApptLabel(int count){
+        if(count > 0){
+            upcomingLabel.setText("You have " + count + " upcoming appointment(s).");
+            return;
+        }
+    }
 
     /**
      * Filters the list of appointments based on the same month
@@ -417,6 +449,7 @@ public class MainController implements Initializable {
     /**
      * Populates the tables with its corresponding columns and data from the data store.
      * The radioButton from the appointments table listens for any selection changes.
+     * Searches for any upcoming appointments the user has within 15 minutes of logging in.
      *
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
      * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
@@ -425,9 +458,10 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupCustomerColumns();
         setupAppointmentColumns();
-        setupUpcomingColumns();
+//        setupUpcomingColumns();
         customerTable.setItems(Customer.getAllCusts());
         appointmentTable.setItems(getAllAppointments());
         filterPerSelection();
+
     }
 }
