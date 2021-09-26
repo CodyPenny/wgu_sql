@@ -87,6 +87,20 @@ public class EditApptController implements Initializable {
             }
         }
 
+        for(Type meeting : typeCombo.getItems()){
+            if(meeting.getAppointment_type().equals(row.getType())){
+                typeCombo.getSelectionModel().select(meeting);
+                break;
+            }
+        }
+
+        for(Customer cust : customerCombo.getItems()){
+            if(cust.getId() == row.getCustomer()){
+                customerCombo.getSelectionModel().select(cust);
+                break;
+            }
+        }
+
 
 
     }
