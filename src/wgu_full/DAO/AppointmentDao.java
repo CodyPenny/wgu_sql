@@ -6,6 +6,7 @@ import wgu_full.model.Appointment;
 import wgu_full.model.Customer;
 
 import java.sql.ResultSet;
+import java.time.LocalDate;
 
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
@@ -44,5 +45,23 @@ public class AppointmentDao {
             System.out.println(e.getMessage());
         }
         return allAppointments;
+    }
+
+    public static ObservableList<Appointment> getSameDateAppointments(int customerId, LocalDate date){
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        try {
+            openConnection();
+            String query = "SELECT Appointment_ID FROM appointments WHERE Start = '" + date + "' AND Customer_ID = " + customerId;
+            Query.makeQuery(query);
+            ResultSet result = Query.getResult();
+            while(result.next()){
+                int id = result.getInt("Appointment_ID");
+                System.out.println("id --> " + id);
+            }
+            closeConnection();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return appointments;
     }
 }

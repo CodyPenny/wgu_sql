@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+import static wgu_full.DAO.AppointmentDao.getSameDateAppointments;
 import static wgu_full.model.Contact.getAllContacts;
 import static wgu_full.model.Customer.getAllCusts;
 import static wgu_full.model.Location.getAllLocations;
@@ -156,6 +157,9 @@ public class AddApptController implements Initializable {
         endZDT = convertToSystemZonedDateTime(endLDT);
 
         // check for overlap with selected customer
+        LocalDate date = startLDT.toLocalDate();
+        System.out.println("local date " + date);
+        getSameDateAppointments( 1, date);
         // convert to utc
 
         // save to db
