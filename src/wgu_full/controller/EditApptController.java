@@ -1,7 +1,10 @@
 package wgu_full.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import wgu_full.model.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -73,6 +77,27 @@ public class EditApptController implements Initializable {
     }
 
     /**
+     * Returns to the main page
+     *
+     * @param event the cancel or saved button has fired
+     * @throws IOException if I/O operation fails
+     */
+    public void backToMain(ActionEvent event) throws IOException{
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/main.fxml"));
+            root = loader.load();
+            MainController controller = loader.getController();
+            controller.selectTab(1);
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showError(true, "Can not load the protected page.");
+        }
+    }
+
+    /**
      * Disable past dates on DatePicker
      * Taken from Oracle documentation
      */
@@ -86,7 +111,6 @@ public class EditApptController implements Initializable {
                             @Override
                             public void updateItem(LocalDate item, boolean empty) {
                                 super.updateItem(item, empty);
-
                                 if (item.isBefore(
                                         dateBox.getValue().plusDays(1))
                                 ) {

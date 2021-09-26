@@ -72,7 +72,7 @@
             </font>
         </Label>
         <Button fx:id="saveBtn" layoutX="490.0" layoutY="590.0" mnemonicParsing="false" onAction="#saveAppointment" text="Save" />
-        <Button fx:id="cancelBtn" layoutX="420.0" layoutY="590.0" mnemonicParsing="false" text="Cancel" />
+        <Button fx:id="cancelBtn" layoutX="420.0" layoutY="590.0" mnemonicParsing="false" onAction="#backToMain" text="Cancel" />
         <TextField disable="true" editable="false" layoutX="155.0" layoutY="96.0" opacity="0.5" prefHeight="26.0" prefWidth="181.0" />
         <TextField fx:id="titleText" layoutX="155.0" layoutY="136.0" prefHeight="26.0" prefWidth="181.0" />
         <TextField fx:id="descriptionText" layoutX="155.0" layoutY="176.0" prefHeight="26.0" prefWidth="321.0" />
