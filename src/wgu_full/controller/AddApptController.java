@@ -78,10 +78,9 @@ public class AddApptController implements Initializable {
 
 
     /**
-     * Validate the entries for the start and end time
+     * Validates the logic of the selected start and end times
      */
-    @FXML
-    private boolean validateTime(){
+    public boolean validateTime(){
         if(startHour.getValue() == 24 && startMin.getValue() > 0){
             showError(true, "Time can not exceed 24 hours.");
             return false;
@@ -101,8 +100,13 @@ public class AddApptController implements Initializable {
             }
         }
 
-         startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
-         endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
+        startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
+        endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
+
+        if(startLDT.isAfter(endLDT) || startLDT.isEqual(endLDT)){
+            showError(true, "Start time can not be greater or the same as the end time.");
+            return false;
+        }
 
         if (!validateZonedDateTimeBusiness(startLDT) || !validateZonedDateTimeBusiness(endLDT)){
             return false;
@@ -111,13 +115,63 @@ public class AddApptController implements Initializable {
         return true;
     }
 
+    public boolean validateInputFields(){
+        if(titleText.getText().isEmpty() || descriptionText.getText().isEmpty()){
+            System.out.println("empty");
+            showError(true, "All fields are required. Please complete.");
+            return false;
+        }
+        if(locationCombo.getSelectionModel().isEmpty()){
+            showError(true, "Please select a location.");
+            return false;
+        }
+        if(contactCombo.getSelectionModel().isEmpty()){
+            showError(true, "Please select a contact.");
+            return false;
+        }
+        if(typeCombo.getSelectionModel().isEmpty()){
+            showError(true, "Please select the type.");
+            return false;
+        }
+        if(customerCombo.getSelectionModel().isEmpty()){
+            showError(true, "Please select a customer.");
+            return false;
+        }
+        if(userCombo.getSelectionModel().isEmpty()){
+            showError(true, "Please select a user.");
+            return false;
+        }
+        return true;
+    }
+
+    public void saveAppointment(){
+        // check all entries are selected
+        if(!validateInputFields()){
+            return;
+        }
+        if(!validateTime()){
+            return;
+        }
+        startZDT = convertToSystemZonedDateTime(startLDT);
+        endZDT = convertToSystemZonedDateTime(endLDT);
+
+        // check for overlap with selected customer
+        // convert to utc
+
+        // save to db
+
+
+    }
+
+
+
     /**
      * Takes the selected date, hour, and minute and creates a LocalDateTime object
      * @param hr the hour
      * @param min the min
      * @return LocalDateTime object of the input time
      */
-    private LocalDateTime convertToTimeObject(int hr, int min) {
+    public LocalDateTime convertToTimeObject(int hr, int min) {
         LocalDate date = dateBox.getValue();
         return LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), hr, min);
     }
@@ -128,15 +182,28 @@ public class AddApptController implements Initializable {
      * @param ldt an instance of LocalDateTime
      * @return ZonedDateTime relative to the user's system time
      */
-    private ZonedDateTime convertToZonedDateTime(LocalDateTime ldt){
+    public ZonedDateTime convertToSystemZonedDateTime(LocalDateTime ldt){
         return ldt.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
     }
 
     /**
-     * Validates the selected time to the business hours
+     * Takes a date-time object and returns a copy with the UTC time zone
+     *
+     * @param zdt an instance of the ZonedDateTime object
+     * @return a UTC date-time object
      */
-    private boolean validateZonedDateTimeBusiness(LocalDateTime ldt){
-        ZonedDateTime zdt = convertToZonedDateTime(ldt);
+    public ZonedDateTime convertToUTC(ZonedDateTime zdt){
+       return zdt.withZoneSameInstant(ZoneId.of("UTC"));
+    }
+
+    /**
+     * Validates the selected time against the business hours
+     *
+     * @param ldt an instance of the LocalDateTime object
+     * @return true if the selected time is within business hours
+     */
+    public boolean validateZonedDateTimeBusiness(LocalDateTime ldt){
+        ZonedDateTime zdt = convertToSystemZonedDateTime(ldt);
         ZonedDateTime est = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
         System.out.println("est " + est);
         ZonedDateTime open = est.withHour(8);
@@ -153,9 +220,6 @@ public class AddApptController implements Initializable {
             showError(true, "Selected time is before business hours. Please select a time within 8am-10pm est.");
             return false;
         }
-
-//        ZonedDateTime db = zdt.withZoneSameInstant(ZoneId.of("UTC"));
-//        System.out.println("db " + db);
         return true;
     }
 
