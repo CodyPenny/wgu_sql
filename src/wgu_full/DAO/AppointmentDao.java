@@ -3,13 +3,10 @@ package wgu_full.DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import wgu_full.model.Appointment;
-import wgu_full.model.Customer;
 
 import java.sql.ResultSet;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
@@ -81,8 +78,7 @@ public class AppointmentDao {
 
     /**
      * Creates an appointment
-     *
-     * @param title the title
+     *  @param title the title
      * @param desc the description
      * @param loc the location
      * @param type the type of appointment
@@ -92,7 +88,7 @@ public class AppointmentDao {
      * @param userId the user id
      * @param contactId the contact id
      */
-    public static void createAppointment(String title, String desc, String loc, String type, LocalDateTime start, LocalDateTime end, int custId, int userId, int contactId){
+    public static void createAppointment(String title, String desc, String loc, String type, Timestamp start, Timestamp end, int custId, int userId, int contactId){
         try {
             openConnection();
             String query = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES ('" + title + "','" + desc + "','" + loc + "','" + type + "','" + start + "','" + end + "'," + custId + "," + userId + "," + contactId + ")";
@@ -103,7 +99,7 @@ public class AppointmentDao {
         }
     }
 
-    public static void updateAppointment(int id, String title, String description, String location, LocalDateTime start, LocalDateTime end,String type, int user, int contact, int customer ){
+    public static void updateAppointment(int id, String title, String description, String location, Timestamp start, Timestamp end, String type, int user, int contact, int customer ){
         try {
             openConnection();
             String query = "UPDATE appointments SET Title = '" + title + "', Description = '" + description + "', Location = '" + location + "', Type = '" + type + "', Start = '" + start + "', End = '" + end + "', Customer_ID = " + customer + ", User_ID = " + user + ", Contact_ID = " + contact + " WHERE Appointment_ID = " + id;

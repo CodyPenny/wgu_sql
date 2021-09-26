@@ -15,6 +15,7 @@ import wgu_full.model.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -114,11 +115,12 @@ public class EditApptController implements Initializable {
         String descriptionField = descriptionText.getText();
         String loc = locationCombo.getSelectionModel().getSelectedItem().toString();
         int contact = contactCombo.getSelectionModel().getSelectedItem().getId();
-        String t = typeCombo.getSelectionModel().getSelectedItem().toString();
+        String ty = typeCombo.getSelectionModel().getSelectedItem().toString();
         int user = userCombo.getSelectionModel().getSelectedItem().getId();
-        LocalDateTime start = convertToUTC(startZDT).toLocalDateTime();
-        LocalDateTime end = convertToUTC(endZDT).toLocalDateTime();
-        updateAppointment(selectedRow.getId(), titleField, descriptionField, loc, start, end, t, user, contact, customer);
+        Timestamp start = Timestamp.valueOf(startLDT);
+        Timestamp end = Timestamp.valueOf(endLDT);
+
+        updateAppointment(selectedRow.getId(), titleField, descriptionField, loc, start, end, ty, user, contact, customer);
         backToMain(event);
     }
 
@@ -204,8 +206,8 @@ public class EditApptController implements Initializable {
      * @return false if there is an overlap
      */
     public boolean validateOverlap(ObservableList<Appointment> test){
-        LocalDateTime A = convertToUTC(startZDT).toLocalDateTime();
-        LocalDateTime Z = convertToUTC(endZDT).toLocalDateTime();
+        LocalDateTime A = startLDT;
+        LocalDateTime Z = endLDT;
         for(Appointment appt : test){
             LocalDateTime S = appt.getStart().toLocalDateTime();
             LocalDateTime E = appt.getEnd().toLocalDateTime();
@@ -321,7 +323,13 @@ public class EditApptController implements Initializable {
                 break;
             }
         }
-        LocalDateTime startLDT = row.getStart().toLocalDateTime();
+        LocalDateTime preStartLDT = row.getStart().toLocalDateTime();
+        ZonedDateTime startLDT = row.getStart().toLocalDateTime().atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+        System.out.println("pre " + preStartLDT);
+        System.out.println("not pre " + startLDT);
+        System.out.println("anoter "+startLDT.toLocalDateTime());
+        System.out.println("value of "+ Timestamp.valueOf(preStartLDT));
+
         LocalDateTime endLDT = row.getEnd().toLocalDateTime();
         LocalDate ld = startLDT.toLocalDate();
         dateBox.setValue(ld);

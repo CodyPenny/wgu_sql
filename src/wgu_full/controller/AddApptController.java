@@ -16,6 +16,7 @@ import wgu_full.model.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -199,8 +200,12 @@ public class AddApptController implements Initializable {
         int contact = contactCombo.getSelectionModel().getSelectedItem().getId();
         String t = typeCombo.getSelectionModel().getSelectedItem().toString();
         int user = userCombo.getSelectionModel().getSelectedItem().getId();
-        LocalDateTime start = convertToUTC(startZDT).toLocalDateTime();
-        LocalDateTime end = convertToUTC(endZDT).toLocalDateTime();
+
+//        LocalDateTime start = convertToUTC(startZDT).toLocalDateTime();
+//        LocalDateTime end = convertToUTC(endZDT).toLocalDateTime();
+        Timestamp start = Timestamp.valueOf(startLDT);
+        Timestamp end = Timestamp.valueOf(endLDT);
+
         createAppointment(titleField, descriptionField, loc, t, start, end, customer, user, contact);
         backToMain(event);
     }
@@ -271,8 +276,8 @@ public class AddApptController implements Initializable {
      * @return false if there is an overlap
      */
     public boolean validateOverlap(ObservableList<Appointment> test){
-        LocalDateTime A = convertToUTC(startZDT).toLocalDateTime();
-        LocalDateTime Z = convertToUTC(endZDT).toLocalDateTime();
+        LocalDateTime A = startLDT;
+        LocalDateTime Z = endLDT;
         for(Appointment appt : test){
             LocalDateTime S = appt.getStart().toLocalDateTime();
             LocalDateTime E = appt.getEnd().toLocalDateTime();
