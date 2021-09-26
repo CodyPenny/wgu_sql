@@ -7,6 +7,7 @@ import wgu_full.model.Customer;
 
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
@@ -57,12 +58,17 @@ public class AppointmentDao {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         try {
             openConnection();
-            String query = "SELECT Appointment_ID FROM appointments WHERE Start = '" + date + "' AND Customer_ID = " + customerId;
+//            String query = "SELECT Appointment_ID FROM appointments WHERE Start = '" + date + "' AND Customer_ID = " + customerId;
+            String query = "SELECT Appointment_ID FROM appointments WHERE Start >= '" + date + "' AND Start < '" + date + "' + INTERVAL 1 DAY AND Customer_ID = " + customerId;
             Query.makeQuery(query);
             ResultSet result = Query.getResult();
             while(result.next()){
                 int id = result.getInt("Appointment_ID");
-                System.out.println("id --> " + id);
+                String start = result.getString("Start");
+                String end = result.getString("End");
+                int customer = result.getInt("Customer_ID");
+                Appointment same = new Appointment(id, "","","","",start, end, customer, 0,"");
+                appointments.add(same);
             }
             closeConnection();
         } catch (Exception e) {
@@ -84,7 +90,7 @@ public class AppointmentDao {
      * @param userId the user id
      * @param contactId the contact id
      */
-    public static void createAppointment(String title, String desc, String loc, String type, String start, String end, int custId, int userId, int contactId){
+    public static void createAppointment(String title, String desc, String loc, String type, LocalDateTime start, LocalDateTime end, int custId, int userId, int contactId){
         try {
             openConnection();
             String query = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES ('" + title + "','" + desc + "','" + loc + "','" + type + "','" + start + "','" + end + "'," + custId + "," + userId + "," + contactId + ")";
