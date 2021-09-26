@@ -5,11 +5,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import wgu_full.model.*;
 
 import java.net.URL;
@@ -57,32 +55,72 @@ public class AddApptController implements Initializable {
      * DatePicker
      */
     @FXML
-    private DatePicker startTime, endTime;
+    private DatePicker dateBox;
+
+    /**
+     * Spinners
+     */
+    @FXML
+    private Spinner<Integer> startHour,startMin, endHour, endMin;
 
     @FXML Label errorLabel;
 
 
+    /**
+     * Disable past dates on DatePicker
+     * Taken from Oracle documentation
+     */
+    private void disablePastDates() {
+        dateBox.setValue(LocalDate.now());
+        final Callback<DatePicker, DateCell> dayCellFactory =
+                new Callback<DatePicker, DateCell>() {
+                    @Override
+                    public DateCell call(final DatePicker datePicker) {
+                        return new DateCell() {
+                            @Override
+                            public void updateItem(LocalDate item, boolean empty) {
+                                super.updateItem(item, empty);
 
-    public void getDate(ActionEvent event){
-        LocalDate selectedDate = startTime.getValue();
-
-
+                                if (item.isBefore(
+                                        dateBox.getValue().plusDays(1))
+                                ) {
+                                    setDisable(true);
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                                }
+                            }
+                        };
+                    }
+                };
+        dateBox.setDayCellFactory(dayCellFactory);
     }
 
 
     /**
+     * Populate the comboBoxes on the GUI
+     * Initiate time spinners with hour and minutes on the GUI
      *
      * @param url
      * @param resourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // fill in the combo boxes
-        // populate type and location instances
         contactCombo.setItems(getAllContacts());
         customerCombo.setItems(getAllCusts());
         userCombo.setItems(getUsers());
         locationCombo.setItems(getAllLocations());
         typeCombo.setItems(getAllTypes());
+
+        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24);
+        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24);
+        SpinnerValueFactory<Integer> minFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 59);
+        startHourFactory.setValue(1);
+        endHourFactory.setValue(1);
+        minFactory.setValue(1);
+        startHour.setValueFactory(startHourFactory);
+        startMin.setValueFactory(minFactory);
+        endHour.setValueFactory(endHourFactory);
+        endMin.setValueFactory(minFactory);
+
+        disablePastDates();
     }
 }

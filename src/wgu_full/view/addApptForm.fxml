@@ -82,18 +82,18 @@
       <DatePicker fx:id="dateBox" layoutX="155.0" layoutY="335.0" prefHeight="26.0" prefWidth="109.0" />
       <ComboBox fx:id="customerCombo" layoutX="155.0" layoutY="460.0" prefHeight="26.0" prefWidth="130.0" />
       <ComboBox fx:id="userCombo" layoutX="155.0" layoutY="500.0" prefHeight="26.0" prefWidth="130.0" />
-      <Spinner fx:id="startHour" layoutX="193.0" layoutY="378.0" prefHeight="26.0" prefWidth="69.0" />
-      <Spinner layoutX="328.0" layoutY="378.0" prefHeight="26.0" prefWidth="81.0" />
-      <Label fx:id="startMin" layoutX="281.0" layoutY="383.0" text="Minute" />
+      <Spinner fx:id="startHour" editable="true" layoutX="193.0" layoutY="378.0" prefHeight="26.0" prefWidth="69.0" />
+      <Spinner fx:id="startMin" editable="true" layoutX="328.0" layoutY="378.0" prefHeight="26.0" prefWidth="81.0" />
+      <Label layoutX="281.0" layoutY="383.0" text="Minute" />
       <Label layoutX="155.0" layoutY="382.0" text="Hour" />
       <Label layoutX="40.0" layoutY="420.0" text="End Time:">
          <font>
             <Font name="Arial" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="endHour" layoutX="155.0" layoutY="420.0" text="Hour" />
-      <Spinner layoutX="193.0" layoutY="416.0" prefHeight="26.0" prefWidth="69.0" />
-      <Label fx:id="endMin" layoutX="281.0" layoutY="420.0" text="Minute" />
-      <Spinner layoutX="328.0" layoutY="416.0" prefHeight="26.0" prefWidth="81.0" />
+      <Label layoutX="155.0" layoutY="420.0" text="Hour" />
+      <Spinner fx:id="endHour" editable="true" layoutX="193.0" layoutY="416.0" prefHeight="26.0" prefWidth="69.0" />
+      <Label layoutX="281.0" layoutY="420.0" text="Minute" />
+      <Spinner fx:id="endMin" editable="true" layoutX="328.0" layoutY="416.0" prefHeight="26.0" prefWidth="81.0" />
    </children>
 </AnchorPane>
