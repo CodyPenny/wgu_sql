@@ -51,7 +51,7 @@
                            <effect>
                               <Blend />
                            </effect></Button>
-                        <Button fx:id="deleteApptBtn" layoutX="845.0" layoutY="294.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="DELETE" />
+                        <Button fx:id="deleteApptBtn" layoutX="845.0" layoutY="294.0" mnemonicParsing="false" onAction="#deleteAppointment" prefHeight="26.0" prefWidth="75.0" text="DELETE" />
                      </children></AnchorPane>
             </content>
           </Tab>

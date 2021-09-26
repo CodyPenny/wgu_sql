@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import wgu_full.DAO.AppointmentDao;
 import wgu_full.DAO.CustomerDao;
 import wgu_full.model.Appointment;
 import wgu_full.model.Customer;
@@ -185,6 +186,26 @@ public class MainController implements Initializable {
                     Alert okAlert = new Alert(INFORMATION, "Customer removed");
                     okAlert.show();
                     customerTable.setItems(Customer.getAllCusts());
+                }
+            }
+        } catch (Exception e){
+            showError(true, "Error with deletion");
+        }
+    }
+
+    public void deleteAppointment(ActionEvent event){
+        try {
+            Appointment selectedAppt = appointmentTable.getFocusModel().getFocusedItem();
+            Alert alert = new Alert(CONFIRMATION, "Are you sure?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                if(!AppointmentDao.deleteAppointment(selectedAppt.getId())){
+                    showError(true, "Error with deletion");
+                    return;
+                } else {
+                    Alert okAlert = new Alert(INFORMATION, "Appointment ID: " + selectedAppt.getId() + ";  Type-" + selectedAppt.getType() + " has been removed.");
+                    okAlert.show();
+                    appointmentTable.setItems(getAllAppointments());
                 }
             }
         } catch (Exception e){

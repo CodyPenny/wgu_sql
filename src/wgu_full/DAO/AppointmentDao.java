@@ -5,11 +5,14 @@ import javafx.collections.ObservableList;
 import wgu_full.model.Appointment;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
+import static wgu_full.DAO.Query.removeAppt;
+import static wgu_full.DAO.Query.removeCustomer;
 
 public class AppointmentDao {
 
@@ -123,6 +126,15 @@ public class AppointmentDao {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static boolean deleteAppointment(int id) throws SQLException {
+        openConnection();
+        if(!removeAppt(id)){
+            return false;
+        }
+        closeConnection();
+        return true;
     }
 
 }

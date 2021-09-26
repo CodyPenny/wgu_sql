@@ -143,6 +143,19 @@ public class Query {
         }
     }
 
+    public static boolean removeAppt(int id) throws SQLException {
+        query = "DELETE FROM appointments WHERE Appointment_ID = ?";
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("SQL error -" + e.getMessage());
+            return false;
+        }
+    }
+
 
     /**
      * Fetches the result referencing the ResultSet object
