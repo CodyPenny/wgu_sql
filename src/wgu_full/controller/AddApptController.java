@@ -323,7 +323,6 @@ public class AddApptController implements Initializable {
         errorLabel.setVisible(showOrHide);
     }
 
-
     /**
      * Disable past dates on DatePicker
      * Taken from Oracle documentation
@@ -351,7 +350,6 @@ public class AddApptController implements Initializable {
                 };
         dateBox.setDayCellFactory(dayCellFactory);
     }
-
 
     /**
      * Populate the comboBoxes
