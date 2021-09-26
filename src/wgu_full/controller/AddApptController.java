@@ -1,6 +1,5 @@
 package wgu_full.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -12,6 +11,8 @@ import wgu_full.model.*;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import static wgu_full.model.Contact.getAllContacts;
@@ -63,7 +64,61 @@ public class AddApptController implements Initializable {
     @FXML
     private Spinner<Integer> startHour,startMin, endHour, endMin;
 
-    @FXML Label errorLabel;
+    @FXML private Label errorLabel;
+
+
+    /**
+     * Validate the entries for the start and end time
+     */
+    @FXML
+    private void validateTime(){
+        if(startHour.getValue() == 24 && startMin.getValue() > 0){
+            showError(true, "Time can not exceed 24 hours.");
+            return;
+        }
+        if(endHour.getValue() == 24 && endMin.getValue() > 0){
+            showError(true, "Time can not exceed 24 hours.");
+            return;
+        }
+        if(startHour.getValue() > endHour.getValue()){
+            showError(true, "Start time can not be greater than the end time.");
+            return;
+        }
+        if(startHour.getValue() == endHour.getValue()){
+            if(startMin.getValue() >= endMin.getValue()){
+                showError(true, "Start time can not be greater or the same as the end time.");
+                return;
+            }
+        }
+
+        convertToTimeObject(startHour.getValue(), endMin.getValue());
+    }
+
+    /**
+     * Converts date, hour, and min to a LocalDateTime object
+     * @param hr the hour
+     * @param min the min
+     * @return LocalDateTime object of the input time
+     */
+    private LocalDateTime convertToTimeObject(int hr, int min) {
+        LocalDate date = dateBox.getValue();
+        return LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), hr, min);
+    }
+
+//    private void validateAgainstBusinessHrs(){
+//
+//    }
+
+    /**
+     * Shows or the hides the custom error
+     *
+     * @param showOrHide sets the error to be visible or invisible
+     * @param errorText the custom error message to show
+     */
+    public void showError(boolean showOrHide, String errorText){
+        errorLabel.setText(errorText);
+        errorLabel.setVisible(showOrHide);
+    }
 
 
     /**
@@ -96,8 +151,9 @@ public class AddApptController implements Initializable {
 
 
     /**
-     * Populate the comboBoxes on the GUI
-     * Initiate time spinners with hour and minutes on the GUI
+     * Populate the comboBoxes
+     * Initiate time spinners with hour and minutes
+     * Disable past dates on the Date Picker
      *
      * @param url
      * @param resourceBundle
@@ -110,16 +166,15 @@ public class AddApptController implements Initializable {
         locationCombo.setItems(getAllLocations());
         typeCombo.setItems(getAllTypes());
 
-        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24);
-        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24);
-        SpinnerValueFactory<Integer> minFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 59);
-        startHourFactory.setValue(1);
-        endHourFactory.setValue(1);
-        minFactory.setValue(1);
+        // limit hour to EST after retrieving local time
+        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 8, 1);
+        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 8);
+        SpinnerValueFactory<Integer> startMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 0, 10);
+        SpinnerValueFactory<Integer> endMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 0, 10);
         startHour.setValueFactory(startHourFactory);
-        startMin.setValueFactory(minFactory);
+        startMin.setValueFactory(startMinFactory);
         endHour.setValueFactory(endHourFactory);
-        endMin.setValueFactory(minFactory);
+        endMin.setValueFactory(endMinFactory);
 
         disablePastDates();
     }
