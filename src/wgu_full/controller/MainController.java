@@ -23,15 +23,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.util.Optional;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static javafx.scene.control.Alert.AlertType.INFORMATION;
 import static wgu_full.DAO.AppointmentDao.getAllAppointments;
-import static wgu_full.DAO.CustomerDao.getAllCustomers;
+
 
 /**
  * The interface for the main page
@@ -47,7 +45,7 @@ public class MainController implements Initializable {
      * The tables
      */
     @FXML private TableView<Customer> customerTable;
-    //@FXML private TableView<> upcomingTable;
+    @FXML private TableView<Appointment> upcomingTable;
     @FXML private TableView<Appointment> appointmentTable;
     //@FXML private TableView<> typeCountTable;
 
@@ -76,9 +74,16 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Customer, String> custPhoneCol;
 
     /**
+     * The columns of the upcoming appointments table
+     */
+    @FXML private TableColumn<Appointment, Integer> upApptIdCol;
+    @FXML private TableColumn<Appointment, String> upDateCol;
+    @FXML private TableColumn<Appointment, String> upTimeCol;
+
+    /**
      * Label
      */
-    @FXML private Label errorLabel;
+    @FXML private Label errorLabel, upcomingLabel, usernameLabel ;
 
     /**
      * Tabs and the TabPane
@@ -400,6 +405,16 @@ public class MainController implements Initializable {
     }
 
     /**
+     * Populates the columns of the upcoming appointments table
+     */
+    public void setupUpcomingColumns(){
+        upApptIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("id"));
+        upDateCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
+        upTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("time"));
+    }
+
+
+    /**
      * Populates the tables with its corresponding columns and data from the data store.
      * The radioButton from the appointments table listens for any selection changes.
      *
@@ -410,6 +425,7 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupCustomerColumns();
         setupAppointmentColumns();
+        setupUpcomingColumns();
         customerTable.setItems(Customer.getAllCusts());
         appointmentTable.setItems(getAllAppointments());
         filterPerSelection();

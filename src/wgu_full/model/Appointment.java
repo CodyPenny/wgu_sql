@@ -142,6 +142,20 @@ public class Appointment {
      */
     public void setContact(String contact){ this.contact = contact; }
 
+    /**
+     * @return extracts and returns the date
+     */
+    public String getDate(){
+        return this.start.toLocalDateTime().toLocalDate().toString();
+    }
+
+    /**
+     * @return extracts and returns the time
+     */
+    public String getTime(){
+        return this.start.toLocalDateTime().toLocalTime().toString();
+    }
+
 
 
 }
