@@ -110,17 +110,17 @@ public class MainController implements Initializable {
     @FXML private ComboBox<Type> reportTypeCombo;
 
 
-
+    /**
+     * Validates the type and month comboBox selections are not null and counts the number of appointments by type in the selected month
+     */
     public void generateMonthTypeReport(){
+        typeErrorLabel.setVisible(false);
         if (!validateMonthTypeComboBox()){
             return;
         }
         int count = getTypeByMonth(reportMthCombo.getValue(), reportTypeCombo.getValue().toString());
         reportQtyLabel.setText(Integer.toString(count));
-
-
     }
-
 
     /**
      * Validates a selection has been made on the comboBoxes
