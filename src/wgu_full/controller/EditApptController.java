@@ -15,6 +15,7 @@ import wgu_full.model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 import static wgu_full.model.Contact.getAllContacts;
@@ -107,6 +108,11 @@ public class EditApptController implements Initializable {
                 break;
             }
         }
+
+        LocalDateTime startLDT = row.getStart().toLocalDateTime();
+        LocalDateTime endLDT = row.getEnd().toLocalDateTime();
+        LocalDate ld = startLDT.toLocalDate();
+        dateBox.setValue(ld);
 
 
 
