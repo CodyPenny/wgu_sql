@@ -181,12 +181,9 @@ public class AddApptController implements Initializable {
         endZDT = convertToSystemZonedDateTime(endLDT);
         // check for overlap with selected customer
         LocalDate date = startLDT.toLocalDate();
-        System.out.println("local date " + date);
         int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
         overlaps = getSameDateAppointments(customer, date);
         if(overlaps.size() > 0){
-            System.out.println("conflicting");
-            //check for conflict
             boolean noOverlap = validateOverlap(overlaps);
             if (!noOverlap){
                 showError(true, "Selected time for customer overlaps with another appointment. Please select another time.");
@@ -200,12 +197,8 @@ public class AddApptController implements Initializable {
         int contact = contactCombo.getSelectionModel().getSelectedItem().getId();
         String t = typeCombo.getSelectionModel().getSelectedItem().toString();
         int user = userCombo.getSelectionModel().getSelectedItem().getId();
-
-//        LocalDateTime start = convertToUTC(startZDT).toLocalDateTime();
-//        LocalDateTime end = convertToUTC(endZDT).toLocalDateTime();
         Timestamp start = Timestamp.valueOf(startLDT);
         Timestamp end = Timestamp.valueOf(endLDT);
-
         createAppointment(titleField, descriptionField, loc, t, start, end, customer, user, contact);
         backToMain(event);
     }
@@ -233,16 +226,6 @@ public class AddApptController implements Initializable {
     }
 
     /**
-     * Takes a date-time object and returns a copy with the UTC time zone
-     *
-     * @param zdt an instance of the ZonedDateTime object
-     * @return a UTC date-time object
-     */
-    public ZonedDateTime convertToUTC(ZonedDateTime zdt){
-       return zdt.withZoneSameInstant(ZoneId.of("UTC"));
-    }
-
-    /**
      * Validates the selected time against the business hours
      *
      * @param ldt an instance of the LocalDateTime object
@@ -251,18 +234,13 @@ public class AddApptController implements Initializable {
     public boolean validateZonedDateTimeBusiness(LocalDateTime ldt){
         ZonedDateTime zdt = convertToSystemZonedDateTime(ldt);
         ZonedDateTime est = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
-        //System.out.println("est " + est);
         ZonedDateTime open = est.withHour(8);
         ZonedDateTime close = est.withHour(22);
-        //System.out.println("open " + open);
-        //System.out.println("close " + close);
         if(est.isAfter(close)){
-            //System.out.println("after close");
             showError(true, "Selected time is after business hours. Please select a time within 8am-10pm est.");
             return false;
         }
         if(est.isBefore(open)) {
-            //System.out.println("before open");
             showError(true, "Selected time is before business hours. Please select a time within 8am-10pm est.");
             return false;
         }

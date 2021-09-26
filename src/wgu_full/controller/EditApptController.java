@@ -88,6 +88,12 @@ public class EditApptController implements Initializable {
 
     @FXML private Label errorLabel;
 
+    /**
+     * Updates the appointment with newly entered fields
+     *
+     * @param event when the save button is fired
+     * @throws IOException
+     */
     public void saveAppointment(ActionEvent event) throws IOException {
         if(!validateInputFields()){
             return;
@@ -102,8 +108,6 @@ public class EditApptController implements Initializable {
         int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
         overlaps = getSameDateAppointments(customer, date);
         if(overlaps.size() > 0){
-            System.out.println("conflicting");
-            //check for conflict
             boolean noOverlap = validateOverlap(overlaps);
             if (!noOverlap){
                 showError(true, "Selected time for customer overlaps with another appointment. Please select another time.");
@@ -181,18 +185,13 @@ public class EditApptController implements Initializable {
     public boolean validateZonedDateTimeBusiness(LocalDateTime ldt){
         ZonedDateTime zdt = convertToSystemZonedDateTime(ldt);
         ZonedDateTime est = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
-        //System.out.println("est " + est);
         ZonedDateTime open = est.withHour(8);
         ZonedDateTime close = est.withHour(22);
-        //System.out.println("open " + open);
-        //System.out.println("close " + close);
         if(est.isAfter(close)){
-            //System.out.println("after close");
             showError(true, "Selected time is after business hours. Please select a time within 8am-10pm est.");
             return false;
         }
         if(est.isBefore(open)) {
-            //System.out.println("before open");
             showError(true, "Selected time is before business hours. Please select a time within 8am-10pm est.");
             return false;
         }
@@ -201,6 +200,7 @@ public class EditApptController implements Initializable {
 
     /**
      * Looks for any overlaps between the input list of appointments and selected appointment times
+     * Skips the appointment if it is the same appointment that was returned
      *
      * @param test the list of appointments with possible conflicts
      * @return false if there is an overlap
@@ -209,6 +209,9 @@ public class EditApptController implements Initializable {
         LocalDateTime A = startLDT;
         LocalDateTime Z = endLDT;
         for(Appointment appt : test){
+            if(appt.getId() == selectedRow.getId()){
+                continue;
+            }
             LocalDateTime S = appt.getStart().toLocalDateTime();
             LocalDateTime E = appt.getEnd().toLocalDateTime();
             //case 1 - when the start is in the window
@@ -226,17 +229,6 @@ public class EditApptController implements Initializable {
         }
         return true;
     }
-
-    /**
-     * Takes a date-time object and returns a copy with the UTC time zone
-     *
-     * @param zdt an instance of the ZonedDateTime object
-     * @return a UTC date-time object
-     */
-    public ZonedDateTime convertToUTC(ZonedDateTime zdt){
-        return zdt.withZoneSameInstant(ZoneId.of("UTC"));
-    }
-
 
     /**
      * Validates the textfields are complete and a selection has been made on the comboBoxes
@@ -323,13 +315,7 @@ public class EditApptController implements Initializable {
                 break;
             }
         }
-        LocalDateTime preStartLDT = row.getStart().toLocalDateTime();
-        ZonedDateTime startLDT = row.getStart().toLocalDateTime().atZone(ZoneId.of(ZoneId.systemDefault().toString()));
-        System.out.println("pre " + preStartLDT);
-        System.out.println("not pre " + startLDT);
-        System.out.println("anoter "+startLDT.toLocalDateTime());
-        System.out.println("value of "+ Timestamp.valueOf(preStartLDT));
-
+        LocalDateTime startLDT = row.getStart().toLocalDateTime();
         LocalDateTime endLDT = row.getEnd().toLocalDateTime();
         LocalDate ld = startLDT.toLocalDate();
         dateBox.setValue(ld);

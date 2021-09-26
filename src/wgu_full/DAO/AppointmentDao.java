@@ -78,6 +78,7 @@ public class AppointmentDao {
 
     /**
      * Creates an appointment
+     *
      *  @param title the title
      * @param desc the description
      * @param loc the location
@@ -99,11 +100,24 @@ public class AppointmentDao {
         }
     }
 
+    /**
+     * Updates the appointment
+     *
+     * @param id the appointment id
+     * @param title the title
+     * @param description the description
+     * @param location the location
+     * @param start the start date and time
+     * @param end the end date and time
+     * @param type the type of appointment
+     * @param user the user
+     * @param contact the contact
+     * @param customer the customer
+     */
     public static void updateAppointment(int id, String title, String description, String location, Timestamp start, Timestamp end, String type, int user, int contact, int customer ){
         try {
             openConnection();
             String query = "UPDATE appointments SET Title = '" + title + "', Description = '" + description + "', Location = '" + location + "', Type = '" + type + "', Start = '" + start + "', End = '" + end + "', Customer_ID = " + customer + ", User_ID = " + user + ", Contact_ID = " + contact + " WHERE Appointment_ID = " + id;
-            System.out.println("query"+query);
             Query.makeQuery(query);
             closeConnection();
         } catch (Exception e) {
