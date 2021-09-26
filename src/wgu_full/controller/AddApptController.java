@@ -1,7 +1,10 @@
 package wgu_full.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import wgu_full.model.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +21,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+import static wgu_full.DAO.AppointmentDao.createAppointment;
 import static wgu_full.DAO.AppointmentDao.getSameDateAppointments;
 import static wgu_full.model.Contact.getAllContacts;
 import static wgu_full.model.Customer.getAllCusts;
@@ -30,10 +35,6 @@ public class AddApptController implements Initializable {
     private Scene scene;
     private Parent root;
 
-    /**
-     * Variables that will hold the text entered in the textfields
-     */
-    private String titleField, descriptionField;
 
     /**
      * DateTime object
@@ -145,8 +146,17 @@ public class AddApptController implements Initializable {
         return true;
     }
 
-    public void saveAppointment(){
-        // check all entries are selected
+    /**
+     * Validates all input fields are complete
+     * Validates time logic and overlaps
+     * Validates time against business hours
+     * Validates time against customer's other appointments
+     * Creates the appointment
+     *
+     * @param event when the save button is fired
+     * @throws IOException
+     */
+    public void saveAppointment(ActionEvent event) throws IOException {
         if(!validateInputFields()){
             return;
         }
@@ -160,11 +170,20 @@ public class AddApptController implements Initializable {
         LocalDate date = startLDT.toLocalDate();
         System.out.println("local date " + date);
         getSameDateAppointments( 1, date);
-        // convert to utc
 
         // save to db
+        String titleField = titleText.getText();
+        String descriptionField = descriptionText.getText();
+        String loc = locationCombo.getSelectionModel().getSelectedItem().toString();
+        int contact = contactCombo.getSelectionModel().getSelectedItem().getId();
+        String t = typeCombo.getSelectionModel().getSelectedItem().toString();
+        int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
+        int user = userCombo.getSelectionModel().getSelectedItem().getId();
+        String start = convertToUTC(startZDT).toLocalDateTime().toString();
+        String end = convertToUTC(endZDT).toLocalDateTime().toString();
+        createAppointment(titleField, descriptionField, loc, t, start, end, customer, user, contact);
 
-
+        backToMain(event);
     }
 
 
@@ -225,6 +244,27 @@ public class AddApptController implements Initializable {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Returns to the main page
+     *
+     * @param event the cancel or saved button has fired
+     * @throws IOException if I/O operation fails
+     */
+    public void backToMain(ActionEvent event) throws IOException{
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/main.fxml"));
+            root = loader.load();
+            MainController controller = loader.getController();
+            controller.selectTab(1);
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showError(true, "Can not load the protected page.");
+        }
     }
 
     /**

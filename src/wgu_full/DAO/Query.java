@@ -143,6 +143,7 @@ public class Query {
         }
     }
 
+
     /**
      * Fetches the result referencing the ResultSet object
      *

@@ -47,6 +47,12 @@ public class AppointmentDao {
         return allAppointments;
     }
 
+    /**
+     *
+     * @param customerId
+     * @param date
+     * @return
+     */
     public static ObservableList<Appointment> getSameDateAppointments(int customerId, LocalDate date){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         try {
@@ -64,4 +70,29 @@ public class AppointmentDao {
         }
         return appointments;
     }
+
+    /**
+     * Creates an appointment
+     *
+     * @param title the title
+     * @param desc the description
+     * @param loc the location
+     * @param type the type of appointment
+     * @param start the start date and time
+     * @param end the end date and time
+     * @param custId the customer id
+     * @param userId the user id
+     * @param contactId the contact id
+     */
+    public static void createAppointment(String title, String desc, String loc, String type, String start, String end, int custId, int userId, int contactId){
+        try {
+            openConnection();
+            String query = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES ('" + title + "','" + desc + "','" + loc + "','" + type + "','" + start + "','" + end + "'," + custId + "," + userId + "," + contactId + ")";
+            Query.makeQuery(query);
+            closeConnection();
+        } catch (Exception e) {
+        System.out.println(e.getMessage());
+        }
+    }
+
 }
