@@ -66,9 +66,9 @@
             <Font name="Arial" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="errorLabel" alignment="CENTER" layoutX="3.0" layoutY="540.0" prefHeight="37.0" prefWidth="594.0" text="ERROR" textFill="#ff5b5b" visible="false">
+      <Label fx:id="errorLabel" alignment="CENTER" layoutX="3.0" layoutY="540.0" prefHeight="37.0" prefWidth="554.0" text="ERROR" textFill="#ff5b5b" visible="false">
          <font>
-            <Font name="Arial" size="14.0" />
+            <Font name="Arial" size="12.0" />
          </font>
       </Label>
       <Button fx:id="saveBtn" layoutX="490.0" layoutY="590.0" mnemonicParsing="false" onAction="#validateTime" text="Save" />

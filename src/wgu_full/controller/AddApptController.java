@@ -12,6 +12,8 @@ import wgu_full.model.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
@@ -31,6 +33,14 @@ public class AddApptController implements Initializable {
      * Variables that will hold the text entered in the textfields
      */
     private String titleField, descriptionField;
+
+    /**
+     * DateTime object
+     */
+    LocalDateTime startLDT;
+    LocalDateTime endLDT;
+    ZonedDateTime startZDT;
+    ZonedDateTime endZDT;
 
     /**
      * The textfields in the add appointment form
@@ -71,31 +81,38 @@ public class AddApptController implements Initializable {
      * Validate the entries for the start and end time
      */
     @FXML
-    private void validateTime(){
+    private boolean validateTime(){
         if(startHour.getValue() == 24 && startMin.getValue() > 0){
             showError(true, "Time can not exceed 24 hours.");
-            return;
+            return false;
         }
         if(endHour.getValue() == 24 && endMin.getValue() > 0){
             showError(true, "Time can not exceed 24 hours.");
-            return;
+            return false;
         }
         if(startHour.getValue() > endHour.getValue()){
             showError(true, "Start time can not be greater than the end time.");
-            return;
+            return false;
         }
         if(startHour.getValue() == endHour.getValue()){
             if(startMin.getValue() >= endMin.getValue()){
                 showError(true, "Start time can not be greater or the same as the end time.");
-                return;
+                return false;
             }
         }
 
-        convertToTimeObject(startHour.getValue(), endMin.getValue());
+         startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
+         endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
+
+        if (!validateZonedDateTimeBusiness(startLDT) || !validateZonedDateTimeBusiness(endLDT)){
+            return false;
+        };
+
+        return true;
     }
 
     /**
-     * Converts date, hour, and min to a LocalDateTime object
+     * Takes the selected date, hour, and minute and creates a LocalDateTime object
      * @param hr the hour
      * @param min the min
      * @return LocalDateTime object of the input time
@@ -105,9 +122,42 @@ public class AddApptController implements Initializable {
         return LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), hr, min);
     }
 
-//    private void validateAgainstBusinessHrs(){
-//
-//    }
+    /**
+     * Converts a LocalDateTime object to a ZonedDateTime object
+     *
+     * @param ldt an instance of LocalDateTime
+     * @return ZonedDateTime relative to the user's system time
+     */
+    private ZonedDateTime convertToZonedDateTime(LocalDateTime ldt){
+        return ldt.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+    }
+
+    /**
+     * Validates the selected time to the business hours
+     */
+    private boolean validateZonedDateTimeBusiness(LocalDateTime ldt){
+        ZonedDateTime zdt = convertToZonedDateTime(ldt);
+        ZonedDateTime est = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
+        System.out.println("est " + est);
+        ZonedDateTime open = est.withHour(8);
+        ZonedDateTime close = est.withHour(22);
+        System.out.println("open " + open);
+        System.out.println("close " + close);
+        if(est.isAfter(close)){
+            System.out.println("after close");
+            showError(true, "Selected time is after business hours. Please select a time within 8am-10pm est.");
+            return false;
+        }
+        if(est.isBefore(open)) {
+            System.out.println("before open");
+            showError(true, "Selected time is before business hours. Please select a time within 8am-10pm est.");
+            return false;
+        }
+
+//        ZonedDateTime db = zdt.withZoneSameInstant(ZoneId.of("UTC"));
+//        System.out.println("db " + db);
+        return true;
+    }
 
     /**
      * Shows or the hides the custom error
