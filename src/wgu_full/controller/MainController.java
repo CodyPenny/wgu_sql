@@ -1,5 +1,9 @@
 package wgu_full.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +21,11 @@ import wgu_full.model.Customer;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
@@ -73,10 +81,101 @@ public class MainController implements Initializable {
     @FXML private Label errorLabel;
 
     /**
-     * Tabs
+     * Tabs and the TabPane
      */
     @FXML private TabPane mainTabPane;
     @FXML private Tab apptTab, custTab, reportTab;
+
+    /**
+     * Radio buttons and its ToggleGroup
+     */
+    @FXML private RadioButton allRadio, monthRadio, weekRadio;
+    @FXML private ToggleGroup view;
+
+
+    /**
+     * Filters the list of appointments based on the same month
+     */
+    public void filterAppointmentsByMonth(){
+        ObservableList<Appointment> monthList = FXCollections.observableArrayList();
+        LocalDate today = LocalDate.now();
+        for(Appointment meet : getAllAppointments()){
+            if(today.getMonthValue() == meet.getStart().toLocalDateTime().getMonthValue()){
+                monthList.add(meet);
+            }
+        }
+        appointmentTable.setItems(monthList);
+    }
+
+    /**
+     * Calculates the front and back-facing gaps of days from last Sunday to next Sunday, and filters appointments within that window.
+     */
+    public void filterAppointmentsByWeek(){
+        ObservableList<Appointment> weekList = FXCollections.observableArrayList();
+        LocalDateTime today = LocalDateTime.now();
+        int day = today.getDayOfWeek().getValue();
+        int addedDay = 0;
+        int minusDay = 0;
+        if(day == 1) {
+            addedDay = 7;
+            minusDay = 2;
+        }
+        if(day == 2) {
+            addedDay = 6;
+            minusDay = 3;
+        }
+        if(day == 3) {
+            addedDay = 5;
+            minusDay = 4;
+        }
+        if(day == 4) {
+            addedDay = 4;
+            minusDay = 5;
+        }
+        if(day == 5) {
+            addedDay = 3;
+            minusDay = 6;
+        }
+        if(day == 6) {
+            addedDay = 2;
+            minusDay = 7;
+        }
+        if(day == 7) {
+            addedDay = 8;
+            minusDay = 1;
+        }
+        LocalDateTime endDay = today.plusDays(addedDay);
+        LocalDateTime startDay = today.minusDays(minusDay);
+        for(Appointment meet : getAllAppointments()){
+            if((meet.getStart().toLocalDateTime().isBefore(endDay)) && (meet.getStart().toLocalDateTime().isAfter(startDay))){
+                weekList.add(meet);
+            }
+        }
+        appointmentTable.setItems(weekList);
+    }
+
+    /**
+     * The radioButton listens for any selection changes and filters the table based on all, week, or month.
+     */
+    public void filterPerSelection(){
+        view.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+                RadioButton rb = (RadioButton) view.getSelectedToggle();
+                if(rb != null){
+                    if(rb.getText().equals("Month")){
+                        filterAppointmentsByMonth();
+                    }
+                    if(rb.getText().equals("Week")){
+                        filterAppointmentsByWeek();
+                    }
+                    if(rb.getText().equals("All")){
+                        appointmentTable.setItems(getAllAppointments());
+                    }
+                }
+            }
+        });
+    }
 
     /**
      * Opens add new customer form
@@ -224,6 +323,12 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Deletes all appointments associated with a customer
+     *
+     * @param customer_id the customer id
+     * @return false if deletion fails
+     */
     public boolean deleteAssociatedAppointments(int customer_id){
         try {
             for(Appointment meet : getAllAppointments()){
@@ -295,6 +400,8 @@ public class MainController implements Initializable {
     }
 
     /**
+     * Populates the tables with its corresponding columns and data from the data store.
+     * The radioButton from the appointments table listens for any selection changes.
      *
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
      * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
@@ -305,5 +412,6 @@ public class MainController implements Initializable {
         setupAppointmentColumns();
         customerTable.setItems(Customer.getAllCusts());
         appointmentTable.setItems(getAllAppointments());
+        filterPerSelection();
     }
 }
