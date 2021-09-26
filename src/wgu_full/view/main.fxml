@@ -105,7 +105,7 @@
                            </children>
                         </Pane>
                         <Button fx:id="reportViewContactBtn" layoutX="588.0" layoutY="55.0" mnemonicParsing="false" onAction="#openReportsByContacts" prefHeight="81.0" prefWidth="283.0" style="-fx-background-color: #9CF6FB;" text="VIEW SCHEDULE FOR EACH CONTACT" />
-                        <Button fx:id="reportViewRegionBtn" layoutX="588.0" layoutY="197.0" mnemonicParsing="false" prefHeight="81.0" prefWidth="283.0" style="-fx-background-color: #394F84;" text="VIEW TOTAL APPOINTMENTS BY REGION" textFill="#fafafa" />
+                        <Button fx:id="reportViewRegionBtn" layoutX="588.0" layoutY="197.0" mnemonicParsing="false" onAction="#openReportsByLocation" prefHeight="81.0" prefWidth="283.0" style="-fx-background-color: #394F84;" text="VIEW TOTAL APPOINTMENTS BY REGION" textFill="#fafafa" />
                         <Label alignment="CENTER" layoutX="35.0" layoutY="34.0" prefHeight="43.0" prefWidth="485.0" text="TOTAL NUMBER OF APPOINTMENTS BY TYPE &amp; MONTH" textFill="#454545">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
