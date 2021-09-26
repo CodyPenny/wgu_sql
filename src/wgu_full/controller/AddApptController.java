@@ -1,5 +1,6 @@
 package wgu_full.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -12,6 +13,7 @@ import javafx.stage.Stage;
 import wgu_full.model.*;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import static wgu_full.model.Contact.getAllContacts;
@@ -58,6 +60,14 @@ public class AddApptController implements Initializable {
     private DatePicker startTime, endTime;
 
     @FXML Label errorLabel;
+
+
+
+    public void getDate(ActionEvent event){
+        LocalDate selectedDate = startTime.getValue();
+
+
+    }
 
 
     /**

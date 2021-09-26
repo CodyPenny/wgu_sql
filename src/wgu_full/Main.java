@@ -19,6 +19,8 @@ import java.time.ZoneId;
 public class Main extends Application {
 
     /**
+     * Populates the location and type local ObservableList
+     * Loads the login form
      *
      * @param primaryStage the top level JavaFX container
      * @throws IOException if start operation fails
