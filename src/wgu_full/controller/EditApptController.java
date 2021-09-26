@@ -101,6 +101,14 @@ public class EditApptController implements Initializable {
             }
         }
 
+        for(User user : userCombo.getItems()){
+            if(user.getId() == row.getUser()){
+                userCombo.getSelectionModel().select(user);
+                break;
+            }
+        }
+
+
 
 
     }
