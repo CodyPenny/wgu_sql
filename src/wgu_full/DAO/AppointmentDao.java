@@ -107,7 +107,33 @@ public class AppointmentDao {
         return appointments;
     }
 
+    public static ObservableList<Appointment> getAppointmentsByContact(int contactId){
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        try {
+            openConnection();
+            String query = "SELECT * FROM appointments WHERE Contact_ID = " + contactId;
+            Query.makeQuery(query);
+            ResultSet result = Query.getResult();
 
+            while(result.next()){
+                int id = result.getInt("Appointment_ID");
+                String title = result.getString("title");
+                String description = result.getString("description");
+                String location = result.getString("location");
+                String type = result.getString("type");
+                Timestamp start = result.getTimestamp("start");
+                Timestamp end = result.getTimestamp("end");
+                int customer = result.getInt("Customer_ID");
+                int user = result.getInt("User_ID");
+                Appointment appt = new Appointment(id, title,description,location,type,start, end, customer, user,"");
+                appointments.add(appt);
+            }
+            closeConnection();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return appointments;
+    }
     /**
      * Creates an appointment
      *

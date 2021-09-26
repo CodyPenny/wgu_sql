@@ -29,13 +29,13 @@
             <TableColumn fx:id="customerCol" prefWidth="79.0" text="Customer_ID" />
         </columns>
       </TableView>
-      <Button fx:id="cancelBtn" layoutX="668.0" layoutY="526.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="Cancel" />
+      <Button fx:id="cancelBtn" layoutX="668.0" layoutY="526.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="26.0" prefWidth="65.0" text="Cancel" />
       <Label layoutX="654.0" layoutY="109.0" prefHeight="17.0" prefWidth="65.0" text="Contact: ">
          <font>
             <Font name="Arial" size="16.0" />
          </font>
       </Label>
-      <Button fx:id="reportBtn" layoutX="748.0" layoutY="526.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="Generate Report" />
+      <Button fx:id="reportBtn" layoutX="748.0" layoutY="526.0" mnemonicParsing="false" onAction="#generateReport" prefHeight="26.0" prefWidth="127.0" text="Generate Report" />
       <ComboBox fx:id="contactCombo" layoutX="725.0" layoutY="106.0" prefWidth="150.0" promptText="Select one ..." />
       <Separator layoutX="258.0" layoutY="85.0" prefHeight="4.0" prefWidth="387.0" />
       <Label fx:id="errorLabel" alignment="CENTER" layoutX="33.0" layoutY="526.0" prefHeight="32.0" prefWidth="610.0" text="ERROR" textFill="#ff4e4e" visible="false">

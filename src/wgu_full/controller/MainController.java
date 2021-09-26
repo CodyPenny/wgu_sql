@@ -254,6 +254,21 @@ public class MainController implements Initializable {
         });
     }
 
+    public void openReportsByContacts(ActionEvent event){
+        try {
+            root = FXMLLoader.load(getClass().getResource("../view/reportByContacts.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            showError(true, "Error opening report.");
+        } catch (Exception e){
+            showError(true, "Error opening report.");
+        }
+    }
+
     /**
      * Opens add new customer form
      *
@@ -495,7 +510,6 @@ public class MainController implements Initializable {
         }
         reportMthCombo.setItems(months);
     }
-
 
     /**
      * Populates the tables with its corresponding columns and data from the data store.
