@@ -36,10 +36,15 @@ import static wgu_full.DAO.AppointmentDao.*;
 import static wgu_full.model.Type.getAllTypes;
 
 
+
+@FunctionalInterface
+interface DayCalculator {
+    public int addDays(int num);
+}
+
 /**
  * The interface for the main page
  */
-
 public class MainController implements Initializable {
 
     private Stage stage;
@@ -186,41 +191,19 @@ public class MainController implements Initializable {
 
     /**
      * Calculates the front and back-facing gaps of days from last Sunday to next Sunday, and filters appointments within that window.
+     * Demonstrates the use of lambda expressions. It helped eliminate 7 if statements simplifying the overall code.
      */
     public void filterAppointmentsByWeek(){
         ObservableList<Appointment> weekList = FXCollections.observableArrayList();
         LocalDateTime today = LocalDateTime.now();
         int day = today.getDayOfWeek().getValue();
-        int addedDay = 0;
-        int minusDay = 0;
-        if(day == 1) {
-            addedDay = 7;
-            minusDay = 2;
-        }
-        if(day == 2) {
-            addedDay = 6;
-            minusDay = 3;
-        }
-        if(day == 3) {
-            addedDay = 5;
-            minusDay = 4;
-        }
-        if(day == 4) {
-            addedDay = 4;
-            minusDay = 5;
-        }
-        if(day == 5) {
-            addedDay = 3;
-            minusDay = 6;
-        }
-        if(day == 6) {
-            addedDay = 2;
-            minusDay = 7;
-        }
-        if(day == 7) {
-            addedDay = 8;
-            minusDay = 1;
-        }
+
+        DayCalculator d = x -> x < 7 ? 8 - x : 8;
+        DayCalculator m = x -> x < 7 ? x + 1 : 1;
+
+        int addedDay = d.addDays(day);
+        int minusDay = m.addDays(day);
+
         LocalDateTime endDay = today.plusDays(addedDay);
         LocalDateTime startDay = today.minusDays(minusDay);
         for(Appointment meet : getAllAppointments()){
@@ -555,5 +538,7 @@ public class MainController implements Initializable {
         filterPerSelection();
         reportTypeCombo.setItems(getAllTypes());
         initiateMonthComboBox();
+        filterAppointmentsByWeek();
+
     }
 }

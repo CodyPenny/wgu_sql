@@ -197,7 +197,6 @@ public class LoginController implements Initializable {
                 System.out.println("File error: " + e.getMessage());
             }
         }
-
     }
 
     /**
