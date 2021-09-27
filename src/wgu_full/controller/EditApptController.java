@@ -132,6 +132,7 @@ public class EditApptController implements Initializable {
 
     /**
      * Validates the logic of the selected start and end times
+     * @return false if the logic is incorrect
      */
     public boolean validateTime(){
         if(startHour.getValue() == 24 && startMin.getValue() > 0){

@@ -1,10 +1,11 @@
 package wgu_full.model;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import static wgu_full.DAO.ContactDao.getContacts;
 
+/**
+ * The Contact class
+ */
 public class Contact {
     private int contact_id;
     private String contact_name;
@@ -61,7 +62,7 @@ public class Contact {
 
     /**
      * Overrides the toString method to customize display in comboBox
-     * @return
+     * @return the contact name
      */
     @Override
     public String toString(){ return this.contact_name; }

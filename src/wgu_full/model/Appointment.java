@@ -2,6 +2,9 @@ package wgu_full.model;
 
 import java.sql.Timestamp;
 
+/**
+ * Appointment class
+ */
 public class Appointment {
     private int id;
     private String title;
@@ -16,16 +19,16 @@ public class Appointment {
 
     /**
      * Constructor
-     *  @param id
-     * @param title
-     * @param description
-     * @param location
-     * @param type
-     * @param start
-     * @param end
-     * @param customer
-     * @param user
-     * @param contact
+     *  @param id the id
+     * @param title the title
+     * @param description the description
+     * @param location the location
+     * @param type the type
+     * @param start the start date and time
+     * @param end the end date and time
+     * @param customer the customer
+     * @param user the user
+     * @param contact the contact
      */
     public Appointment(int id, String title, String description, String location, String type, Timestamp start, Timestamp end, int customer, int user, String contact){
         this.id = id;

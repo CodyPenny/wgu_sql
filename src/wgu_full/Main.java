@@ -13,6 +13,10 @@ import java.io.IOException;
 /*
     Javadoc files are in the doc folder
  */
+
+/**
+ * Starts the execution of the program
+ */
 public class Main extends Application {
 
     /**

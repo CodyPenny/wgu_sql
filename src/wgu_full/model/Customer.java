@@ -5,6 +5,9 @@ import javafx.collections.ObservableList;
 
 import static wgu_full.DAO.CustomerDao.getAllCustomers;
 
+/**
+ * The Customer class
+ */
 public class Customer {
     private ObservableList<Appointment> associatedAppts = FXCollections.observableArrayList();
     private int id;
@@ -18,13 +21,13 @@ public class Customer {
     /**
      * Constructor
      *
-     * @param id
-     * @param name
-     * @param address
-     * @param postal_code
-     * @param phone
-     * @param division
-     * @param country
+     * @param id the id
+     * @param name the name
+     * @param address the address
+     * @param postal_code the postal code
+     * @param phone the phone number
+     * @param division the division
+     * @param country the country
      */
     public Customer(int id, String name, String address, String postal_code, String phone, String division, int country){
         this.id = id;
@@ -123,19 +126,10 @@ public class Customer {
      */
     public static ObservableList<Customer> getAllCusts(){return getAllCustomers();}
 
-    /**
-     *
-     * @param appt
-     * @return
-     */
-    public boolean deleteAssociatedAppointment(Appointment appt){
-        //delete from database too
-        return true;
-    }
 
     /**
      * Overrides the toString method to customize display in comboBox
-     * @return
+     * @return the id and name
      */
     @Override
     public String toString(){ return (Integer.toString(this.id) + " - " + this.name); }

@@ -2,10 +2,12 @@ package wgu_full.model;
 
 import javafx.collections.ObservableList;
 
-import static wgu_full.DAO.CountryDao.getAllCountries;
 import static wgu_full.DAO.DivisionDao.getAllDivisions;
 import static wgu_full.DAO.DivisionDao.getAllDivisionsByCountry;
 
+/**
+ * The Division class
+ */
 public class Division {
     private int id;
     private String division;
@@ -13,8 +15,8 @@ public class Division {
     /**
      * Constructor
      *
-     * @param id
-     * @param division
+     * @param id the id
+     * @param division the division
      */
     public Division(int id, String division){
         this.id = id;
@@ -49,6 +51,7 @@ public class Division {
     }
 
     /**
+     * @param countryId the country id
      * @return all divisions by country from the data store
      */
     public static ObservableList<Division> getAllDivisionByCountry(int countryId){
@@ -58,7 +61,7 @@ public class Division {
     /**
      * Overrides the toString method to customize display in comboBox
      *
-     * @return
+     * @return the division
      */
     @Override
     public String toString(){ return this.division; }

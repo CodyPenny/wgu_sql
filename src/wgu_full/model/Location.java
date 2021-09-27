@@ -41,7 +41,7 @@ public class Location {
 
     /**
      * Overrides the toString method to customize display in comboBox
-     * @return
+     * @return the city/state
      */
     @Override
     public String toString(){ return this.city_state; }

@@ -11,6 +11,10 @@ public class Type {
     private static ObservableList<Type> allTypes = FXCollections.observableArrayList();
     private String appointment_type;
 
+    /**
+     * Constructor
+     * @param appointment_type the type of appointment
+     */
     public Type(String appointment_type){
         this.appointment_type = appointment_type;
     }
@@ -37,7 +41,7 @@ public class Type {
 
     /**
      * Overrides the toString method to customize display in comboBox
-     * @return
+     * @return the type of appointment
      */
     @Override
     public String toString(){ return this.appointment_type; }

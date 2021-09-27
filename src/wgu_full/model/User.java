@@ -1,9 +1,11 @@
 package wgu_full.model;
 
 import javafx.collections.ObservableList;
-
 import static wgu_full.DAO.UserDao.getAllUsers;
 
+/**
+ * The User class
+ */
 public class User {
     private int user_id;
     private String user_name;
@@ -12,9 +14,9 @@ public class User {
     /**
      * Constructor
      *
-     * @param id
-     * @param name
-     * @param password
+     * @param id the id
+     * @param name the name
+     * @param password the password
      */
     public User(int id, String name, String password){
         this.user_id = id;
@@ -61,7 +63,7 @@ public class User {
 
     /**
      * Overrides the toString method to customize display in comboBox
-     * @return
+     * @return the user id and user name
      */
     @Override
     public String toString(){ return (Integer.toString(this.user_id) + " - " + this.user_name); }

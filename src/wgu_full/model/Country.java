@@ -1,9 +1,11 @@
 package wgu_full.model;
 
 import javafx.collections.ObservableList;
-
 import static wgu_full.DAO.CountryDao.getAllCountries;
 
+/**
+ * The Country class
+ */
 public class Country {
     private int id;
     private String country;
@@ -11,8 +13,8 @@ public class Country {
     /**
      * Constructor
      *
-     * @param id
-     * @param country
+     * @param id the id
+     * @param country the country
      */
     public Country(int id, String country){
         this.id = id;
@@ -48,7 +50,7 @@ public class Country {
 
     /**
      * Overrides the toString method to customize display in comboBox
-     * @return
+     * @return the country
      */
     @Override
     public String toString(){ return this.country; }

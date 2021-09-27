@@ -127,7 +127,9 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Validates a selection has been made on the comboBoxes
+     * Validates selections have been made on the comboBoxes
+     *
+     * @return false if either comboBoxes are not selected
      */
     public boolean validateMonthTypeComboBox(){
         if(reportMthCombo.getSelectionModel().isEmpty() || reportTypeCombo.getSelectionModel().isEmpty()){

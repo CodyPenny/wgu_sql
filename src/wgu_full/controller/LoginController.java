@@ -80,6 +80,7 @@ public class LoginController implements Initializable {
      * Displays the error in French if the user's system is set to French
      *
      * @return 0 if false
+     * @throws SQLException if it encounters an error in the driver or database
      */
     public int validateInput() throws SQLException {
         try {
@@ -149,6 +150,7 @@ public class LoginController implements Initializable {
      * Opens the main page
      *
      * @param event login button has been fired
+     * @param user_id the user id
      * @throws IOException if I/O operation fails
      */
     public void goToMain(ActionEvent event, int user_id) throws IOException{
