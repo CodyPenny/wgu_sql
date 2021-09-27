@@ -390,7 +390,6 @@ public class MainController implements Initializable {
         }
     }
 
-
     /**
      * Deletes the selected appointment
      *
@@ -406,7 +405,7 @@ public class MainController implements Initializable {
                     showError(true, "Error with deletion");
                     return;
                 } else {
-                    Alert okAlert = new Alert(INFORMATION, "Appointment ID: " + selectedAppt.getId() + ";  Type-" + selectedAppt.getType() + " has been removed.");
+                    Alert okAlert = new Alert(INFORMATION, "Appointment ID: " + selectedAppt.getId() + ", " + selectedAppt.getType() + " has been removed.");
                     okAlert.show();
                     appointmentTable.setItems(getAllAppointments());
                 }

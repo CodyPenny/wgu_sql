@@ -9,7 +9,6 @@ import static wgu_full.DAO.CustomerDao.getAllCustomers;
  * The Customer class
  */
 public class Customer {
-    private ObservableList<Appointment> associatedAppts = FXCollections.observableArrayList();
     private int id;
     private String name;
     private String address;
@@ -105,27 +104,9 @@ public class Customer {
     public void setCountry(int country){ this.country = country;}
 
     /**
-     * Adds an appointment to the associated Appointment list
-     *
-     * @param appt the appointment
-     */
-    public void addAssociatedAppointment(Appointment appt){
-        this.associatedAppts.add(appt);
-        // add to database
-    }
-
-    /**
-     * @return The ObservableList for associated appointments
-     */
-    public ObservableList<Appointment> getAllAssociatedAppointments(){
-        return this.associatedAppts;
-    }
-
-    /**
      * @return The ObservableList for all customers from the data store
      */
     public static ObservableList<Customer> getAllCusts(){return getAllCustomers();}
-
 
     /**
      * Overrides the toString method to customize display in comboBox
