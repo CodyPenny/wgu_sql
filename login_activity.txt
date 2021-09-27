@@ -1,0 +1,2 @@
+Username: test | Attempted login timestamp: 2021/09/27 00:08:30 | Success: Success
+Username: fdfd | Attempted login timestamp: 2021/09/27 00:08:53 | Success: Failed

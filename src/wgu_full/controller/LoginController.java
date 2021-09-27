@@ -14,10 +14,14 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import javax.swing.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -118,7 +122,8 @@ public class LoginController implements Initializable {
     /**
      * Validates the login form
      *
-     * @param event
+     * @param event when the login button is fired
+     * @throws Exception
      */
     public void login(ActionEvent event) throws Exception {
         try {
@@ -126,6 +131,7 @@ public class LoginController implements Initializable {
             passwordField = passwordInput.getText();
             int result = validateInput();
             if( result == 0 ){
+                createLog(usernameField, "Failed");
                 if(showFrench){
                     showError(true, "Utilisateur invalide ou non autorisé.");
                 } else {
@@ -133,6 +139,7 @@ public class LoginController implements Initializable {
                 }
                 return;
             }
+            createLog(usernameField, "Success");
             goToMain(event, result);
 
         } catch(Exception e){
@@ -162,6 +169,35 @@ public class LoginController implements Initializable {
         } catch (IOException e) {
             showError(true, "Can not load the protected page.");
         }
+    }
+
+    /**
+     * Uses the BufferedWriter and FileWriter object to log user logins to a text file
+     *
+     * @param username the username entered
+     * @throws IOException if I/O operation fails
+     */
+    public static void createLog(String username, String success) throws IOException {
+        String filename = "login_activity.txt";
+        String timestamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
+        String log = "Username: " + username +  " | Attempted login timestamp: " + timestamp + " | Status: " + success + "\n";
+        BufferedWriter buffer = null;
+        try {
+            buffer = new BufferedWriter(new FileWriter(filename,true));
+            buffer.write(log);
+        } catch(IOException e){
+            System.out.println("File error: " + e.getMessage());
+        }
+        finally {
+            try {
+                if (buffer != null) {
+                    buffer.close();
+                }
+            } catch (IOException e) {
+                System.out.println("File error: " + e.getMessage());
+            }
+        }
+
     }
 
     /**
