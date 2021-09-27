@@ -19,8 +19,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static wgu_full.DAO.CustomerDao.addCustomer;
 import static wgu_full.DAO.CustomerDao.updateCustomer;
+
+/**
+ * The interface for the
+ */
 
 public class EditCustomerController implements Initializable {
 
@@ -58,8 +61,7 @@ public class EditCustomerController implements Initializable {
 
     /**
      * Populates the form with the selected customer object from the customer table
-     * Populates the comboBoxes
-     * Pre-selects the selection on the comboBoxes
+     * Populates the comboBoxes and pre-selects the comboBoxes
      *
      * @param customer the selected customer
      */
@@ -80,7 +82,6 @@ public class EditCustomerController implements Initializable {
             }
         }
         stateOrProvinceCombo.setItems(Division.getAllDivisionByCountry(country_id));
-
         for(Division d : stateOrProvinceCombo.getItems()){
             if(customer.getDivision().equals(d.getDivision())){
                 stateOrProvinceCombo.getSelectionModel().select(d);
@@ -89,6 +90,11 @@ public class EditCustomerController implements Initializable {
         }
     }
 
+    /**
+     * Saves the customer information in the database
+     *
+     * @param event when the save button is fired
+     */
     public void saveForm(ActionEvent event){
         try {
             nameField = custNameText.getText();
@@ -105,20 +111,17 @@ public class EditCustomerController implements Initializable {
             if(!validateInput()){
                 return;
             }
-            //insert new obj in db
             updateCustomer(customer_id, nameField, addressField, postalField, phoneField, divisionField);
-            // go back to main
             backToMain(event);
-
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
     /**
-     * Validates the textfields are not empty
+     * Validates the text fields are complete
      *
-     * @return false if a textfield is empty prompting an error to show
+     * @return false if a text field is empty
      */
     public boolean validateInput(){
         if(nameField.isEmpty() || addressField.isEmpty() || postalField.isEmpty() || phoneField.isEmpty() ) {
@@ -150,7 +153,7 @@ public class EditCustomerController implements Initializable {
     }
 
     /**
-     * Shows or the hides the custom error
+     * Shows or hides the custom error
      *
      * @param showOrHide sets the error to be visible or invisible
      * @param errorText the custom error message to show
@@ -161,8 +164,8 @@ public class EditCustomerController implements Initializable {
     }
 
     /**
-     * The country comboBox listens for any changes in the selection and displays the province or states associated with the selected country
-     * Also changes the label from state to province and vice-versa
+     * The country comboBox listens for any changes and displays the province or state associated with the selected country
+     * Also changes the label from 'state' to 'province' and vice-versa
      */
     public void stateOrProvince(){
         countryCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -176,9 +179,8 @@ public class EditCustomerController implements Initializable {
         });
     }
 
-
     /**
-     * Populates the country ComboBox and listens for any changes in the state or province
+     * Initializes the country ComboBox and listens for any changes in the state or province
      *
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
      * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.

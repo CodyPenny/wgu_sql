@@ -9,10 +9,15 @@ import java.sql.ResultSet;
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
 
+/**
+ * DAO for Country
+ */
+
 public class CountryDao {
 
     /**
-     * Accesses the country table
+     * Retrieves all the country instances
+     *
      * @return the ObservableList containing all countries
      */
     public static ObservableList<Country> getAllCountries(){
@@ -22,7 +27,6 @@ public class CountryDao {
             String query = "SELECT * FROM countries";
             Query.makeQuery(query);
             ResultSet result = Query.getResult();
-
             while(result.next()){
                 int id = result.getInt("Country_ID");
                 String name = result.getString("Country");

@@ -24,6 +24,10 @@ import java.util.ResourceBundle;
 import static wgu_full.DAO.AppointmentDao.getAppointmentsByLocation;
 import static wgu_full.model.Location.getAllLocations;
 
+/**
+ * The interface for the Reports by location
+ */
+
 public class ReportByLocationController implements Initializable {
 
     private Stage stage;
@@ -60,6 +64,11 @@ public class ReportByLocationController implements Initializable {
     @FXML private ComboBox<Location> locationCombo;
 
 
+    /**
+     * Generates the report
+     *
+     * @param event when the generate report button is fired
+     */
     public void generateReport(ActionEvent event){
         if (locationCombo.getSelectionModel().isEmpty()){
             showError(true, "Select a contact to generate report.");
@@ -119,6 +128,12 @@ public class ReportByLocationController implements Initializable {
         userIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("user"));
     }
 
+    /**
+     * Initializes the table
+     *
+     * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupAppointmentColumns();

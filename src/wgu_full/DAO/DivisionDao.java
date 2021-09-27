@@ -2,7 +2,6 @@ package wgu_full.DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import wgu_full.model.Country;
 import wgu_full.model.Division;
 
 import java.sql.ResultSet;
@@ -10,11 +9,14 @@ import java.sql.ResultSet;
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
 
+/**
+ * THe DAO for Division
+ */
 public class DivisionDao {
 
 
     /**
-     * Accesses the first-level divisions table
+     * Retrieves all Division instances
      *
      * @return the ObservableList containing all divisions
      */
@@ -41,8 +43,9 @@ public class DivisionDao {
     }
 
     /**
-     * Accesses the first-level divisions table and collects by country
+     * Retrieves divisions by country
      *
+     * @param countryId the country id
      * @return the ObservableList containing all divisions
      */
     public static ObservableList<Division> getAllDivisionsByCountry(int countryId) {

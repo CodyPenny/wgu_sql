@@ -11,10 +11,14 @@ import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
 import static wgu_full.DAO.Query.*;
 
+/**
+ * The DAO for Customer
+ */
+
 public class CustomerDao {
 
     /**
-     * Creates a new customer by accessing the customers table
+     * Creates a new customer instance
      *
      * @param name the name of the customer
      * @param address the address of the customer
@@ -65,7 +69,7 @@ public class CustomerDao {
     }
 
     /**
-     * Accesses the customers and divisions table
+     * Retrieves all customers
      *
      * @return the ObservableList containing all customers
      */

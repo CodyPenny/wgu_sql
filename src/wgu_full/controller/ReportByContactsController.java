@@ -32,6 +32,9 @@ interface DisplayError {
     public void show(boolean b, String s);
 }
 
+/**
+ * The interface for the Reports by contact page
+ */
 public class ReportByContactsController implements Initializable {
 
     private Stage stage;
@@ -68,12 +71,16 @@ public class ReportByContactsController implements Initializable {
     @FXML private ComboBox<Contact> contactCombo;
 
 
+    /**
+     * Generates the report
+     *
+     * @param event when the generate report button is fired
+     */
     public void generateReport(ActionEvent event){
         DisplayError err = (x, y) -> {
             errorLabel.setText(y);
             errorLabel.setVisible(x);
         };
-
         if (contactCombo.getSelectionModel().isEmpty()){
             err.show(true, "Select a contact to generate the report.");
             return;
@@ -125,6 +132,12 @@ public class ReportByContactsController implements Initializable {
         userIdCol.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("user"));
     }
 
+    /**
+     * Initializes the table
+     *
+     * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupAppointmentColumns();

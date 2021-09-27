@@ -1,6 +1,5 @@
 package wgu_full.controller;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,7 +20,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import static wgu_full.DAO.AppointmentDao.createAppointment;
@@ -32,6 +30,9 @@ import static wgu_full.model.Location.getAllLocations;
 import static wgu_full.model.Type.getAllTypes;
 import static wgu_full.model.User.getUsers;
 
+/**
+ * The interface for the Add Appointment form
+ */
 public class AddApptController implements Initializable {
 
     private Stage stage;
@@ -39,23 +40,24 @@ public class AddApptController implements Initializable {
     private Parent root;
 
     /**
-     * Start and end local date time
+     * Holds the start and end local date times
      */
     LocalDateTime startLDT;
     LocalDateTime endLDT;
+
     /**
-     * Start and end zoned date time
+     * Holds the start and end zoned date times
      */
     ZonedDateTime startZDT;
     ZonedDateTime endZDT;
 
     /**
-     * Observable list of possible overlapping appointments
+     * Observable list that holds appointments that may overlap
      */
     private static ObservableList<Appointment> overlaps;
 
     /**
-     * The textfields in the add appointment form
+     * The textfields
      */
     @FXML
     private TextField titleText, descriptionText;
@@ -86,11 +88,16 @@ public class AddApptController implements Initializable {
     @FXML
     private Spinner<Integer> startHour,startMin, endHour, endMin;
 
+    /**
+     * Label for displaying an error message
+     */
     @FXML private Label errorLabel;
 
 
     /**
      * Validates the logic of the selected start and end times
+     *
+     * @return false if there are errors
      */
     public boolean validateTime(){
         if(startHour.getValue() == 24 && startMin.getValue() > 0){
@@ -111,7 +118,6 @@ public class AddApptController implements Initializable {
                 return false;
             }
         }
-
         startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
         endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
 
@@ -119,7 +125,6 @@ public class AddApptController implements Initializable {
             showError(true, "Start time can not be greater or the same as the end time.");
             return false;
         }
-
         if (!validateZonedDateTimeBusiness(startLDT) || !validateZonedDateTimeBusiness(endLDT)){
             return false;
         };
@@ -127,13 +132,12 @@ public class AddApptController implements Initializable {
     }
 
     /**
-     * Validates the textfields are complete and a selection has been made on the comboBoxes
+     * Validates the form entries are complete and selections have been made on the comboBoxes
      *
      * @return false if incomplete
      */
     public boolean validateInputFields(){
         if(titleText.getText().isEmpty() || descriptionText.getText().isEmpty()){
-            System.out.println("empty");
             showError(true, "All fields are required. Please complete.");
             return false;
         }
@@ -161,14 +165,12 @@ public class AddApptController implements Initializable {
     }
 
     /**
-     * Validates all input fields are complete
-     * Validates time logic and overlaps
-     * Validates time against business hours
-     * Validates time against customer's other appointments
-     * Creates the appointment
+     * Creates an Appointment instance after validation.
+     * Validates form input fields are complete and time logic is without error.
+     * Also validates the time is within business hours and does not overlap with the customer's other appointments
      *
      * @param event when the save button is fired
-     * @throws IOException
+     * @throws IOException if I/O operation fails
      */
     public void saveAppointment(ActionEvent event) throws IOException {
         if(!validateInputFields()){
@@ -179,7 +181,6 @@ public class AddApptController implements Initializable {
         }
         startZDT = convertToSystemZonedDateTime(startLDT);
         endZDT = convertToSystemZonedDateTime(endLDT);
-        // check for overlap with selected customer
         LocalDate date = startLDT.toLocalDate();
         int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
         overlaps = getSameDateAppointments(customer, date);
@@ -206,6 +207,7 @@ public class AddApptController implements Initializable {
 
     /**
      * Takes the selected date, hour, and minute and creates a LocalDateTime object
+     *
      * @param hr the hour
      * @param min the min
      * @return LocalDateTime object of the input time
@@ -308,8 +310,8 @@ public class AddApptController implements Initializable {
     }
 
     /**
-     * Disable past dates on DatePicker
-     * Taken from Oracle documentation
+     * Disables past dates on the DatePicker widget
+     * Taken from the Oracle documentation
      */
     private void disablePastDates() {
         dateBox.setValue(LocalDate.now());
@@ -336,12 +338,12 @@ public class AddApptController implements Initializable {
     }
 
     /**
-     * Populate the comboBoxes
-     * Initiate time spinners with hour and minutes
-     * Disable past dates on the Date Picker
+     * Populates the comboBoxes
+     * Initiates time spinners with the hour and minutes
+     * Disables past dates on the Date Picker widget
      *
-     * @param url
-     * @param resourceBundle
+     * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -350,8 +352,6 @@ public class AddApptController implements Initializable {
         userCombo.setItems(getUsers());
         locationCombo.setItems(getAllLocations());
         typeCombo.setItems(getAllTypes());
-
-        // limit hour to EST after retrieving local time
         SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 8, 1);
         SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, 8);
         SpinnerValueFactory<Integer> startMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 0, 10);
@@ -360,7 +360,6 @@ public class AddApptController implements Initializable {
         startMin.setValueFactory(startMinFactory);
         endHour.setValueFactory(endHourFactory);
         endMin.setValueFactory(endMinFactory);
-
         disablePastDates();
     }
 }

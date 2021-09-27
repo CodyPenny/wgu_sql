@@ -13,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -55,7 +54,7 @@ public class LoginController implements Initializable {
     @FXML private TextField userNameInput, passwordInput;
 
     /**
-     * Sets the zone label on the login form with the user's location
+     * Sets the label for zone information with the user's location
      *
      * @param zone the zone or the user's location
      */
@@ -64,7 +63,7 @@ public class LoginController implements Initializable {
     }
 
     /**
-     * Translates the form to French if user's system is set to French
+     * Translates the form text to French if the user's system is set to French
      */
     public void translate(){
         system_language = Locale.getDefault().toString();
@@ -77,10 +76,10 @@ public class LoginController implements Initializable {
     }
 
     /**
-     * Validates the username and password fields
+     * Validates the username and password
      * Displays the error in French if the user's system is set to French
      *
-     * @return false if invalid
+     * @return 0 if false
      */
     public int validateInput() throws SQLException {
         try {
@@ -120,12 +119,12 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Validates the login form
+     * Validates the credentials of the user
      *
      * @param event when the login button is fired
-     * @throws Exception
+     * @throws IOException if I/O operation fails
      */
-    public void login(ActionEvent event) throws Exception {
+    public void login(ActionEvent event) throws IOException {
         try {
             usernameField = userNameInput.getText();
             passwordField = passwordInput.getText();
@@ -141,8 +140,7 @@ public class LoginController implements Initializable {
             }
             createLog(usernameField, "Success");
             goToMain(event, result);
-
-        } catch(Exception e){
+        } catch(IOException | SQLException e){
             System.out.println(e.getMessage());
         }
     }
@@ -160,7 +158,6 @@ public class LoginController implements Initializable {
             MainController controller = loader.getController();
             controller.setupUpcomingColumns();
             controller.searchUpcomingAppointments(user_id);
-
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -172,9 +169,10 @@ public class LoginController implements Initializable {
     }
 
     /**
-     * Uses the BufferedWriter and FileWriter object to log user logins to a text file
+     * Uses the BufferedWriter and FileWriter object to record user login attempts to a text file
      *
      * @param username the username entered
+     * @param success the status
      * @throws IOException if I/O operation fails
      */
     public static void createLog(String username, String success) throws IOException {

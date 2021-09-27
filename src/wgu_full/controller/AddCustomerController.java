@@ -15,12 +15,14 @@ import wgu_full.model.Country;
 import wgu_full.model.Division;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import static wgu_full.DAO.CustomerDao.addCustomer;
 
+/**
+ * The interface for the Add Customer form
+ */
 public class AddCustomerController implements Initializable {
 
     private Stage stage;
@@ -50,8 +52,8 @@ public class AddCustomerController implements Initializable {
     @FXML private Label stateOrProvinceLabel, errorLabel;
 
     /**
-     * The country comboBox listens for any changes in the selection and displays the province or states associated with the selected country
-     * Also changes the label from state to province and vice-versa
+     * The country comboBox listens for any changes and displays the province or state associated with the selected country
+     * Also changes the label from 'state' to 'province' and vice-versa
      */
     public void stateOrProvince(){
         countryCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -61,12 +63,11 @@ public class AddCustomerController implements Initializable {
             } else {
                 stateOrProvinceLabel.setText("State");
             }
-
         });
     }
 
     /**
-     * Takes the entered text in the textfields, validates the entry, then creates a new customer
+     * Takes the input text from the text fields, validates the entry, then creates a new customer
      *
      * @param event the save button has been fired
      */
@@ -86,9 +87,8 @@ public class AddCustomerController implements Initializable {
             if(!validateInput()){
                 return;
             }
-            //insert new obj in db
+
             addCustomer(nameField, addressField, postalField, phoneField, divisionField);
-            // go back to main
             backToMain(event);
 
         } catch (Exception e){
@@ -98,9 +98,9 @@ public class AddCustomerController implements Initializable {
     }
 
     /**
-     * Validates the textfields are not empty
+     * Validates text fields are not empty
      *
-     * @return false if a textfield is empty prompting an error to show
+     * @return false if a text field is empty
      */
     public boolean validateInput(){
         if(nameField.isEmpty() || addressField.isEmpty() || postalField.isEmpty() || phoneField.isEmpty() ) {
@@ -144,7 +144,7 @@ public class AddCustomerController implements Initializable {
 
     /**
      * Populates the country and state/province comboBoxes
-     * Based on the region, the label changes to state or province
+     * Based on the region, the label changes to 'state' or 'province'
      *
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
      * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.

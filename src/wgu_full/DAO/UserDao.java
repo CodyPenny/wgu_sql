@@ -10,10 +10,14 @@ import java.sql.SQLException;
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
 
+/**
+ * User DAO
+ */
+
 public class UserDao {
 
     /**
-     * Allows access to the Users table and validates the input username and password
+     * Authenticates credentials entered by user
      *
      * @param username the input username
      * @param pw the input password
@@ -37,7 +41,7 @@ public class UserDao {
     }
 
     /**
-     * Allows access to the users table
+     * Retrieves all user instances
      *
      * @return ObservableList of all users
      */

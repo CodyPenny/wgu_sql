@@ -1,6 +1,5 @@
 package wgu_full;
 
-import com.sun.javafx.runtime.VersionInfo;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

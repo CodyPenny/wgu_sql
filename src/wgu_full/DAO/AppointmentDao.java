@@ -13,10 +13,13 @@ import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
 import static wgu_full.DAO.Query.removeAppt;
 
+/**
+ * The Appointment data access object interface
+ */
 public class AppointmentDao {
 
     /**
-     * Allows the Appointments, Users, Customers, and Contact table
+     * Creates the query to retrieve all appointments
      *
      * @return the ObservableList containing all appointments
      */
@@ -50,7 +53,7 @@ public class AppointmentDao {
     }
 
     /**
-     * Accesses the appointments table and retrieves appointments from the same customer with same dates
+     * Retrieves appointments by customer id and the date
      *
      * @param customerId the customer id
      * @param date the date
@@ -79,7 +82,7 @@ public class AppointmentDao {
     }
 
     /**
-     * Accesses the appointments table and retrieves appointments from the same customer with same dates
+     * Retrieves appointments by the user id and date
      *
      * @param userId the user id
      * @param date the date
@@ -107,6 +110,12 @@ public class AppointmentDao {
         return appointments;
     }
 
+    /**
+     * Retrieves appointments by the contact id
+     *
+     * @param contactId the contact id
+     * @return ObservableList of appointments
+     */
     public static ObservableList<Appointment> getAppointmentsByContact(int contactId){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         try {
@@ -135,6 +144,12 @@ public class AppointmentDao {
         return appointments;
     }
 
+    /**
+     * Retreives appointments by location
+     *
+     * @param place the location
+     * @return ObservableList of appointments
+     */
     public static ObservableList<Appointment> getAppointmentsByLocation(String place){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         try {
@@ -166,7 +181,7 @@ public class AppointmentDao {
 
 
     /**
-     * Creates an appointment
+     * Creates an appointment instance in the database
      *
      * @param title the title
      * @param desc the description
@@ -190,7 +205,7 @@ public class AppointmentDao {
     }
 
     /**
-     * Updates the appointment
+     * Updates the appointment instance
      *
      * @param id the appointment id
      * @param title the title
@@ -230,6 +245,13 @@ public class AppointmentDao {
         return true;
     }
 
+    /**
+     * Counts the number of appointment instances that match the month and 'type'
+     *
+     * @param mth the month
+     * @param type the type
+     * @return the count
+     */
     public static int getTypeByMonth(int mth, String type){
         int count = 0;
         try{

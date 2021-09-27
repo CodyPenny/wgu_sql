@@ -30,6 +30,9 @@ import static wgu_full.model.Location.getAllLocations;
 import static wgu_full.model.Type.getAllTypes;
 import static wgu_full.model.User.getUsers;
 
+/**
+ * The interface for the Edit Appointment form
+ */
 public class EditApptController implements Initializable {
 
     private Stage stage;
@@ -39,23 +42,23 @@ public class EditApptController implements Initializable {
     Appointment selectedRow;
 
     /**
-     * Start and end local date time
+     * Holds the start and end local date times
      */
     LocalDateTime startLDT;
     LocalDateTime endLDT;
     /**
-     * Start and end zoned date time
+     * Holds the start and end zoned date time
      */
     ZonedDateTime startZDT;
     ZonedDateTime endZDT;
 
     /**
-     * Observable list of possible overlapping appointments
+     * An ObservableList of possible overlapping appointments
      */
     private static ObservableList<Appointment> overlaps;
 
     /**
-     * The textfields in the add appointment form
+     * The text fields in the add appointment form
      */
     @FXML
     private TextField titleText, descriptionText, idText;
@@ -89,10 +92,11 @@ public class EditApptController implements Initializable {
     @FXML private Label errorLabel;
 
     /**
-     * Updates the appointment with newly entered fields
+     * Updates the selected appointment with newly entered input
+     * Checks for any appointment overlaps
      *
      * @param event when the save button is fired
-     * @throws IOException
+     * @throws IOException whe I/O operation fails
      */
     public void saveAppointment(ActionEvent event) throws IOException {
         if(!validateInputFields()){
@@ -103,7 +107,6 @@ public class EditApptController implements Initializable {
         }
         startZDT = convertToSystemZonedDateTime(startLDT);
         endZDT = convertToSystemZonedDateTime(endLDT);
-        // check for overlap with selected customer
         LocalDate date = startLDT.toLocalDate();
         int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
         overlaps = getSameDateAppointments(customer, date);
@@ -123,7 +126,6 @@ public class EditApptController implements Initializable {
         int user = userCombo.getSelectionModel().getSelectedItem().getId();
         Timestamp start = Timestamp.valueOf(startLDT);
         Timestamp end = Timestamp.valueOf(endLDT);
-
         updateAppointment(selectedRow.getId(), titleField, descriptionField, loc, start, end, ty, user, contact, customer);
         backToMain(event);
     }
@@ -150,15 +152,12 @@ public class EditApptController implements Initializable {
                 return false;
             }
         }
-
         startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
         endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
-
         if(startLDT.isAfter(endLDT) || startLDT.isEqual(endLDT)){
             showError(true, "Start time can not be greater or the same as the end time.");
             return false;
         }
-
         if (!validateZonedDateTimeBusiness(startLDT) || !validateZonedDateTimeBusiness(endLDT)){
             return false;
         };
@@ -167,6 +166,7 @@ public class EditApptController implements Initializable {
 
     /**
      * Takes the selected date, hour, and minute and creates a LocalDateTime object
+     *
      * @param hr the hour
      * @param min the min
      * @return LocalDateTime object of the input time
@@ -177,7 +177,7 @@ public class EditApptController implements Initializable {
     }
 
     /**
-     * Validates the selected time against the business hours
+     * Validates the selected time against business hours
      *
      * @param ldt an instance of the LocalDateTime object
      * @return true if the selected time is within business hours
@@ -199,7 +199,7 @@ public class EditApptController implements Initializable {
     }
 
     /**
-     * Looks for any overlaps between the input list of appointments and selected appointment times
+     * Looks for any overlaps between the input list of appointments and the selected appointment times
      * Skips the appointment if it is the same appointment that was returned
      *
      * @param test the list of appointments with possible conflicts
@@ -231,13 +231,12 @@ public class EditApptController implements Initializable {
     }
 
     /**
-     * Validates the textfields are complete and a selection has been made on the comboBoxes
+     * Validates text fields are complete and the comboBoxes are selected
      *
      * @return false if incomplete
      */
     public boolean validateInputFields(){
         if(titleText.getText().isEmpty() || descriptionText.getText().isEmpty()){
-            System.out.println("empty");
             showError(true, "All fields are required. Please complete.");
             return false;
         }
@@ -265,10 +264,10 @@ public class EditApptController implements Initializable {
     }
 
     /**
-     * Converts a LocalDateTime object to a ZonedDateTime object
+     * Converts the LocalDateTime object to a ZonedDateTime object
      *
      * @param ldt an instance of LocalDateTime
-     * @return ZonedDateTime relative to the user's system time
+     * @return an instance of ZonedDateTime relative to the user's system time
      */
     public ZonedDateTime convertToSystemZonedDateTime(LocalDateTime ldt){
         return ldt.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
@@ -407,8 +406,6 @@ public class EditApptController implements Initializable {
         userCombo.setItems(getUsers());
         locationCombo.setItems(getAllLocations());
         typeCombo.setItems(getAllTypes());
-
-        // limit hour to EST after retrieving local time
         setSpinners(8,8,0,0);
         disablePastDates();
     }

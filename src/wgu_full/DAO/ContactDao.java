@@ -9,10 +9,14 @@ import java.sql.ResultSet;
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
 
+/**
+ * The DAO for Contacts
+ */
+
 public class ContactDao {
 
     /**
-     * Accesses the contacts table
+     * Retreives all contacts
      *
      * @return the ObservableList containing all contacts
      */

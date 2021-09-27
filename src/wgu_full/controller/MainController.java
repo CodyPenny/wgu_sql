@@ -36,7 +36,7 @@ import static wgu_full.model.Type.getAllTypes;
 
 /**
  * Lambda expression that accepts an int and returns an int
- * Used in calculating which other dates fall in a Sun to Sun week for a particular date
+ * Used in calculating what other dates fall in a Sun to Sun week for a particular date
  */
 @FunctionalInterface
 interface DayCalculator {
@@ -58,7 +58,6 @@ public class MainController implements Initializable {
     @FXML private TableView<Customer> customerTable;
     @FXML private TableView<Appointment> upcomingTable;
     @FXML private TableView<Appointment> appointmentTable;
-    //@FXML private TableView<> typeCountTable;
 
     /**
      * The columns of the appointment table
@@ -116,7 +115,7 @@ public class MainController implements Initializable {
 
 
     /**
-     * Validates the type and month comboBox selections are not null and counts the number of appointments by type in the selected month
+     * Calculates the number of appointments by type and the selected month
      */
     public void generateMonthTypeReport(){
         typeErrorLabel.setVisible(false);
@@ -139,20 +138,16 @@ public class MainController implements Initializable {
         return true;
     }
     /**
-     * Searches the data store for upcoming appointments for the user that is scheduled within 15 minutes.
-     * It also considers appointments one is late to.
+     * Searches for upcoming appointments within 15 minutes of the login time
      *
      * @param user_id the user id of the user
      */
     public void searchUpcomingAppointments(int user_id){
         ObservableList<Appointment> inFifteen = FXCollections.observableArrayList();
         LocalTime currentTime = LocalTime.now();
-
         for(Appointment meet : getSameDateAppointmentsByUser(user_id, LocalDate.now())){
             LocalTime otherTime = meet.getStart().toLocalDateTime().toLocalTime();
-
             long timeDiff = ChronoUnit.MINUTES.between(currentTime, otherTime);
-
             if(timeDiff < 0) {
                 timeDiff *= -1;
             }
@@ -165,7 +160,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Displays the count
+     * Displays the number of upcoming appointments
      *
      * @param count the number of appointments in the next 15 minutes since login
      */
@@ -177,7 +172,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Filters the list of appointments based on the same month
+     * Filters the list of appointments based on the month
      */
     public void filterAppointmentsByMonth(){
         ObservableList<Appointment> monthList = FXCollections.observableArrayList();
@@ -191,20 +186,18 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Calculates the number of front and back-facing days from a past Sunday to the next Sunday. It filters the appointments within that window.
-     * Demonstrates the use of lambda expressions. It helped eliminate 7 if statements simplifying the overall code.
+     * Calculates the number of front and back-facing days from the past Sunday to the next Sunday.
+     * It filters the appointments within that window.
+     * Also demonstrates the use of lambda expressions. It helped eliminate 7 if statements.
      */
     public void filterAppointmentsByWeek(){
         ObservableList<Appointment> weekList = FXCollections.observableArrayList();
         LocalDateTime today = LocalDateTime.now();
-        int day = today.getDayOfWeek().getValue();
-
         DayCalculator d = x -> x < 7 ? 8 - x : 8;
         DayCalculator m = x -> x < 7 ? x + 1 : 1;
-
+        int day = today.getDayOfWeek().getValue();
         int addedDay = d.calcDays(day);
         int minusDay = m.calcDays(day);
-
         LocalDateTime endDay = today.plusDays(addedDay);
         LocalDateTime startDay = today.minusDays(minusDay);
         for(Appointment meet : getAllAppointments()){
@@ -238,6 +231,11 @@ public class MainController implements Initializable {
         });
     }
 
+    /**
+     * Opens the Reports for contacts
+     *
+     * @param event when the 'view schedule for each contact' is fired
+     */
     public void openReportsByContacts(ActionEvent event){
         try {
             root = FXMLLoader.load(getClass().getResource("../view/reportByContacts.fxml"));
@@ -245,22 +243,6 @@ public class MainController implements Initializable {
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-
-        } catch (IOException e) {
-            showError(true, "Error opening report.");
-        } catch (Exception e){
-            showError(true, "Error opening report.");
-        }
-    }
-
-    public void openReportsByLocation(ActionEvent event){
-        try {
-            root = FXMLLoader.load(getClass().getResource("../view/reportByLocation.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-
         } catch (IOException e) {
             showError(true, "Error opening report.");
         } catch (Exception e){
@@ -269,7 +251,26 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Opens add new customer form
+     * Opens the Reports for locations
+     *
+     * @param event when the 'view schedule for each location' is fired
+     */
+    public void openReportsByLocation(ActionEvent event){
+        try {
+            root = FXMLLoader.load(getClass().getResource("../view/reportByLocation.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showError(true, "Error opening report.");
+        } catch (Exception e){
+            showError(true, "Error opening report.");
+        }
+    }
+
+    /**
+     * Opens the add new customer form
      *
      * @param event when the create new button is fired
      * @throws IOException if I/O operation fails
@@ -281,7 +282,6 @@ public class MainController implements Initializable {
             scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-
         } catch (IOException e) {
             showError(true, "Error opening add form.");
         } catch (Exception e){
@@ -290,7 +290,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Opens the edit/update customer form
+     * Opens the edit customer form
      *
      * @param event when the edit button is fired
      * @throws Exception if I/O operation fails
@@ -302,7 +302,6 @@ public class MainController implements Initializable {
             root = loader.load();
             EditCustomerController controller = loader.getController();
             controller.populateForm(row);
-
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -346,7 +345,6 @@ public class MainController implements Initializable {
             root = loader.load();
             EditApptController controller = loader.getController();
             controller.populateForm(row);
-
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -456,7 +454,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Prompts confirmation from the user on exit. Closes the program on Ok.
+     * Closes the program. Prompts confirmation from the user.
      */
     public void exitProgram(){
         Alert alert = new Alert(CONFIRMATION, "Are you sure?");
@@ -530,7 +528,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Populates the comboBox with an integer representation of each month
+     * Populates the comboBox with integer representation of each month
      */
     public void initiateMonthComboBox(){
         ObservableList<Integer> months = FXCollections.observableArrayList();
@@ -543,8 +541,8 @@ public class MainController implements Initializable {
     /**
      * Populates the tables with its corresponding columns and data from the data store.
      * The radioButton from the appointments table listens for any selection changes.
-     * Searches for any upcoming appointments the user has within 15 minutes of logging in.
-     * Populates the month and type comboBox in Reports
+     * Initiates the search for any upcoming appointments the user has within 15 minutes of logging in.
+     * Populates the month and type comboBoxes in the Reports pane.
      *
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
      * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.

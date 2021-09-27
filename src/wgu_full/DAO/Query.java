@@ -7,6 +7,9 @@ import java.sql.Statement;
 
 import static wgu_full.DAO.JDBC.*;
 
+/**
+ * Query DAO
+ */
 public class Query {
     private static String query;
     private static Statement stat;
@@ -14,7 +17,7 @@ public class Query {
     private static ResultSet result;
 
     /**
-     * Queries the database per sql keyword
+     * Queries the database
      * @param q the query string
      */
     public static void makeQuery(String q) {
@@ -32,7 +35,7 @@ public class Query {
     }
 
     /**
-     * Uses the PreparedStatement interface to validate the input username and password
+     * Uses a PreparedStatement interface to validate the input username and password
      *
      * @param username the username string
      * @param pw the password string
@@ -52,7 +55,7 @@ public class Query {
     }
 
     /**
-     * Uses the PreparedStatement interface to retrieve divisions by country
+     * Uses a PreparedStatement interface to retrieve divisions by country
      *
      * @param countryId the country id
      * @throws SQLException JDBC encountered an error with the data source
@@ -69,7 +72,7 @@ public class Query {
     }
 
     /**
-     * Uses the PreparedStatement interface to create a new customer
+     * Uses a PreparedStatement interface to create a new customer
      *
      * @param name the name of the customer
      * @param address the address of the customer
@@ -95,7 +98,7 @@ public class Query {
     }
 
     /**
-     * Update a customer
+     * Updates a customer instance
      *
      * @param id the customer id
      * @param name the name of the customer
@@ -124,7 +127,7 @@ public class Query {
     }
 
     /**
-     * Remove or deletes a customer
+     * Deletes a customer
      *
      * @param id the customer id
      * @return true if customer is deleted without any errors
@@ -144,7 +147,7 @@ public class Query {
     }
 
     /**
-     * Remove or deletes an appointment
+     * Deletes an appointment
      *
      * @param id the appointment id
      * @return false if deletion fails
