@@ -5,6 +5,7 @@ A GUI-based scheduling desktop application
 * [General info]
 * [Technologies]
 * [Setup]
+* [Features]
 
 ## Scenario
 This is a scheduling desktop application developed to explore real-world requirements for educational purposes.
@@ -18,5 +19,13 @@ The consulting organization has provided a MySQL database that the application p
 * MySQL 8.0.26
 
 ## Setup
-Install the JDK, JavaFX SDK, and Scene Builder dependencies and also set up the IDE to run Java.
+Install the JDK, JavaFX SDK, and Scene Builder dependencies and set up the IDE to run Java.
 Connect the application to a MySQL database and configure the connection string.
+
+## Features
+* Displays the log-in form in English or French based on a user's language setting
+* Adds customers to the database
+* Create or schedule appointments with customers, contacts, and users
+* Alerts if appointments conflict due to overlaps or different time zones
+* Alerts if the user has upcoming appointments within 15 minutes of logging in
+* Generates reports
