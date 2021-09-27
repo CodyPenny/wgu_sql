@@ -23,6 +23,15 @@ import java.util.ResourceBundle;
 import static wgu_full.DAO.AppointmentDao.getAppointmentsByContact;
 import static wgu_full.model.Contact.getAllContacts;
 
+
+/**
+ * Lambda, Shows or the hides the custom error
+ */
+@FunctionalInterface
+interface DisplayError {
+    public void show(boolean b, String s);
+}
+
 public class ReportByContactsController implements Initializable {
 
     private Stage stage;
@@ -60,15 +69,19 @@ public class ReportByContactsController implements Initializable {
 
 
     public void generateReport(ActionEvent event){
+        DisplayError err = (x, y) -> {
+            errorLabel.setText(y);
+            errorLabel.setVisible(x);
+        };
+
         if (contactCombo.getSelectionModel().isEmpty()){
-            showError(true, "Select a contact to generate report.");
+            err.show(true, "Select a contact to generate the report.");
             return;
         } else {
-            showError(false, "");
+            err.show(false, "");
         }
         int contact = contactCombo.getSelectionModel().getSelectedItem().getId();
         contactReportTable.setItems(getAppointmentsByContact(contact));
-
     }
 
     /**
@@ -78,6 +91,10 @@ public class ReportByContactsController implements Initializable {
      * @throws IOException if I/O operation fails
      */
     public void backToMain(ActionEvent event) throws IOException{
+        DisplayError er = (x, y) -> {
+            errorLabel.setText(y);
+            errorLabel.setVisible(x);
+        };
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/main.fxml"));
             root = loader.load();
@@ -88,21 +105,9 @@ public class ReportByContactsController implements Initializable {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            showError(true, "Can not load the main page.");
+            er.show(true, "Can not load the main page.");
         }
     }
-
-    /**
-     * Shows or the hides the custom error
-     *
-     * @param showOrHide sets the error to be visible or invisible
-     * @param errorText the custom error message to show
-     */
-    public void showError(boolean showOrHide, String errorText){
-        errorLabel.setText(errorText);
-        errorLabel.setVisible(showOrHide);
-    }
-
 
 
     /**

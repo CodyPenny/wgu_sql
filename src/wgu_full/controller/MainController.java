@@ -22,7 +22,6 @@ import wgu_full.model.Type;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -30,16 +29,18 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
-import static javafx.scene.control.Alert.AlertType.INFORMATION;
+import static javafx.scene.control.Alert.AlertType.*;
 import static wgu_full.DAO.AppointmentDao.*;
 import static wgu_full.model.Type.getAllTypes;
 
 
-
+/**
+ * Lambda expression that accepts an int and returns an int
+ * Used in calculating which other dates fall in a Sun to Sun week for a particular date
+ */
 @FunctionalInterface
 interface DayCalculator {
-    public int addDays(int num);
+    public int calcDays(int num);
 }
 
 /**
@@ -50,7 +51,6 @@ public class MainController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
-
 
     /**
      * The tables
@@ -139,19 +139,20 @@ public class MainController implements Initializable {
         return true;
     }
     /**
-     * Searches the data store for upcoming appointments for the user that is scheduled in the next 15 minutes
+     * Searches the data store for upcoming appointments for the user that is scheduled within 15 minutes.
+     * It also considers appointments one is late to.
      *
      * @param user_id the user id of the user
      */
     public void searchUpcomingAppointments(int user_id){
         ObservableList<Appointment> inFifteen = FXCollections.observableArrayList();
-        LocalTime current = LocalTime.now();
-        System.out.println("current "+ current);
+        LocalTime currentTime = LocalTime.now();
+
         for(Appointment meet : getSameDateAppointmentsByUser(user_id, LocalDate.now())){
             LocalTime otherTime = meet.getStart().toLocalDateTime().toLocalTime();
-            System.out.println("other time "+ otherTime);
-            long timeDiff = ChronoUnit.MINUTES.between(current, otherTime);
-            System.out.println("timeDiff"+timeDiff);
+
+            long timeDiff = ChronoUnit.MINUTES.between(currentTime, otherTime);
+
             if(timeDiff < 0) {
                 timeDiff *= -1;
             }
@@ -190,7 +191,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Calculates the front and back-facing gaps of days from last Sunday to next Sunday, and filters appointments within that window.
+     * Calculates the number of front and back-facing days from a past Sunday to the next Sunday. It filters the appointments within that window.
      * Demonstrates the use of lambda expressions. It helped eliminate 7 if statements simplifying the overall code.
      */
     public void filterAppointmentsByWeek(){
@@ -201,8 +202,8 @@ public class MainController implements Initializable {
         DayCalculator d = x -> x < 7 ? 8 - x : 8;
         DayCalculator m = x -> x < 7 ? x + 1 : 1;
 
-        int addedDay = d.addDays(day);
-        int minusDay = m.addDays(day);
+        int addedDay = d.calcDays(day);
+        int minusDay = m.calcDays(day);
 
         LocalDateTime endDay = today.plusDays(addedDay);
         LocalDateTime startDay = today.minusDays(minusDay);
@@ -358,7 +359,8 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Deletes a customer from the customer table
+     * Deletes a customer from the customer table.
+     * Alerts the user if the selected customer has associated appointments
      *
      * @param event when the delete button is fired
      */
@@ -366,18 +368,19 @@ public class MainController implements Initializable {
         try {
             Customer selectedCustomer = customerTable.getFocusModel().getFocusedItem();
             int customerId = selectedCustomer.getId();
-            Alert alert = new Alert(CONFIRMATION, "Are you sure? All of the customer's appointments will also be deleted.");
+            Alert alert = new Alert(CONFIRMATION, "Are you sure?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
+                if(isCustomerAssociated(customerId)){
+                    Alert okAlert = new Alert(ERROR, "This customer has associated appointments. Please delete the appointments first.");
+                    okAlert.show();
+                    return;
+                }
                 if(!CustomerDao.deleteCustomer(customerId)){
                     showError(true, "Error with deletion");
                     return;
                 }
-                if(!deleteAssociatedAppointments(customerId)){
-                    showError(true, "Error with deletion");
-                    return;
-                }
-                Alert okAlert = new Alert(INFORMATION, "The customer and all associated appointments have been deleted.");
+                Alert okAlert = new Alert(INFORMATION, "The customer have been deleted.");
                 okAlert.show();
                 customerTable.setItems(Customer.getAllCusts());
                 appointmentTable.setItems(getAllAppointments());
@@ -414,25 +417,42 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Deletes all appointments associated with a customer
+     * Deletes all appointments associated with the customer
+     * (Side note) The requirement is not clear if the user should be able to delete associated appointments on prompt
+     * Will comment out this function and instead alert the user that each appointment should be deleted first before deleting the customer
      *
      * @param customer_id the customer id
      * @return false if deletion fails
      */
-    public boolean deleteAssociatedAppointments(int customer_id){
-        try {
-            for(Appointment meet : getAllAppointments()){
-                if(meet.getCustomer() == customer_id){
-                    if(!AppointmentDao.deleteAppointment(meet.getId())){
-                        return false;
-                    }
-                }
+//    public boolean deleteAssociatedAppointments(int customer_id){
+//        try {
+//            for(Appointment meet : getAllAppointments()){
+//                if(meet.getCustomer() == customer_id){
+//                    if(!AppointmentDao.deleteAppointment(meet.getId())){
+//                        return false;
+//                    }
+//                }
+//            }
+//        }catch (Exception e){
+//            showError(true, "Error with deletion");
+//            return false;
+//        }
+//        return true;
+//    }
+
+    /**
+     * Confirms if a customer has associated appointments
+     *
+     * @param customer_id the customer id
+     * @return true if the customer has associated appointments
+     */
+    public boolean isCustomerAssociated(int customer_id){
+        for(Appointment meet : getAllAppointments()){
+            if(meet.getCustomer() == customer_id){
+                return true;
             }
-        }catch (Exception e){
-            showError(true, "Error with deletion");
-            return false;
         }
-        return true;
+        return false;
     }
 
     /**
