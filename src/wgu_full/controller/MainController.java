@@ -190,13 +190,16 @@ public class MainController implements Initializable {
     /**
      * Calculates the number of front and back-facing days from the past Sunday to the next Sunday.
      * It filters the appointments within that window.
-     * Also demonstrates the use of lambda expressions. It helped eliminate 7 if statements.
+     *
+     * LAMBDA
+     * The lambda expression here helped eliminate 7 if-statements and presents a more concise way of calculating the number of days in question.
      */
     public void filterAppointmentsByWeek(){
         ObservableList<Appointment> weekList = FXCollections.observableArrayList();
-        LocalDateTime today = LocalDateTime.now();
         DayCalculator d = x -> x < 7 ? 8 - x : 8;
         DayCalculator m = x -> x < 7 ? x + 1 : 1;
+
+        LocalDateTime today = LocalDateTime.now();
         int day = today.getDayOfWeek().getValue();
         int addedDay = d.calcDays(day);
         int minusDay = m.calcDays(day);

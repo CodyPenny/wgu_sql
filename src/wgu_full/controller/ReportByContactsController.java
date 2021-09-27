@@ -74,6 +74,10 @@ public class ReportByContactsController implements Initializable {
     /**
      * Generates the report
      *
+     * LAMBDA
+     * The method that displays the error is common on all the controller
+     * Implementing it this way shows its usage is versatile
+     *
      * @param event when the generate report button is fired
      */
     public void generateReport(ActionEvent event){
@@ -93,6 +97,10 @@ public class ReportByContactsController implements Initializable {
 
     /**
      * Returns to the main page
+     *
+     *  LAMBDA
+     *  The method that displays the error is common on all the controller
+     *  Implementing it this way shows its usage is versatile
      *
      * @param event the cancel or saved button has fired
      * @throws IOException if I/O operation fails
@@ -115,7 +123,6 @@ public class ReportByContactsController implements Initializable {
             er.show(true, "Can not load the main page.");
         }
     }
-
 
     /**
      * Populates the columns of the appointments table
