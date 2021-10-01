@@ -15,11 +15,9 @@ import wgu_full.model.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ResourceBundle;
 
 import static wgu_full.DAO.AppointmentDao.createAppointment;
@@ -100,32 +98,27 @@ public class AddApptController implements Initializable {
      * @return false if there are errors
      */
     public boolean validateTime(){
-        if(startHour.getValue() == 24 && startMin.getValue() > 0){
-            showError(true, "Time can not exceed 24 hours.");
-            return false;
-        }
-        if(endHour.getValue() == 24 && endMin.getValue() > 0){
-            showError(true, "Time can not exceed 24 hours.");
-            return false;
-        }
         if(startHour.getValue() > endHour.getValue()){
-            showError(true, "Start time can not be greater than the end time.");
+            showError(true, "The start time can not be greater than the end time.");
             return false;
         }
         if(startHour.getValue() == endHour.getValue()){
             if(startMin.getValue() >= endMin.getValue()){
-                showError(true, "Start time can not be greater or the same as the end time.");
+                showError(true, "The start time can not be greater or the same as the end time.");
                 return false;
             }
         }
         startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
         endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
-
+        System.out.println("time object " + startLDT );
         if(startLDT.isAfter(endLDT) || startLDT.isEqual(endLDT)){
-            showError(true, "Start time can not be greater or the same as the end time.");
+            showError(true, "The start time can not be greater or the same as the end time.");
             return false;
         }
-        if (!validateZonedDateTimeBusiness(startLDT) || !validateZonedDateTimeBusiness(endLDT)){
+        if (!validateZonedDateTimeBusiness(startLDT)){
+            return false;
+        }
+        if (!validateZonedDateTimeBusiness(endLDT)){
             return false;
         };
         return true;
@@ -172,7 +165,7 @@ public class AddApptController implements Initializable {
      * @param event when the save button is fired
      * @throws IOException if I/O operation fails
      */
-    public void saveAppointment(ActionEvent event) throws IOException {
+    public void saveAppointment(ActionEvent event) throws IOException, SQLException {
         if(!validateInputFields()){
             return;
         }
@@ -198,10 +191,22 @@ public class AddApptController implements Initializable {
         int contact = contactCombo.getSelectionModel().getSelectedItem().getId();
         String t = typeCombo.getSelectionModel().getSelectedItem().toString();
         int user = userCombo.getSelectionModel().getSelectedItem().getId();
-        Timestamp start = Timestamp.valueOf(startLDT);
-        Timestamp end = Timestamp.valueOf(endLDT);
+        Timestamp start = convertZDT(startZDT);
+        Timestamp end = convertZDT(endZDT);
+        System.out.println("start in db "+ start);
+        System.out.println("end in db "+ end);
         createAppointment(titleField, descriptionField, loc, t, start, end, customer, user, contact);
         backToMain(event);
+    }
+
+    /**
+     * Sets the ZonedDateTime reference to UTC and then converts the object to a Timestamp
+     *
+     * @param zdt the ZonedDateTime reference
+     * @return the timestamp
+     */
+    public Timestamp convertZDT(ZonedDateTime zdt){
+       return Timestamp.valueOf(zdt.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime());
     }
 
 
@@ -214,6 +219,7 @@ public class AddApptController implements Initializable {
      */
     public LocalDateTime convertToTimeObject(int hr, int min) {
         LocalDate date = dateBox.getValue();
+
         return LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), hr, min);
     }
 
@@ -224,7 +230,7 @@ public class AddApptController implements Initializable {
      * @return ZonedDateTime relative to the user's system time
      */
     public ZonedDateTime convertToSystemZonedDateTime(LocalDateTime ldt){
-        return ldt.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+        return ZonedDateTime.of(ldt, ZoneId.systemDefault());
     }
 
     /**
@@ -235,15 +241,20 @@ public class AddApptController implements Initializable {
      */
     public boolean validateZonedDateTimeBusiness(LocalDateTime ldt){
         ZonedDateTime zdt = convertToSystemZonedDateTime(ldt);
+        System.out.println("zdt "+ zdt);
         ZonedDateTime est = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
+        System.out.println("est of zdt " + est);
+
         ZonedDateTime open = est.withHour(8);
+        System.out.println("open est  " + open);
         ZonedDateTime close = est.withHour(22);
+        System.out.println("close est " + close);
         if(est.isAfter(close)){
-            showError(true, "Selected time is after business hours. Please select a time within 8am-10pm est.");
+            showError(true, "The selected time is after business hours. Please select a time within 8am-10pm est.");
             return false;
         }
         if(est.isBefore(open)) {
-            showError(true, "Selected time is before business hours. Please select a time within 8am-10pm est.");
+            showError(true, "The selected time is before business hours. Please select a time within 8am-10pm est.");
             return false;
         }
         return true;

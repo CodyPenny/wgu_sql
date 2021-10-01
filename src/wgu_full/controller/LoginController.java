@@ -194,7 +194,9 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ZoneId zone = ZoneId.systemDefault();
+       ZoneId zone = ZoneId.systemDefault();
+        // test zone
+        //ZoneId zone = ZoneId.of("Europe/London");
         setZoneLabel(zone.toString());
     }
 }

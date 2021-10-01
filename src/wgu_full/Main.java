@@ -87,7 +87,7 @@ public class Main extends Application {
         populateLocation();
         populateType();
         // test French
-        Locale.setDefault(new Locale("fr"));
+        //Locale.setDefault(new Locale("fr"));
         Locale systemLanguage = Locale.getDefault();
         System.out.println("print lang->" + systemLanguage); // en_US
         loadView(primaryStage, systemLanguage);

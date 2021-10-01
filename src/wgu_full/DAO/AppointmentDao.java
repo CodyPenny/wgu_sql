@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 import static wgu_full.DAO.JDBC.closeConnection;
 import static wgu_full.DAO.JDBC.openConnection;
+import static wgu_full.DAO.Query.createAppt;
 import static wgu_full.DAO.Query.removeAppt;
 
 /**
@@ -44,6 +45,10 @@ public class AppointmentDao {
                 String contact = result.getString("Contact_Name");
                 Appointment appointmentResult = new Appointment(id, title, description, location, type, start, end, customer, user, contact);
                 allAppointments.add(appointmentResult);
+
+//                System.out.println("Timestamp for start" + start);
+//                System.out.println("Timestamp local" + start.toLocalDateTime());
+//                System.out.println("Timestamp hour" + start.toLocalDateTime().getHour());
             }
             closeConnection();
         } catch (Exception e){
@@ -193,15 +198,11 @@ public class AppointmentDao {
      * @param userId the user id
      * @param contactId the contact id
      */
-    public static void createAppointment(String title, String desc, String loc, String type, Timestamp start, Timestamp end, int custId, int userId, int contactId){
-        try {
-            openConnection();
-            String query = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES ('" + title + "','" + desc + "','" + loc + "','" + type + "','" + start + "','" + end + "'," + custId + "," + userId + "," + contactId + ")";
-            Query.makeQuery(query);
-            closeConnection();
-        } catch (Exception e) {
-        System.out.println(e.getMessage());
-        }
+    public static void createAppointment(String title, String desc, String loc, String type, Timestamp start, Timestamp end, int custId, int userId, int contactId) throws SQLException {
+        openConnection();
+        createAppt(title, desc, loc, type, start, end, custId, userId, contactId);
+        closeConnection();
+        return;
     }
 
     /**

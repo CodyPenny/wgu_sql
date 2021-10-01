@@ -1,9 +1,6 @@
 package wgu_full.DAO;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import static wgu_full.DAO.JDBC.*;
 
@@ -163,6 +160,26 @@ public class Query {
         } catch (SQLException e) {
             System.out.println("SQL error -" + e.getMessage());
             return false;
+        }
+    }
+
+    public static void createAppt(String title, String desc, String loc, String type, Timestamp start, Timestamp end, int custId, int userId, int contactId) throws SQLException {
+        query = "INSERT INTO appointments " + "(Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)" + "values (?,?,?,?,?,?,?,?,?)";
+        try {
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, title);
+            stmt.setString(2, desc);
+            stmt.setString(3, loc);
+            stmt.setString(4, type);
+            stmt.setTimestamp(5, start);
+            stmt.setTimestamp(6, end);
+            stmt.setInt(7, custId);
+            stmt.setInt(8, userId);
+            stmt.setInt(9, contactId);
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("SQL error -" + e.getMessage());
         }
     }
 

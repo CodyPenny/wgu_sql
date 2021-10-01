@@ -16,10 +16,10 @@ import wgu_full.model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static wgu_full.DAO.AppointmentDao.getSameDateAppointments;
@@ -132,31 +132,24 @@ public class EditApptController implements Initializable {
 
     /**
      * Validates the logic of the selected start and end times
+     *
      * @return false if the logic is incorrect
      */
     public boolean validateTime(){
-        if(startHour.getValue() == 24 && startMin.getValue() > 0){
-            showError(true, "Time can not exceed 24 hours.");
-            return false;
-        }
-        if(endHour.getValue() == 24 && endMin.getValue() > 0){
-            showError(true, "Time can not exceed 24 hours.");
-            return false;
-        }
         if(startHour.getValue() > endHour.getValue()){
-            showError(true, "Start time can not be greater than the end time.");
+            showError(true, "The start time can not be greater than the end time.");
             return false;
         }
         if(startHour.getValue() == endHour.getValue()){
             if(startMin.getValue() >= endMin.getValue()){
-                showError(true, "Start time can not be greater or the same as the end time.");
+                showError(true, "The start time can not be greater or the same as the end time.");
                 return false;
             }
         }
         startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
         endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
         if(startLDT.isAfter(endLDT) || startLDT.isEqual(endLDT)){
-            showError(true, "Start time can not be greater or the same as the end time.");
+            showError(true, "The start time can not be greater or the same as the end time.");
             return false;
         }
         if (!validateZonedDateTimeBusiness(startLDT) || !validateZonedDateTimeBusiness(endLDT)){
@@ -189,11 +182,11 @@ public class EditApptController implements Initializable {
         ZonedDateTime open = est.withHour(8);
         ZonedDateTime close = est.withHour(22);
         if(est.isAfter(close)){
-            showError(true, "Selected time is after business hours. Please select a time within 8am-10pm est.");
+            showError(true, "Selected times are after business hours. Please select a time within 8am-10pm est.");
             return false;
         }
         if(est.isBefore(open)) {
-            showError(true, "Selected time is before business hours. Please select a time within 8am-10pm est.");
+            showError(true, "Selected times are before business hours. Please select a time within 8am-10pm est.");
             return false;
         }
         return true;
@@ -271,12 +264,13 @@ public class EditApptController implements Initializable {
      * @return an instance of ZonedDateTime relative to the user's system time
      */
     public ZonedDateTime convertToSystemZonedDateTime(LocalDateTime ldt){
-        return ldt.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+        return ZonedDateTime.of(ldt, ZoneId.systemDefault());
     }
 
 
     /**
      * Populates the form with the attributes of the selected appointment
+     * Converts UTC time to the local time zone
      *
      * @param row the appointment
      */
@@ -315,11 +309,26 @@ public class EditApptController implements Initializable {
                 break;
             }
         }
-        LocalDateTime startLDT = row.getStart().toLocalDateTime();
-        LocalDateTime endLDT = row.getEnd().toLocalDateTime();
+        LocalDateTime startLDT = convertFromUtc(row.getStart().toLocalDateTime());
+        LocalDateTime endLDT = convertFromUtc(row.getEnd().toLocalDateTime());
         LocalDate ld = startLDT.toLocalDate();
-        dateBox.setValue(ld);
+        System.out.println("LDT start" + startLDT);
+        System.out.println("LDT end" + endLDT);
         setSpinners(startLDT.getHour(), endLDT.getHour(), startLDT.getMinute(), endLDT.getMinute());
+    }
+
+    /**
+     * Converts the LocalDateTime reference to the local time zone
+     *
+     * @param utc the LocalDateTime reference
+     * @return the converted local date time
+     */
+    public LocalDateTime convertFromUtc(LocalDateTime utc){
+        return ZonedDateTime.
+                of(utc, ZoneId.of("UTC"))
+                .toOffsetDateTime()
+                .atZoneSameInstant(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
     /**
@@ -390,10 +399,10 @@ public class EditApptController implements Initializable {
      * @param initEndMin the end minute
      */
     public void setSpinners(int initStartHr, int initEndHr, int initStartMin, int initEndMin){
-        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, initStartHr);
-        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 24, initEndHr);
-        SpinnerValueFactory<Integer> startMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, initStartMin, 10);
-        SpinnerValueFactory<Integer> endMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, initEndMin, 10);
+        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 23, initStartHr);
+        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 23, initEndHr);
+        SpinnerValueFactory<Integer> startMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 45, initStartMin, 15);
+        SpinnerValueFactory<Integer> endMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 45, initEndMin, 15);
         startHour.setValueFactory(startHourFactory);
         startMin.setValueFactory(startMinFactory);
         endHour.setValueFactory(endHourFactory);
