@@ -22,9 +22,8 @@ import wgu_full.model.Type;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.sql.Timestamp;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Optional;
@@ -141,16 +140,17 @@ public class MainController implements Initializable {
         return true;
     }
     /**
-     * Searches for upcoming appointments within 15 minutes of the login time
+     * Searches for user appointments that are within 15 minutes of the login time
      *
      * @param user_id the user id of the user
      */
     public void searchUpcomingAppointments(int user_id){
         ObservableList<Appointment> inFifteen = FXCollections.observableArrayList();
-        LocalTime currentTime = LocalTime.now();
-        for(Appointment meet : getSameDateAppointmentsByUser(user_id, LocalDate.now())){
-            LocalTime otherTime = meet.getStart().toLocalDateTime().toLocalTime();
-            long timeDiff = ChronoUnit.MINUTES.between(currentTime, otherTime);
+        LocalDateTime currentTime = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+        for(Appointment meet : getSameDateAppointmentsByUser(user_id, currentTime.toLocalDate())){
+            LocalDateTime otherAppt = meet.getStart().toLocalDateTime();
+            LocalTime otherTime = ZonedDateTime.of(otherAppt, ZoneId.of("UTC")).toOffsetDateTime().atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime().toLocalTime();
+            long timeDiff = ChronoUnit.MINUTES.between(ZonedDateTime.now().toLocalTime(), otherTime);
             if(timeDiff < 0) {
                 timeDiff *= -1;
             }
@@ -158,6 +158,7 @@ public class MainController implements Initializable {
                 inFifteen.add(meet);
             }
         }
+
         displayUpcomingApptLabel(inFifteen.size());
         upcomingTable.setItems(inFifteen);
     }
