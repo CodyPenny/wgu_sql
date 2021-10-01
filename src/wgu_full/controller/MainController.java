@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -568,6 +569,7 @@ public class MainController implements Initializable {
      * The radioButton from the appointments table listens for any selection changes.
      * Initiates the search for any upcoming appointments the user has within 15 minutes of logging in.
      * Populates the month and type comboBoxes in the Reports pane.
+     * Sets system language back to English so table labels are not affected.
      *
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
      * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
@@ -582,6 +584,7 @@ public class MainController implements Initializable {
         reportTypeCombo.setItems(getAllTypes());
         initiateMonthComboBox();
         filterAppointmentsByWeek();
+        Locale.setDefault(new Locale("en"));
 
     }
 }
