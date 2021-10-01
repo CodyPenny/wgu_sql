@@ -363,7 +363,8 @@ public class MainController implements Initializable {
 
     /**
      * Deletes a customer from the customer table.
-     * Alerts the user if the selected customer has associated appointments
+     * Alerts the user if the selected customer has associated appointments and prompts continue
+     * If yes, deletes the customer's associated appointments before deleting the customer
      *
      * @param event when the delete button is fired
      */
@@ -374,20 +375,43 @@ public class MainController implements Initializable {
             Alert alert = new Alert(CONFIRMATION, "Are you sure?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
+                // does cust have associated appts
                 if(isCustomerAssociated(customerId)){
-                    Alert okAlert = new Alert(ERROR, "This customer has associated appointments. Please delete the appointments first.");
-                    okAlert.show();
-                    return;
+                    Alert errAlert = new Alert(ERROR, "This customer has associated appointments that must be deleted first. Would you like to delete the appointments?");
+                    Optional<ButtonType> deleteResult = errAlert.showAndWait();
+                    if (deleteResult.isPresent() && deleteResult.get() == ButtonType.OK) {
+                        // delete cust appts
+                        if(!deleteAssociatedAppointments(customerId)){
+                            showError(true, "Error with deleting associated appointments.");
+                            return;
+                        }
+                        // appts have been deleted
+                        // now delete customer
+                        if (CustomerDao.deleteCustomer(customerId)) {
+                            Alert deleteConf = new Alert(INFORMATION, "The customer and all associated appointments have been deleted.");
+                            deleteConf.show();
+                        } else {
+                            showError(true, "Error with deleting the customer");
+                            return;
+                        }
+
+                    } else {
+                        // did not hit ok
+                        return;
+                    }
+                    // customer does not have meets
+                } else {
+                    if (!CustomerDao.deleteCustomer(customerId)) {
+                        showError(true, "Error with deleting the customer");
+                        return;
+                    }
+                    Alert custConf = new Alert(INFORMATION, "The customer has been deleted.");
+                    custConf.show();
                 }
-                if(!CustomerDao.deleteCustomer(customerId)){
-                    showError(true, "Error with deletion");
-                    return;
-                }
-                Alert okAlert = new Alert(INFORMATION, "The customer have been deleted.");
-                okAlert.show();
-                customerTable.setItems(Customer.getAllCusts());
-                appointmentTable.setItems(getAllAppointments());
-            }
+            customerTable.setItems(Customer.getAllCusts());
+            appointmentTable.setItems(getAllAppointments());
+            } // cust cancelled proceeding with deletion
+            return;
         } catch (Exception e){
             showError(true, "Error with deletion");
         }
@@ -420,27 +444,24 @@ public class MainController implements Initializable {
 
     /**
      * Deletes all appointments associated with the customer
-     * (Side note) The requirement is not clear if the user should be able to delete associated appointments on prompt
-     * Will comment out this function and instead alert the user that each appointment should be deleted first before deleting the customer
      *
      * @param customer_id the customer id
      * @return false if deletion fails
      */
-//    public boolean deleteAssociatedAppointments(int customer_id){
-//        try {
-//            for(Appointment meet : getAllAppointments()){
-//                if(meet.getCustomer() == customer_id){
-//                    if(!AppointmentDao.deleteAppointment(meet.getId())){
-//                        return false;
-//                    }
-//                }
-//            }
-//        }catch (Exception e){
-//            showError(true, "Error with deletion");
-//            return false;
-//        }
-//        return true;
-//    }
+    public boolean deleteAssociatedAppointments(int customer_id){
+        try {
+            for(Appointment meet : getAllAppointments()){
+                if(meet.getCustomer() == customer_id){
+                    if(!AppointmentDao.deleteAppointment(meet.getId())){
+                        return false;
+                    }
+                }
+            }
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Confirms if a customer has associated appointments

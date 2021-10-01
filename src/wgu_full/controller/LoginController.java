@@ -215,5 +215,4 @@ public class LoginController implements Initializable {
         //Locale.setDefault(new Locale("fr"));
         translate();
     }
-
 }
