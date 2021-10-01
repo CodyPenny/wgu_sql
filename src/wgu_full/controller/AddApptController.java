@@ -94,6 +94,7 @@ public class AddApptController implements Initializable {
 
     /**
      * Validates the logic of the selected start and end times
+     * Validates against business hours
      *
      * @return false if there are errors
      */
@@ -115,10 +116,13 @@ public class AddApptController implements Initializable {
             showError(true, "The start time can not be greater or the same as the end time.");
             return false;
         }
-        if (!validateZonedDateTimeBusiness(startLDT)){
+        startZDT = convertToSystemZonedDateTime(startLDT);
+        endZDT = convertToSystemZonedDateTime(endLDT);
+
+        if (!validateZonedDateTimeBusiness(startZDT)){
             return false;
         }
-        if (!validateZonedDateTimeBusiness(endLDT)){
+        if (!validateZonedDateTimeBusiness(endZDT)){
             return false;
         };
         return true;
@@ -169,18 +173,22 @@ public class AddApptController implements Initializable {
         if(!validateInputFields()){
             return;
         }
+
         if(!validateTime()){
             return;
         }
-        startZDT = convertToSystemZonedDateTime(startLDT);
-        endZDT = convertToSystemZonedDateTime(endLDT);
-        LocalDate date = startLDT.toLocalDate();
+        // gets date from utc format
+        LocalDate date = startZDT.withZoneSameInstant(ZoneOffset.UTC).toLocalDate();
+        System.out.println("after utc, the date is " + date);
+
         int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
+
         overlaps = getSameDateAppointments(customer, date);
+
         if(overlaps.size() > 0){
             boolean noOverlap = validateOverlap(overlaps);
             if (!noOverlap){
-                showError(true, "Selected time for customer overlaps with another appointment. Please select another time.");
+                showError(true, "The selected time for the customer overlaps with another appointment. Please select another time.");
                 return;
             }
         }
@@ -209,7 +217,6 @@ public class AddApptController implements Initializable {
        return Timestamp.valueOf(zdt.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime());
     }
 
-
     /**
      * Takes the selected date, hour, and minute and creates a LocalDateTime object
      *
@@ -236,11 +243,10 @@ public class AddApptController implements Initializable {
     /**
      * Validates the selected time against the business hours
      *
-     * @param ldt an instance of the LocalDateTime object
+     * @param zdt an instance of the ZonedDateTime object
      * @return true if the selected time is within business hours
      */
-    public boolean validateZonedDateTimeBusiness(LocalDateTime ldt){
-        ZonedDateTime zdt = convertToSystemZonedDateTime(ldt);
+    public boolean validateZonedDateTimeBusiness(ZonedDateTime zdt){
         System.out.println("zdt "+ zdt);
         ZonedDateTime est = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
         System.out.println("est of zdt " + est);
@@ -249,12 +255,13 @@ public class AddApptController implements Initializable {
         System.out.println("open est  " + open);
         ZonedDateTime close = est.withHour(22);
         System.out.println("close est " + close);
+
         if(est.isAfter(close)){
-            showError(true, "The selected time is after business hours. Please select a time within 8am-10pm est.");
+            showError(true, "The selected time is outside of business hours. Please select a time within 8am-10pm est.");
             return false;
         }
         if(est.isBefore(open)) {
-            showError(true, "The selected time is before business hours. Please select a time within 8am-10pm est.");
+            showError(true, "The selected time is outside of business hours. Please select a time within 8am-10pm est.");
             return false;
         }
         return true;
@@ -263,15 +270,16 @@ public class AddApptController implements Initializable {
     /**
      * Looks for any overlaps between the input list of appointments and selected appointment times
      *
-     * @param test the list of appointments with possible conflicts
+     * @param customerAppts the list of appointments with possible conflicts
      * @return false if there is an overlap
      */
-    public boolean validateOverlap(ObservableList<Appointment> test){
+    public boolean validateOverlap(ObservableList<Appointment> customerAppts){
         LocalDateTime A = startLDT;
         LocalDateTime Z = endLDT;
-        for(Appointment appt : test){
-            LocalDateTime S = appt.getStart().toLocalDateTime();
-            LocalDateTime E = appt.getEnd().toLocalDateTime();
+
+        for(Appointment appt : customerAppts){
+            LocalDateTime S = convertFromUtc(appt.getStart().toLocalDateTime());
+            LocalDateTime E = convertFromUtc(appt.getEnd().toLocalDateTime());
             //case 1 - when the start is in the window
             if((A.isAfter(S) || A.isEqual(S)) && Z.isBefore(S)){
                 return false;
@@ -286,6 +294,20 @@ public class AddApptController implements Initializable {
             }
         }
         return true;
+    }
+
+    /**
+     * Converts the LocalDateTime reference to the local time zone
+     *
+     * @param utc the LocalDateTime reference
+     * @return the converted local date time
+     */
+    public LocalDateTime convertFromUtc(LocalDateTime utc){
+        return ZonedDateTime.
+                of(utc, ZoneId.of("UTC"))
+                .toOffsetDateTime()
+                .atZoneSameInstant(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
     /**

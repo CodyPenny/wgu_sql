@@ -105,8 +105,6 @@ public class EditApptController implements Initializable {
         if(!validateTime()){
             return;
         }
-        startZDT = convertToSystemZonedDateTime(startLDT);
-        endZDT = convertToSystemZonedDateTime(endLDT);
         LocalDate date = startLDT.toLocalDate();
         int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
         overlaps = getSameDateAppointments(customer, date);
@@ -124,8 +122,8 @@ public class EditApptController implements Initializable {
         int contact = contactCombo.getSelectionModel().getSelectedItem().getId();
         String ty = typeCombo.getSelectionModel().getSelectedItem().toString();
         int user = userCombo.getSelectionModel().getSelectedItem().getId();
-        Timestamp start = Timestamp.valueOf(startLDT);
-        Timestamp end = Timestamp.valueOf(endLDT);
+        Timestamp start = convertZDT(startZDT);
+        Timestamp end = convertZDT(endZDT);
         updateAppointment(selectedRow.getId(), titleField, descriptionField, loc, start, end, ty, user, contact, customer);
         backToMain(event);
     }
@@ -148,11 +146,19 @@ public class EditApptController implements Initializable {
         }
         startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
         endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
+
+        System.out.println("time object " + startLDT );
         if(startLDT.isAfter(endLDT) || startLDT.isEqual(endLDT)){
             showError(true, "The start time can not be greater or the same as the end time.");
             return false;
         }
-        if (!validateZonedDateTimeBusiness(startLDT) || !validateZonedDateTimeBusiness(endLDT)){
+        startZDT = convertToSystemZonedDateTime(startLDT);
+        endZDT = convertToSystemZonedDateTime(endLDT);
+
+        if (!validateZonedDateTimeBusiness(startZDT)){
+            return false;
+        }
+        if (!validateZonedDateTimeBusiness(endZDT)){
             return false;
         };
         return true;
@@ -176,20 +182,35 @@ public class EditApptController implements Initializable {
      * @param ldt an instance of the LocalDateTime object
      * @return true if the selected time is within business hours
      */
-    public boolean validateZonedDateTimeBusiness(LocalDateTime ldt){
-        ZonedDateTime zdt = convertToSystemZonedDateTime(ldt);
+    public boolean validateZonedDateTimeBusiness(ZonedDateTime zdt){
+        System.out.println("zdt "+ zdt);
         ZonedDateTime est = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
+        System.out.println("est of zdt " + est);
+
         ZonedDateTime open = est.withHour(8);
+        System.out.println("open est  " + open);
         ZonedDateTime close = est.withHour(22);
+        System.out.println("close est " + close);
+
         if(est.isAfter(close)){
-            showError(true, "Selected times are after business hours. Please select a time within 8am-10pm est.");
+            showError(true, "The selected time is outside of business hours. Please select a time within 8am-10pm est.");
             return false;
         }
         if(est.isBefore(open)) {
-            showError(true, "Selected times are before business hours. Please select a time within 8am-10pm est.");
+            showError(true, "The selected time is outside of business hours. Please select a time within 8am-10pm est.");
             return false;
         }
         return true;
+    }
+
+    /**
+     * Sets the ZonedDateTime reference to UTC and then converts the object to a Timestamp
+     *
+     * @param zdt the ZonedDateTime reference
+     * @return the timestamp
+     */
+    public Timestamp convertZDT(ZonedDateTime zdt){
+        return Timestamp.valueOf(zdt.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime());
     }
 
     /**
@@ -206,8 +227,8 @@ public class EditApptController implements Initializable {
             if(appt.getId() == selectedRow.getId()){
                 continue;
             }
-            LocalDateTime S = appt.getStart().toLocalDateTime();
-            LocalDateTime E = appt.getEnd().toLocalDateTime();
+            LocalDateTime S = convertFromUtc(appt.getStart().toLocalDateTime());
+            LocalDateTime E = convertFromUtc(appt.getEnd().toLocalDateTime());
             //case 1 - when the start is in the window
             if((A.isAfter(S) || A.isEqual(S)) && Z.isBefore(S)){
                 return false;
