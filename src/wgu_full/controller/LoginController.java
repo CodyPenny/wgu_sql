@@ -34,9 +34,8 @@ public class LoginController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
-    private String system_language = "";
     private String usernameField, passwordField;
-    private boolean showFrench = false;
+    ResourceBundle bundle;
 
     /**
      * Labels
@@ -65,14 +64,11 @@ public class LoginController implements Initializable {
     /**
      * Translates the form text to French if the user's system is set to French
      */
-    public void translate(){
-        system_language = Locale.getDefault().toString();
-        if( system_language.equals("fr")){
-            nameLabel.setText("Nom d'utilisateur");
-            passwordLabel.setText("Mot de passe");
-            loginBtn.setText("Connexion");
-            showFrench = true;
-        }
+    public void translate(ResourceBundle rb){
+        bundle = rb;
+        nameLabel.setText(bundle.getString("nameLabel"));
+        passwordLabel.setText(bundle.getString("passwordLabel"));
+        loginBtn.setText(bundle.getString("loginBtn"));
     }
 
     /**
@@ -85,26 +81,23 @@ public class LoginController implements Initializable {
     public int validateInput() throws SQLException {
         try {
             if(usernameField == null || usernameField.isEmpty()){
-                if(!showFrench){
-                    showError(true, "Please enter a username");
-                } else {
-                    showError(true, "Merci d'entrer un nom d'utilisateur.");
-                }
+                showError(true, bundle.getString("enterUser"));
                 return 0;
             }
             if(passwordField == null || passwordField.isEmpty()){
-                if(!showFrench){
-                    showError(true, "Please enter a password");
-                } else {
-                    showError(true, "Veuillez entrer un mot de passe.");
-                }
+                showError(true, bundle.getString("enterPassword"));
                 return 0;
             }
-
+            int result = validateUser(usernameField, passwordField);
+            if(result == 0){
+                createLog(usernameField, "Failed");
+                showError(true, bundle.getString("invalid"));
+                return 0;
+            }
         } catch (Exception e){
             System.out.println("Error -" + e.getMessage());
         }
-        return validateUser(usernameField, passwordField);
+        return 1;
     }
 
     /**
@@ -118,7 +111,6 @@ public class LoginController implements Initializable {
         errorLabel.setVisible(showOrHide);
     }
 
-
     /**
      * Validates the credentials of the user
      *
@@ -131,12 +123,6 @@ public class LoginController implements Initializable {
             passwordField = passwordInput.getText();
             int result = validateInput();
             if( result == 0 ){
-                createLog(usernameField, "Failed");
-                if(showFrench){
-                    showError(true, "Utilisateur invalide ou non autorisé.");
-                } else {
-                    showError(true, "Invalid user or unauthorized.");
-                }
                 return;
             }
             createLog(usernameField, "Success");
@@ -202,7 +188,6 @@ public class LoginController implements Initializable {
     /**
      * Initializes the controller after its root element processes
      * Sets the zone id with the user's location
-     * Translates the form to French if user's system is set to French
      *
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
      * @param resourceBundle The resources used to localize the root object, or null if the root object was not localized.
@@ -211,8 +196,5 @@ public class LoginController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ZoneId zone = ZoneId.systemDefault();
         setZoneLabel(zone.toString());
-        //test French
-        //Locale.setDefault(new Locale("fr"));
-        translate();
     }
 }

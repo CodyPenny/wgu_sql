@@ -5,10 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import wgu_full.controller.LoginController;
 import wgu_full.model.Location;
 import wgu_full.model.Type;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /*
     Javadoc files are in the doc folder
@@ -48,7 +51,32 @@ public class Main extends Application {
     }
 
     /**
-     * Populates the location and type local ObservableList
+     * Loads the view and the resource bundle based on the system language
+     * Translates the form to English or French
+     *
+     * @param primaryStage the top level JavaFX container
+     * @param local an instance of the Locale object
+     */
+    public void loadView(Stage primaryStage, Locale local){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("view/login.fxml"));
+            ResourceBundle rb = ResourceBundle.getBundle("bundle", local);
+            loader.setResources(rb);
+            Parent root = loader.load();
+            LoginController controller = loader.getController();
+            controller.translate(rb);
+            primaryStage.setTitle("Global Consulting Scheduling");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Populates the location and the type local ObservableList
+     * Translates the form to French if user's system is set to French
      * Loads the login form
      *
      * @param primaryStage the top level JavaFX container
@@ -58,14 +86,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException{
         populateLocation();
         populateType();
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("view/login.fxml"));
-            primaryStage.setTitle("Global Consulting Scheduling");
-            primaryStage.setScene(new Scene(root));
-            primaryStage.show();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        // test French
+        Locale.setDefault(new Locale("fr"));
+        Locale systemLanguage = Locale.getDefault();
+        System.out.println("print lang->" + systemLanguage); // en_US
+        loadView(primaryStage, systemLanguage);
     }
 
     /**
