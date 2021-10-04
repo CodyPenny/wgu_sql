@@ -49,7 +49,7 @@ public class UserDao {
         ObservableList<User> allUsers = FXCollections.observableArrayList();
         try {
             openConnection();
-            String query = "SELECT User_ID, User_Name FROM users";
+            String query = "SELECT User_ID, User_Name FROM users ORDER BY 1";
             Query.makeQuery(query);
             ResultSet result = Query.getResult();
 
