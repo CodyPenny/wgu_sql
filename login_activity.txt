@@ -175,3 +175,6 @@ Username: test | Attempted login timestamp: 2021/10/04 17:53:18 | Status: Succes
 Username: test | Attempted login timestamp: 2021/10/04 17:54:43 | Status: Success
 Username: test | Attempted login timestamp: 2021/10/04 17:55:52 | Status: Success
 Username: test | Attempted login timestamp: 2021/10/04 18:08:42 | Status: Success
+Username: test | Attempted login timestamp: 2021/10/04 18:29:08 | Status: Success
+Username: test | Attempted login timestamp: 2021/10/04 18:30:51 | Status: Success
+Username: test | Attempted login timestamp: 2021/10/04 02:32:56 | Status: Success

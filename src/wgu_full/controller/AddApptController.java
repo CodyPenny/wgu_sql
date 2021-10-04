@@ -286,8 +286,8 @@ public class AddApptController implements Initializable {
      */
     public LocalTime setBusinessHoursToLocalHours(int hr){
         LocalDateTime now = LocalDateTime.now();
-       LocalDateTime ldt = LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), hr, 0);
-       return ZonedDateTime.
+        LocalDateTime ldt = LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), hr, 0);
+        return ZonedDateTime.
                 of(ldt, ZoneId.of("America/New_York"))
                 .toOffsetDateTime()
                 .atZoneSameInstant(ZoneId.systemDefault())
@@ -433,7 +433,6 @@ public class AddApptController implements Initializable {
         endFactory.setValue(startHr);
         startSpinner.setValueFactory(startFactory);
         endSpinner.setValueFactory(endFactory);
-
     }
 
     /**
