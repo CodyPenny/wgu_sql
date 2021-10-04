@@ -55,14 +55,15 @@ public class User {
     public void setPassword(String password){ this.password = password; }
 
     /**
-     * @return ObservableList of all users from the data store
+     * @return the ObservableList of all the users from the data store
      */
     public static ObservableList<User> getUsers(){
         return getAllUsers();
     }
 
     /**
-     * Overrides the toString method to customize display in comboBox
+     * Overrides the toString method to customize the display in the comboBox
+     *
      * @return the user id and user name
      */
     @Override

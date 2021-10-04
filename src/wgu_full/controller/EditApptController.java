@@ -1,6 +1,5 @@
 package wgu_full.controller;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -89,8 +88,6 @@ public class EditApptController implements Initializable {
     /**
      * Spinners
      */
-//    @FXML
-//    private Spinner<Integer> startHour,startMin, endHour, endMin;
     @FXML
     private Spinner<LocalTime> startSpinner, endSpinner;
 
@@ -139,23 +136,6 @@ public class EditApptController implements Initializable {
      * @return false if the logic is incorrect
      */
     public boolean validateTime(){
-//        if(startHour.getValue() > endHour.getValue()){
-//            showError(true, "The start time can not be greater than the end time.");
-//            return false;
-//        }
-//        if(startHour.getValue() == endHour.getValue()){
-//            if(startMin.getValue() >= endMin.getValue()){
-//                showError(true, "The start time can not be greater or the same as the end time.");
-//                return false;
-//            }
-//        }
-//
-//        startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
-//        endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
-
-        System.out.println("start " + startLDT );
-        System.out.println("end " + endLDT );
-
         if(startSpinner.getValue().isAfter(endSpinner.getValue())){
             showError(true, "The start time can not be greater than the end time.");
             return false;
@@ -363,7 +343,7 @@ public class EditApptController implements Initializable {
     }
 
     /**
-     * Shows or the hides the custom error
+     * Shows or hides the custom error
      *
      * @param showOrHide sets the error to be visible or invisible
      * @param errorText the custom error message to show
@@ -395,7 +375,7 @@ public class EditApptController implements Initializable {
     }
 
     /**
-     * Disable past dates on the DatePicker widget
+     * Disables past dates on the DatePicker widget
      * (Taken from the Oracle documentation)
      */
     private void disablePastDates() {
@@ -422,7 +402,7 @@ public class EditApptController implements Initializable {
     }
 
     /**
-     * Initializes the start and end spinners with the selected appointment times and sets the options within business hours
+     * Initializes the start and end spinners with the selected appointment times and sets the options to business hours
      *
      */
     public void setSpinners(){

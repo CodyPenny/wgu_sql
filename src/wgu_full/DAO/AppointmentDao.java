@@ -46,9 +46,6 @@ public class AppointmentDao {
                 Appointment appointmentResult = new Appointment(id, title, description, location, type, start, end, customer, user, contact);
                 allAppointments.add(appointmentResult);
 
-//                System.out.println("Timestamp for start" + start);
-//                System.out.println("Timestamp local" + start.toLocalDateTime());
-//                System.out.println("Timestamp hour" + start.toLocalDateTime().getHour());
             }
             closeConnection();
         } catch (Exception e){
@@ -259,13 +256,11 @@ public class AppointmentDao {
         try{
             openConnection();
             String query = "SELECT * FROM appointments WHERE MONTH(START) = " + mth + " AND Type = '" + type +"'";
-            System.out.println(query);
             Query.makeQuery(query);
             ResultSet result = Query.getResult();
             while(result.next()){
                 int id = result.getInt("Appointment_ID");
                 Timestamp start = result.getTimestamp("Start");
-                System.out.println("start "+ start);
                 count++;
             }
         } catch (Exception e){

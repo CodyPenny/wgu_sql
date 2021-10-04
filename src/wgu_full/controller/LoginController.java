@@ -21,7 +21,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static wgu_full.DAO.UserDao.validateUser;

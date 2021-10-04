@@ -17,7 +17,7 @@ import static wgu_full.DAO.JDBC.openConnection;
 public class UserDao {
 
     /**
-     * Authenticates credentials entered by user
+     * Authenticates credentials entered by the user
      *
      * @param username the input username
      * @param pw the input password
