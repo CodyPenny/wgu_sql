@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgu_full.controller.EditApptController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgu_full.controller.EditApptController">
     <children>
         <Label alignment="CENTER" layoutY="20.0" prefHeight="50.0" prefWidth="570.0" text="EDIT APPOINTMENT FORM">
             <font>
@@ -51,17 +51,17 @@
                 <Font name="Arial" size="14.0" />
             </font>
         </Label>
-        <Label layoutX="40.0" layoutY="380.0" text="Start Time:">
+        <Label layoutX="40.0" layoutY="415.0" text="Start Time:">
             <font>
                 <Font name="Arial" size="14.0" />
             </font>
         </Label>
-        <Label layoutX="40.0" layoutY="465.0" text="Customer Id:">
+        <Label layoutX="40.0" layoutY="505.0" text="Customer Id:">
             <font>
                 <Font name="Arial" size="14.0" />
             </font>
         </Label>
-        <Label layoutX="40.0" layoutY="505.0" text="User Id:">
+        <Label layoutX="40.0" layoutY="555.0" text="User Id:">
             <font>
                 <Font name="Arial" size="14.0" />
             </font>
@@ -71,8 +71,8 @@
                 <Font name="Arial" size="12.0" />
             </font>
         </Label>
-        <Button fx:id="saveBtn" layoutX="490.0" layoutY="590.0" mnemonicParsing="false" onAction="#saveAppointment" text="Save" />
-        <Button fx:id="cancelBtn" layoutX="420.0" layoutY="590.0" mnemonicParsing="false" onAction="#backToMain" text="Cancel" />
+        <Button fx:id="saveBtn" layoutX="490.0" layoutY="630.0" mnemonicParsing="false" onAction="#saveAppointment" text="Save" />
+        <Button fx:id="cancelBtn" layoutX="420.0" layoutY="630.0" mnemonicParsing="false" onAction="#backToMain" text="Cancel" />
         <TextField fx:id="idText" disable="true" editable="false" layoutX="155.0" layoutY="96.0" opacity="0.5" prefHeight="26.0" prefWidth="181.0" />
         <TextField fx:id="titleText" layoutX="155.0" layoutY="136.0" prefHeight="26.0" prefWidth="181.0" />
         <TextField fx:id="descriptionText" layoutX="155.0" layoutY="176.0" prefHeight="26.0" prefWidth="321.0" />
@@ -80,20 +80,21 @@
         <ComboBox fx:id="contactCombo" layoutX="155.0" layoutY="256.0" prefHeight="26.0" prefWidth="181.0" promptText="Select one ..." />
         <ComboBox fx:id="typeCombo" layoutX="155.0" layoutY="296.0" prefHeight="26.0" prefWidth="181.0" promptText="Select one ..." />
         <DatePicker fx:id="dateBox" layoutX="155.0" layoutY="335.0" prefHeight="26.0" prefWidth="109.0" />
-        <ComboBox fx:id="customerCombo" layoutX="155.0" layoutY="460.0" prefHeight="26.0" prefWidth="181.0" promptText="Select one ..." />
-        <ComboBox fx:id="userCombo" layoutX="155.0" layoutY="500.0" prefHeight="26.0" prefWidth="181.0" promptText="Select one ..." />
-        <Spinner fx:id="startHour" layoutX="193.0" layoutY="378.0" prefHeight="26.0" prefWidth="69.0" />
-        <Spinner fx:id="startMin" layoutX="328.0" layoutY="378.0" prefHeight="26.0" prefWidth="81.0" />
-        <Label layoutX="281.0" layoutY="383.0" text="Minute" />
-        <Label layoutX="155.0" layoutY="382.0" text="Hour" />
-        <Label layoutX="40.0" layoutY="420.0" text="End Time:">
+        <ComboBox fx:id="customerCombo" layoutX="155.0" layoutY="500.0" prefHeight="26.0" prefWidth="181.0" promptText="Select one ..." />
+        <ComboBox fx:id="userCombo" layoutX="155.0" layoutY="550.0" prefHeight="26.0" prefWidth="181.0" promptText="Select one ..." />
+        <Spinner fx:id="startHour" layoutX="193.0" layoutY="410.0" prefHeight="26.0" prefWidth="69.0" />
+        <Spinner fx:id="startMin" layoutX="328.0" layoutY="410.0" prefHeight="26.0" prefWidth="81.0" />
+        <Label layoutX="281.0" layoutY="415.0" text="Minute" />
+        <Label layoutX="155.0" layoutY="415.0" text="Hour" />
+        <Label layoutX="40.0" layoutY="455.0" text="End Time:">
             <font>
                 <Font name="Arial" size="14.0" />
             </font>
         </Label>
-        <Label layoutX="155.0" layoutY="420.0" text="Hour" />
-        <Spinner fx:id="endHour" layoutX="193.0" layoutY="416.0" prefHeight="26.0" prefWidth="69.0" />
-        <Label layoutX="281.0" layoutY="420.0" text="Minute" />
-        <Spinner fx:id="endMin" layoutX="328.0" layoutY="416.0" prefHeight="26.0" prefWidth="81.0" />
+        <Label layoutX="155.0" layoutY="455.0" text="Hour" />
+        <Spinner fx:id="endHour" layoutX="193.0" layoutY="450.0" prefHeight="26.0" prefWidth="69.0" />
+        <Label layoutX="281.0" layoutY="455.0" text="Minute" />
+        <Spinner fx:id="endMin" layoutX="328.0" layoutY="450.0" prefHeight="26.0" prefWidth="81.0" />
+      <Label alignment="CENTER" layoutX="139.0" layoutY="375.0" prefHeight="26.0" prefWidth="288.0" text="Please select from the following business hours:" />
     </children>
 </AnchorPane>

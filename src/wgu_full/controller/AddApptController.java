@@ -111,9 +111,10 @@ public class AddApptController implements Initializable {
                 return false;
             }
         }
+
         startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
         endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
-        System.out.println("time object " + startLDT );
+
         if(startLDT.isAfter(endLDT) || startLDT.isEqual(endLDT)){
             showError(true, "The start time can not be greater or the same as the end time.");
             return false;
@@ -182,7 +183,6 @@ public class AddApptController implements Initializable {
         LocalDate date = startZDT.withZoneSameInstant(ZoneOffset.UTC).toLocalDate();
         int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
         overlaps = getSameDateAppointments(customer, date);
-        System.out.println("overlaps " + overlaps.size());
         if(overlaps.size() > 0){
             boolean noOverlap = validateOverlap(overlaps);
             if (!noOverlap){
@@ -222,7 +222,6 @@ public class AddApptController implements Initializable {
      */
     public LocalDateTime convertToTimeObject(int hr, int min) {
         LocalDate date = dateBox.getValue();
-
         return LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), hr, min);
     }
 
@@ -272,11 +271,11 @@ public class AddApptController implements Initializable {
             LocalDateTime S = LocalDateTime.parse(appt.getStart(), formatter);
             LocalDateTime E = LocalDateTime.parse(appt.getEnd(), formatter);
             //case 1 - when the start is in the window
-            if((A.isAfter(S) || A.isEqual(S)) && Z.isBefore(S)){
+            if((A.isAfter(S) || A.isEqual(S)) && A.isBefore(E)){
                 return false;
             }
             //case 2 - when the end is in the window
-            if(A.isAfter(E) && (Z.isBefore(E) || Z.isEqual(E))){
+            if(Z.isAfter(S) && (Z.isBefore(E) || Z.isEqual(E))){
                 return false;
             }
             //case 3 - when the start and end are outside of the window
@@ -288,18 +287,21 @@ public class AddApptController implements Initializable {
     }
 
     /**
-     * Converts the LocalDateTime reference to the local time zone
+     * Takes an arbitrary hour and takes an instant of it in Eastern Standard Time and converts it to the local zone hour.
      *
-     * @param utc the LocalDateTime reference
-     * @return the converted local date time
+     * @param hr the hour
+     * @return the hour in local zone time
      */
-    public LocalDateTime convertFromUtc(LocalDateTime utc){
-        return ZonedDateTime.
-                of(utc, ZoneId.of("UTC"))
+    public int setBusinessHoursToLocalHours(int hr){
+        LocalDateTime now = LocalDateTime.now();
+       LocalDateTime ldt = LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), hr, 0);
+       return ZonedDateTime.
+                of(ldt, ZoneId.of("America/New_York"))
                 .toOffsetDateTime()
                 .atZoneSameInstant(ZoneId.systemDefault())
-                .toLocalDateTime();
+                .toLocalDateTime().toLocalTime().getHour();
     }
+
 
     /**
      * Returns to the main page
@@ -363,7 +365,7 @@ public class AddApptController implements Initializable {
 
     /**
      * Populates the comboBoxes
-     * Initiates time spinners with the hour and minutes
+     * Initiates time spinners with the hour and minutes based on business hours
      * Disables past dates on the Date Picker widget
      *
      * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
@@ -376,8 +378,10 @@ public class AddApptController implements Initializable {
         userCombo.setItems(getUsers());
         locationCombo.setItems(getAllLocations());
         typeCombo.setItems(getAllTypes());
-        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 23, 8);
-        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 23, 8);
+        int startHr = setBusinessHoursToLocalHours(8);
+        int endHr = setBusinessHoursToLocalHours(22);
+        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, endHr);
+        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, endHr);
         SpinnerValueFactory<Integer> startMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 45, 0, 15);
         SpinnerValueFactory<Integer> endMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 45, 0, 15);
         startHour.setValueFactory(startHourFactory);

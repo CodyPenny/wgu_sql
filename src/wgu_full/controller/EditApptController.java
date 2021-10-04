@@ -143,8 +143,12 @@ public class EditApptController implements Initializable {
                 return false;
             }
         }
+
         startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
         endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
+
+        System.out.println("start " + startLDT );
+        System.out.println("end " + endLDT );
 
         if(startLDT.isAfter(endLDT) || startLDT.isEqual(endLDT)){
             showError(true, "The start time can not be greater or the same as the end time.");
@@ -181,14 +185,9 @@ public class EditApptController implements Initializable {
      * @return true if the selected time is within business hours
      */
     public boolean validateZonedDateTimeBusiness(ZonedDateTime zdt){
-        System.out.println("zdt "+ zdt);
         ZonedDateTime est = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
-        System.out.println("est of zdt " + est);
-
         ZonedDateTime open = est.withHour(8);
-        System.out.println("open est  " + open);
         ZonedDateTime close = est.withHour(22);
-        System.out.println("close est " + close);
 
         if(est.isAfter(close)){
             showError(true, "The selected time is outside of business hours. Please select a time within 8am-10pm est.");
@@ -221,6 +220,7 @@ public class EditApptController implements Initializable {
     public boolean validateOverlap(ObservableList<Appointment> test){
         LocalDateTime A = startLDT;
         LocalDateTime Z = endLDT;
+
         for(Appointment appt : test){
             if(appt.getId() == selectedRow.getId()){
                 continue;
@@ -228,11 +228,11 @@ public class EditApptController implements Initializable {
             LocalDateTime S = LocalDateTime.parse(appt.getStart(), formatter);
             LocalDateTime E = LocalDateTime.parse(appt.getEnd(), formatter);
             //case 1 - when the start is in the window
-            if((A.isAfter(S) || A.isEqual(S)) && Z.isBefore(S)){
+            if((A.isAfter(S) || A.isEqual(S)) && A.isBefore(E)){
                 return false;
             }
             //case 2 - when the end is in the window
-            if(A.isAfter(E) && (Z.isBefore(E) || Z.isEqual(E))){
+            if(Z.isAfter(S) && (Z.isBefore(E) || Z.isEqual(E))){
                 return false;
             }
             //case 3 - when the start and end are outside of the window
@@ -335,17 +335,19 @@ public class EditApptController implements Initializable {
     }
 
     /**
-     * Converts the LocalDateTime reference to the local time zone
+     * Takes an arbitrary hour and takes an instant of it in Eastern Standard Time and converts it to the local zone hour.
      *
-     * @param utc the LocalDateTime reference
-     * @return the converted local date time
+     * @param hr the hour
+     * @return the hour in local zone time
      */
-    public LocalDateTime convertFromUtc(LocalDateTime utc){
+    public int setBusinessHoursToLocalHours(int hr){
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime ldt = LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), hr, 0);
         return ZonedDateTime.
-                of(utc, ZoneId.of("UTC"))
+                of(ldt, ZoneId.of("America/New_York"))
                 .toOffsetDateTime()
                 .atZoneSameInstant(ZoneId.systemDefault())
-                .toLocalDateTime();
+                .toLocalDateTime().toLocalTime().getHour();
     }
 
     /**
@@ -408,7 +410,7 @@ public class EditApptController implements Initializable {
     }
 
     /**
-     * Initializes the start and end hours/minutes of the spinners
+     * Initializes the start and end hours/minutes of the spinners based on business hours
      *
      * @param initStartHr the start hour
      * @param initEndHr the end hour
@@ -416,8 +418,10 @@ public class EditApptController implements Initializable {
      * @param initEndMin the end minute
      */
     public void setSpinners(int initStartHr, int initEndHr, int initStartMin, int initEndMin){
-        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 23, initStartHr);
-        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 23, initEndHr);
+        int startHr = setBusinessHoursToLocalHours(8);
+        int endHr = setBusinessHoursToLocalHours(22);
+        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, endHr, initStartHr);
+        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, endHr, initEndHr);
         SpinnerValueFactory<Integer> startMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 45, initStartMin, 15);
         SpinnerValueFactory<Integer> endMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 45, initEndMin, 15);
         startHour.setValueFactory(startHourFactory);

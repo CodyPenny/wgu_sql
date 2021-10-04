@@ -437,11 +437,12 @@ public class MainController implements Initializable {
                 if(!AppointmentDao.deleteAppointment(selectedAppt.getId())){
                     showError(true, "Error with deletion");
                     return;
-                } else {
-                    Alert okAlert = new Alert(INFORMATION, "Appointment ID: " + selectedAppt.getId() + ", " + selectedAppt.getType() + " has been removed.");
-                    okAlert.show();
-                    appointmentTable.setItems(getAllAppointments());
                 }
+                Alert okAlert = new Alert(INFORMATION, "Appointment ID: " + selectedAppt.getId() + ", " + selectedAppt.getType() + " has been removed.");
+                okAlert.show();
+
+                // BUG. sets items with already deleted appts
+                appointmentTable.setItems(getAllAppointments());
             }
         } catch (Exception e){
             showError(true, "Error with deletion");
