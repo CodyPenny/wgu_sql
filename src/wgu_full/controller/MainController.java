@@ -441,7 +441,6 @@ public class MainController implements Initializable {
                 Alert okAlert = new Alert(INFORMATION, "Appointment ID: " + selectedAppt.getId() + ", " + selectedAppt.getType() + " has been removed.");
                 okAlert.show();
 
-                // BUG. sets items with already deleted appts
                 appointmentTable.setItems(getAllAppointments());
             }
         } catch (Exception e){
@@ -589,7 +588,6 @@ public class MainController implements Initializable {
         filterPerSelection();
         reportTypeCombo.setItems(getAllTypes());
         initiateMonthComboBox();
-        filterAppointmentsByWeek();
         Locale.setDefault(new Locale("en"));
 
     }
