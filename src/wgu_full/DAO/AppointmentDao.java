@@ -197,6 +197,7 @@ public class AppointmentDao {
      * @param custId the customer id
      * @param userId the user id
      * @param contactId the contact id
+     * @throws SQLException JDBC encountered an error with the data source
      */
     public static void createAppointment(String title, String desc, String loc, String type, Timestamp start, Timestamp end, int custId, int userId, int contactId) throws SQLException {
         openConnection();

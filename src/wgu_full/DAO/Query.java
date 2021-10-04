@@ -163,6 +163,19 @@ public class Query {
         }
     }
 
+    /**
+     * Creates an instance of the appointment using PreparedStatement
+     * @param title the title
+     * @param desc the description
+     * @param loc the location
+     * @param type the type
+     * @param start the start date and time
+     * @param end the end date and time
+     * @param custId the customer Id
+     * @param userId the user Id
+     * @param contactId the contact ID
+     * @throws SQLException JDBC encountered an error with the data source
+     */
     public static void createAppt(String title, String desc, String loc, String type, Timestamp start, Timestamp end, int custId, int userId, int contactId) throws SQLException {
         query = "INSERT INTO appointments " + "(Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)" + "values (?,?,?,?,?,?,?,?,?)";
         try {
@@ -182,7 +195,6 @@ public class Query {
             System.out.println("SQL error -" + e.getMessage());
         }
     }
-
 
     /**
      * Fetches the result referencing the ResultSet object

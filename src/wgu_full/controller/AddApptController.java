@@ -18,6 +18,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import static wgu_full.DAO.AppointmentDao.createAppointment;
@@ -36,6 +37,7 @@ public class AddApptController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
      * Holds the start and end local date times
@@ -168,23 +170,19 @@ public class AddApptController implements Initializable {
      *
      * @param event when the save button is fired
      * @throws IOException if I/O operation fails
+     * @throws SQLException JDBC encountered an error with the data source
      */
     public void saveAppointment(ActionEvent event) throws IOException, SQLException {
         if(!validateInputFields()){
             return;
         }
-
         if(!validateTime()){
             return;
         }
-        // gets date from utc format
         LocalDate date = startZDT.withZoneSameInstant(ZoneOffset.UTC).toLocalDate();
-        System.out.println("after utc, the date is " + date);
-
         int customer = customerCombo.getSelectionModel().getSelectedItem().getId();
-
         overlaps = getSameDateAppointments(customer, date);
-
+        System.out.println("overlaps " + overlaps.size());
         if(overlaps.size() > 0){
             boolean noOverlap = validateOverlap(overlaps);
             if (!noOverlap){
@@ -201,8 +199,6 @@ public class AddApptController implements Initializable {
         int user = userCombo.getSelectionModel().getSelectedItem().getId();
         Timestamp start = convertZDT(startZDT);
         Timestamp end = convertZDT(endZDT);
-        System.out.println("start in db "+ start);
-        System.out.println("end in db "+ end);
         createAppointment(titleField, descriptionField, loc, t, start, end, customer, user, contact);
         backToMain(event);
     }
@@ -247,14 +243,9 @@ public class AddApptController implements Initializable {
      * @return true if the selected time is within business hours
      */
     public boolean validateZonedDateTimeBusiness(ZonedDateTime zdt){
-        System.out.println("zdt "+ zdt);
         ZonedDateTime est = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
-        System.out.println("est of zdt " + est);
-
         ZonedDateTime open = est.withHour(8);
-        System.out.println("open est  " + open);
         ZonedDateTime close = est.withHour(22);
-        System.out.println("close est " + close);
 
         if(est.isAfter(close)){
             showError(true, "The selected time is outside of business hours. Please select a time within 8am-10pm est.");
@@ -278,8 +269,8 @@ public class AddApptController implements Initializable {
         LocalDateTime Z = endLDT;
 
         for(Appointment appt : customerAppts){
-            LocalDateTime S = convertFromUtc(appt.getStart().toLocalDateTime());
-            LocalDateTime E = convertFromUtc(appt.getEnd().toLocalDateTime());
+            LocalDateTime S = LocalDateTime.parse(appt.getStart(), formatter);
+            LocalDateTime E = LocalDateTime.parse(appt.getEnd(), formatter);
             //case 1 - when the start is in the window
             if((A.isAfter(S) || A.isEqual(S)) && Z.isBefore(S)){
                 return false;

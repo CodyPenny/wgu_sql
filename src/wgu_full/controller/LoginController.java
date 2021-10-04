@@ -63,6 +63,8 @@ public class LoginController implements Initializable {
 
     /**
      * Translates the form text to French if the user's system is set to French
+     *
+     * @param rb the ResourceBundle
      */
     public void translate(ResourceBundle rb){
         bundle = rb;

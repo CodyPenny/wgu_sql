@@ -18,8 +18,6 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static wgu_full.DAO.AppointmentDao.getSameDateAppointments;
@@ -38,6 +36,7 @@ public class EditApptController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     Appointment selectedRow;
 
@@ -147,7 +146,6 @@ public class EditApptController implements Initializable {
         startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
         endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
 
-        System.out.println("time object " + startLDT );
         if(startLDT.isAfter(endLDT) || startLDT.isEqual(endLDT)){
             showError(true, "The start time can not be greater or the same as the end time.");
             return false;
@@ -179,7 +177,7 @@ public class EditApptController implements Initializable {
     /**
      * Validates the selected time against business hours
      *
-     * @param ldt an instance of the LocalDateTime object
+     * @param zdt an instance of the ZonedDateTime object
      * @return true if the selected time is within business hours
      */
     public boolean validateZonedDateTimeBusiness(ZonedDateTime zdt){
@@ -227,8 +225,8 @@ public class EditApptController implements Initializable {
             if(appt.getId() == selectedRow.getId()){
                 continue;
             }
-            LocalDateTime S = convertFromUtc(appt.getStart().toLocalDateTime());
-            LocalDateTime E = convertFromUtc(appt.getEnd().toLocalDateTime());
+            LocalDateTime S = LocalDateTime.parse(appt.getStart(), formatter);
+            LocalDateTime E = LocalDateTime.parse(appt.getEnd(), formatter);
             //case 1 - when the start is in the window
             if((A.isAfter(S) || A.isEqual(S)) && Z.isBefore(S)){
                 return false;
@@ -330,11 +328,9 @@ public class EditApptController implements Initializable {
                 break;
             }
         }
-        LocalDateTime startLDT = convertFromUtc(row.getStart().toLocalDateTime());
-        LocalDateTime endLDT = convertFromUtc(row.getEnd().toLocalDateTime());
-        LocalDate ld = startLDT.toLocalDate();
-        System.out.println("LDT start" + startLDT);
-        System.out.println("LDT end" + endLDT);
+        LocalDateTime startLDT = LocalDateTime.parse(row.getStart(), formatter);
+        LocalDateTime endLDT = LocalDateTime.parse(row.getEnd(), formatter);
+        dateBox.setValue(startLDT.toLocalDate());
         setSpinners(startLDT.getHour(), endLDT.getHour(), startLDT.getMinute(), endLDT.getMinute());
     }
 

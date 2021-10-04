@@ -1,6 +1,10 @@
 package wgu_full.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Appointment class
@@ -16,6 +20,7 @@ public class Appointment {
     private int customer;
     private int user;
     private String contact;
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
      * Constructor
@@ -96,9 +101,16 @@ public class Appointment {
     public void setType(String type){ this.type = type; }
 
     /**
-     * @return the start date and time
+     * @return the start date and time in local date time
      */
-    public Timestamp getStart(){ return this.start; }
+    public String getStart(){
+        LocalDateTime ts = ZonedDateTime.
+                of(this.start.toLocalDateTime(), ZoneId.of("UTC"))
+                .toOffsetDateTime()
+                .atZoneSameInstant(ZoneId.systemDefault())
+                .toLocalDateTime();
+        return ts.format(formatter);
+    }
 
     /**
      * @param start the start date and time to set
@@ -106,9 +118,16 @@ public class Appointment {
     public void setStart(Timestamp start){ this.start = start; }
 
     /**
-     * @return the end date and time
+     * @return the end date and time in local date time
      */
-    public Timestamp getEnd(){ return this.end; }
+    public String getEnd() {
+        LocalDateTime ts = ZonedDateTime.
+                of(this.end.toLocalDateTime(), ZoneId.of("UTC"))
+                .toOffsetDateTime()
+                .atZoneSameInstant(ZoneId.systemDefault())
+                .toLocalDateTime();
+        return ts.format(formatter);
+    }
 
     /**
      * @param end the end date and time
@@ -149,14 +168,24 @@ public class Appointment {
      * @return extracts and returns the date
      */
     public String getDate(){
-        return this.start.toLocalDateTime().toLocalDate().toString();
+        LocalDateTime ts = ZonedDateTime.
+                of(this.start.toLocalDateTime(), ZoneId.of("UTC"))
+                .toOffsetDateTime()
+                .atZoneSameInstant(ZoneId.systemDefault())
+                .toLocalDateTime();
+        return ts.toLocalDate().toString();
     }
 
     /**
      * @return extracts and returns the time
      */
     public String getTime(){
-        return this.start.toLocalDateTime().toLocalTime().toString();
+        LocalDateTime ts = ZonedDateTime.
+                of(this.start.toLocalDateTime(), ZoneId.of("UTC"))
+                .toOffsetDateTime()
+                .atZoneSameInstant(ZoneId.systemDefault())
+                .toLocalDateTime();
+        return ts.toLocalTime().toString();
     }
 
 

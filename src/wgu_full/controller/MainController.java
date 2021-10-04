@@ -22,8 +22,8 @@ import wgu_full.model.Type;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Optional;
@@ -51,6 +51,7 @@ public class MainController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
      * The tables
@@ -148,7 +149,7 @@ public class MainController implements Initializable {
         ObservableList<Appointment> inFifteen = FXCollections.observableArrayList();
         LocalDateTime currentTime = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
         for(Appointment meet : getSameDateAppointmentsByUser(user_id, currentTime.toLocalDate())){
-            LocalDateTime otherAppt = meet.getStart().toLocalDateTime();
+            LocalDateTime otherAppt = LocalDateTime.parse(meet.getStart(), formatter);
             LocalTime otherTime = ZonedDateTime.of(otherAppt, ZoneId.of("UTC")).toOffsetDateTime().atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime().toLocalTime();
             long timeDiff = ChronoUnit.MINUTES.between(ZonedDateTime.now().toLocalTime(), otherTime);
             if(timeDiff < 0) {
@@ -182,7 +183,7 @@ public class MainController implements Initializable {
         ObservableList<Appointment> monthList = FXCollections.observableArrayList();
         LocalDate today = LocalDate.now();
         for(Appointment meet : getAllAppointments()){
-            if(today.getMonthValue() == meet.getStart().toLocalDateTime().getMonthValue()){
+            if(today.getMonthValue() == LocalDateTime.parse(meet.getStart(), formatter).getMonthValue()){
                 monthList.add(meet);
             }
         }
@@ -207,8 +208,11 @@ public class MainController implements Initializable {
         int minusDay = m.calcDays(day);
         LocalDateTime endDay = today.plusDays(addedDay);
         LocalDateTime startDay = today.minusDays(minusDay);
+
         for(Appointment meet : getAllAppointments()){
-            if((meet.getStart().toLocalDateTime().isBefore(endDay)) && (meet.getStart().toLocalDateTime().isAfter(startDay))){
+            LocalDateTime st = LocalDateTime.parse(meet.getStart(), formatter);
+            LocalDateTime end = LocalDateTime.parse(meet.getStart(), formatter);
+            if(st.isBefore(endDay) && end.isAfter(startDay)){
                 weekList.add(meet);
             }
         }
@@ -365,7 +369,7 @@ public class MainController implements Initializable {
 
     /**
      * Deletes a customer from the customer table.
-     * Alerts the user if the selected customer has associated appointments and prompts continue
+     * Alerts the user if the selected customer has associated appointments and prompts confirmation
      * If yes, deletes the customer's associated appointments before deleting the customer
      *
      * @param event when the delete button is fired
@@ -412,7 +416,7 @@ public class MainController implements Initializable {
                 }
             customerTable.setItems(Customer.getAllCusts());
             appointmentTable.setItems(getAllAppointments());
-            } // cust cancelled proceeding with deletion
+            } // customer cancelled deletion
             return;
         } catch (Exception e){
             showError(true, "Error with deletion");
