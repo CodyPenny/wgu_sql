@@ -1,5 +1,6 @@
 package wgu_full.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.converter.LocalTimeStringConverter;
 import wgu_full.model.*;
 
 import java.io.IOException;
@@ -76,6 +78,7 @@ public class EditApptController implements Initializable {
     @FXML
     private ComboBox<User> userCombo;
 
+
     /**
      * DatePicker
      */
@@ -87,6 +90,8 @@ public class EditApptController implements Initializable {
      */
     @FXML
     private Spinner<Integer> startHour,startMin, endHour, endMin;
+    @FXML
+    private Spinner<LocalTime> testSpinner;
 
     @FXML private Label errorLabel;
 
@@ -418,16 +423,62 @@ public class EditApptController implements Initializable {
      * @param initEndMin the end minute
      */
     public void setSpinners(int initStartHr, int initEndHr, int initStartMin, int initEndMin){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        ObservableList<LocalTime> time = FXCollections.observableArrayList();
+
         int startHr = setBusinessHoursToLocalHours(8);
         int endHr = setBusinessHoursToLocalHours(22);
-        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, endHr, initStartHr);
-        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, endHr, initEndHr);
+        SpinnerValueFactory<LocalTime> timeFactory = new SpinnerValueFactory<LocalTime>() {
+            {
+                setConverter(new LocalTimeStringConverter(formatter,null));
+            }
+            @Override
+            public void decrement(int steps) {
+                steps = 15;
+                if (getValue() == null)
+                    setValue(LocalTime.now());
+                else {
+                    LocalTime time = (LocalTime) getValue();
+                    setValue(time.minusMinutes(steps));
+                }
+            }
+
+            @Override
+            public void increment(int steps) {
+                steps = 15;
+                if (this.getValue() == null)
+                    setValue(LocalTime.now());
+                else {
+                    LocalTime time = (LocalTime) getValue();
+                    if(time.isBefore(LocalTime.of(20,00))){
+                        setValue(time.plusMinutes(steps));
+                    }
+                }
+            }
+        };
+
+        if(startHr > endHr){
+            SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, 24, initStartHr);
+            SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, endHr, initEndHr);
+            startHour.setValueFactory(startHourFactory);
+            endHour.setValueFactory(endHourFactory);
+            startHourFactory.setWrapAround(true);
+            endHourFactory.setWrapAround(true);
+
+        } else {
+            SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, endHr, initStartHr);
+            SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, endHr, initEndHr);
+            startHour.setValueFactory(startHourFactory);
+            endHour.setValueFactory(endHourFactory);
+        }
         SpinnerValueFactory<Integer> startMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 45, initStartMin, 15);
         SpinnerValueFactory<Integer> endMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 45, initEndMin, 15);
-        startHour.setValueFactory(startHourFactory);
         startMin.setValueFactory(startMinFactory);
-        endHour.setValueFactory(endHourFactory);
         endMin.setValueFactory(endMinFactory);
+
+        timeFactory.setValue(LocalTime.now());
+
+        testSpinner.setValueFactory(timeFactory);
     }
 
     @Override
@@ -437,7 +488,7 @@ public class EditApptController implements Initializable {
         userCombo.setItems(getUsers());
         locationCombo.setItems(getAllLocations());
         typeCombo.setItems(getAllTypes());
-        setSpinners(8,8,0,0);
+        setSpinners(0, 0, 0,0);
         disablePastDates();
     }
 

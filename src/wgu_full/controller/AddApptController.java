@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.converter.LocalTimeStringConverter;
 import wgu_full.model.*;
 
 import java.io.IOException;
@@ -86,7 +87,7 @@ public class AddApptController implements Initializable {
      * Spinners
      */
     @FXML
-    private Spinner<Integer> startHour,startMin, endHour, endMin;
+    private Spinner<LocalTime> startSpinner, endSpinner;
 
     /**
      * Label for displaying an error message
@@ -101,24 +102,16 @@ public class AddApptController implements Initializable {
      * @return false if there are errors
      */
     public boolean validateTime(){
-        if(startHour.getValue() > endHour.getValue()){
+        if(startSpinner.getValue().isAfter(endSpinner.getValue())){
             showError(true, "The start time can not be greater than the end time.");
             return false;
         }
-        if(startHour.getValue() == endHour.getValue()){
-            if(startMin.getValue() >= endMin.getValue()){
-                showError(true, "The start time can not be greater or the same as the end time.");
-                return false;
-            }
-        }
-
-        startLDT = convertToTimeObject(startHour.getValue(), startMin.getValue());
-        endLDT = convertToTimeObject(endHour.getValue(), endMin.getValue());
-
-        if(startLDT.isAfter(endLDT) || startLDT.isEqual(endLDT)){
-            showError(true, "The start time can not be greater or the same as the end time.");
+        if(startSpinner.getValue().equals(endSpinner.getValue())){
+            showError(true, "The start time can not be the same as the end time.");
             return false;
         }
+        startLDT = convertToTimeObject(startSpinner.getValue());
+        endLDT = convertToTimeObject(endSpinner.getValue());
         startZDT = convertToSystemZonedDateTime(startLDT);
         endZDT = convertToSystemZonedDateTime(endLDT);
 
@@ -216,13 +209,12 @@ public class AddApptController implements Initializable {
     /**
      * Takes the selected date, hour, and minute and creates a LocalDateTime object
      *
-     * @param hr the hour
-     * @param min the min
+     * @param tm the time
      * @return LocalDateTime object of the input time
      */
-    public LocalDateTime convertToTimeObject(int hr, int min) {
+    public LocalDateTime convertToTimeObject(LocalTime tm) {
         LocalDate date = dateBox.getValue();
-        return LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), hr, min);
+        return LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), tm.getHour(), tm.getMinute());
     }
 
     /**
@@ -292,14 +284,14 @@ public class AddApptController implements Initializable {
      * @param hr the hour
      * @return the hour in local zone time
      */
-    public int setBusinessHoursToLocalHours(int hr){
+    public LocalTime setBusinessHoursToLocalHours(int hr){
         LocalDateTime now = LocalDateTime.now();
        LocalDateTime ldt = LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), hr, 0);
        return ZonedDateTime.
                 of(ldt, ZoneId.of("America/New_York"))
                 .toOffsetDateTime()
                 .atZoneSameInstant(ZoneId.systemDefault())
-                .toLocalDateTime().toLocalTime().getHour();
+                .toLocalDateTime().toLocalTime();
     }
 
 
@@ -364,6 +356,87 @@ public class AddApptController implements Initializable {
     }
 
     /**
+     * Initiates the start and end time spinners and sets min and max times based on business hours
+     */
+    public void setSpinners(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime startHr = setBusinessHoursToLocalHours(8);
+        LocalTime endHr = setBusinessHoursToLocalHours(22);
+
+        SpinnerValueFactory<LocalTime> startFactory = new SpinnerValueFactory<LocalTime>() {
+            {
+                setConverter(new LocalTimeStringConverter(formatter,null));
+            }
+            @Override
+            public void decrement(int steps) {
+                steps = 15;
+                if (getValue() == null)
+                    setValue(LocalTime.now());
+                else {
+                    LocalTime time = (LocalTime) getValue();
+                    if(time.equals(startHr)){
+                        return;
+                    }
+                    setValue(time.minusMinutes(steps));
+                }
+            }
+
+            @Override
+            public void increment(int steps) {
+                steps = 15;
+                if (this.getValue() == null)
+                    setValue(LocalTime.now());
+                else {
+                    LocalTime time = (LocalTime) getValue();
+                    if(time.equals(endHr)){
+                        return;
+                    }
+                    setValue(time.plusMinutes(steps));
+                }
+            }
+        };
+
+        SpinnerValueFactory<LocalTime> endFactory = new SpinnerValueFactory<LocalTime>() {
+            {
+                setConverter(new LocalTimeStringConverter(formatter,null));
+            }
+            @Override
+            public void decrement(int steps) {
+                steps = 15;
+                if (getValue() == null)
+                    setValue(LocalTime.now());
+                else {
+                    LocalTime time = (LocalTime) getValue();
+                    if(time.equals(startHr)){
+                        return;
+                    }
+                    setValue(time.minusMinutes(steps));
+                }
+            }
+
+            @Override
+            public void increment(int steps) {
+                steps = 15;
+                if (this.getValue() == null)
+                    setValue(LocalTime.now());
+                else {
+                    LocalTime time = (LocalTime) getValue();
+                    if(time.equals(endHr)){
+                        return;
+                    }
+                    setValue(time.plusMinutes(steps));
+                }
+            }
+        };
+
+        startFactory.setValue(startHr);
+        endFactory.setValue(startHr);
+        startSpinner.setValueFactory(startFactory);
+        endSpinner.setValueFactory(endFactory);
+
+    }
+
+    /**
      * Populates the comboBoxes
      * Initiates time spinners with the hour and minutes based on business hours
      * Disables past dates on the Date Picker widget
@@ -378,16 +451,7 @@ public class AddApptController implements Initializable {
         userCombo.setItems(getUsers());
         locationCombo.setItems(getAllLocations());
         typeCombo.setItems(getAllTypes());
-        int startHr = setBusinessHoursToLocalHours(8);
-        int endHr = setBusinessHoursToLocalHours(22);
-        SpinnerValueFactory<Integer> startHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, endHr);
-        SpinnerValueFactory<Integer> endHourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(startHr, endHr);
-        SpinnerValueFactory<Integer> startMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 45, 0, 15);
-        SpinnerValueFactory<Integer> endMinFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 45, 0, 15);
-        startHour.setValueFactory(startHourFactory);
-        startMin.setValueFactory(startMinFactory);
-        endHour.setValueFactory(endHourFactory);
-        endMin.setValueFactory(endMinFactory);
+        setSpinners();
         disablePastDates();
     }
 }

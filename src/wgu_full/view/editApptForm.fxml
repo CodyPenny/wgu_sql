@@ -96,5 +96,6 @@
         <Label layoutX="281.0" layoutY="455.0" text="Minute" />
         <Spinner fx:id="endMin" layoutX="328.0" layoutY="450.0" prefHeight="26.0" prefWidth="81.0" />
       <Label alignment="CENTER" layoutX="139.0" layoutY="375.0" prefHeight="26.0" prefWidth="288.0" text="Please select from the following business hours:" />
+      <Spinner fx:id="testSpinner" layoutX="368.0" layoutY="284.0" />
     </children>
 </AnchorPane>
